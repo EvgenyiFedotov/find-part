@@ -1,0 +1,22 @@
+{
+  "name": "find-part",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EvgenyiFedotov/find-part.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EvgenyiFedotov/find-part/issues"
+  },
+  "homepage": "https://github.com/EvgenyiFedotov/find-part#readme",
+  "devDependencies": {
+    "eslint": "^5.4.0"
+  }
+}
