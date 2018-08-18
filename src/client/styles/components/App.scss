@@ -1,0 +1,24 @@
+$top-height: 65px;
+
+.wh-100 {
+  width: 100%;
+  height: 100%;
+}
+
+.app {
+  @extend .wh-100;
+  display: grid;
+  grid-template-rows: $top-height 1fr;
+
+  .top {
+    @extend .wh-100;
+    padding: 1rem;
+  }
+
+  .content {
+    @extend .wh-100;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+  }
+}
