@@ -23,5 +23,10 @@ module.exports = [
     },
     mode,
     devtool,
+    target: 'node',
+    externals: ['uws'],
+    stats: {
+      warnings: false,
+    },
   }),
 ];
