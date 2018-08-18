@@ -1,9 +1,9 @@
 import React from 'react';
 
-export default function (params = {}) {
-  let { data } = params;
+export default function Html(params = {}) {
+  let { store } = params;
 
-  data = data instanceof Object ? data : {};
+  store = store instanceof Object ? store : {};
 
   return (
     <html>
@@ -14,10 +14,9 @@ export default function (params = {}) {
       </head>
 
       <body>
-        TEST
         <div id="root">{params.content}</div>
-        <script id="initial-data" type="text/plain" data-json={JSON.stringify(data)}></script>
-        {/* <script src="index.js"></script> */}
+        <script id="store" type="text/plain" data-json={JSON.stringify(store)}></script>
+        <script src="index.js"></script>
       </body>
     </html>
   );
