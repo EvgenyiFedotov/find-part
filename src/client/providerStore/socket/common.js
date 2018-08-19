@@ -1,30 +1,5 @@
 import io from 'socket.io-client';
-
-/**
- * @param {String} method
- * @param {Object} data
- */
-function emitApi(method, data = {}) {
-  this.emit('api', { method, data });
-}
-
-function onApi(method, callback) {
-  this.on('api_result', (response) => {
-    if (response.method && method === response.method) {
-      callback(response.result);
-    }
-  });
-}
-
-function onceApi(method, callback) {
-  this.once('api_result', (response) => {
-    if (response.method && method === response.method) {
-      callback(response.result);
-    } else {
-      this.onceApi(method, callback);
-    }
-  });
-}
+import api from './api';
 
 /**
  * @param {String[]} [url]
@@ -37,9 +12,7 @@ export function create(url, options = {}) {
     ...options,
   });
 
-  socket.emitApi = emitApi.bind(socket);
-  socket.onApi = onApi.bind(socket);
-  socket.onceApi = onceApi.bind(socket);
+  socket.api = api(socket);
 
   return socket;
 }

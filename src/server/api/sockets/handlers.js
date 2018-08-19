@@ -16,7 +16,7 @@ export function api(common, params = {}) {
 
   return {
     method,
-    result: 'aaaa',
+    status: 'OK',
   };
 }
 

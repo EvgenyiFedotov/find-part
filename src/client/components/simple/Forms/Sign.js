@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Input from '@material-ui/core/Input';
 
+import { nav } from '../../../providerStore';
+
 function header(mode) {
   switch (mode) {
     case 'up': return 'Регистрация';
@@ -16,7 +18,7 @@ class Sign extends Component {
     super(options);
 
     this.state = {
-      login: '123',
+      login: '',
       password1: '',
       password2: '',
     };
@@ -29,13 +31,16 @@ class Sign extends Component {
   }
 
   send() {
-    const { mode, socket } = this.props;
+    const { mode, socket, dispatch } = this.props;
     const method = `user/sign${mode}`;
 
-    socket.onceApi(method, (result) => {
-      console.log('@onceApi', result);
+    socket.api.once(method, () => {
+      if (mode === 'up') {
+        dispatch(nav.actions.setMode('signIn'));
+      }
     });
-    socket.emitApi(method, this.state);
+
+    socket.api.emit(method, this.state);
   }
 
   render() {
@@ -83,6 +88,7 @@ class Sign extends Component {
 Sign.propTypes = {
   mode: PropTypes.string,
   socket: PropTypes.object,
+  dispatch: PropTypes.func,
 };
 
 Sign.defaultProps = {
