@@ -1,15 +1,27 @@
 import io from 'socket.io-client';
 
 /**
+ * @param {String} method
+ * @param {Object} data
+ */
+function emitApi(method, data = {}) {
+  this.emit('api', { method, data });
+}
+
+/**
  * @param {String[]} [url]
  * @param {Object} options
  */
 export function create(url, options = {}) {
-  return io(url, {
+  const socket = io(url, {
     transports: ['websocket'],
     upgrade: false,
     ...options,
   });
+
+  socket.emitApi = emitApi.bind(socket);
+
+  return socket;
 }
 
 /**

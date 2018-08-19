@@ -3,6 +3,8 @@ import http from 'http';
 import { main } from './http';
 import socket from './socket';
 
+import handlers from './api/sockets/handlers';
+
 const PORT = 3000;
 const app = express();
 const httpServer = http.Server(app);
@@ -10,7 +12,9 @@ const httpServer = http.Server(app);
 app.use(express.static('dist/client'));
 app.get('/', main);
 
-socket(httpServer);
+socket(httpServer, {
+  ...handlers,
+});
 
 httpServer.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);

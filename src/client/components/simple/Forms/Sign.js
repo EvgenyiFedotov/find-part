@@ -12,12 +12,26 @@ function header(mode) {
 }
 
 class Sign extends Component {
-  send() {
-    console.log('send');
-    this.props.dispatch({
-      type: '123123',
-      value: 123,
+  constructor(options) {
+    super(options);
+
+    this.state = {
+      login: '123',
+      password1: '',
+      password2: '',
+    };
+  }
+
+  onChange(field, event) {
+    this.setState({
+      [field]: event.target.value,
     });
+  }
+
+  send() {
+    const { mode, socket } = this.props;
+
+    socket.emitApi(`user/sign${mode}`, this.state);
   }
 
   render() {
@@ -26,22 +40,29 @@ class Sign extends Component {
     return (
       <div className="sign">
         <div className="header">{header(mode)}</div>
+
         <Input
           placeholder="Логин"
           className="input"
+          value={this.state.login}
+          onChange={this.onChange.bind(this, 'login')}
         />
 
         <Input
           placeholder="Пароль"
           type="password"
           className="input"
+          value={this.state.password1}
+          onChange={this.onChange.bind(this, 'password1')}
         />
 
-        { mode === 'up' && <Input
+        {mode === 'up' && <Input
           placeholder="Повторите пароль"
           type="password"
           className="input"
-        /> }
+          value={this.state.password2}
+          onChange={this.onChange.bind(this, 'password2')}
+        />}
 
         <Button
           variant="contained"
@@ -57,11 +78,13 @@ class Sign extends Component {
 
 Sign.propTypes = {
   mode: PropTypes.string,
-  dispatch: PropTypes.func,
+  socket: PropTypes.object,
 };
 
 Sign.defaultProps = {
   mode: 'in', // up
 };
 
-export default connect()(Sign);
+export default connect(store => ({
+  socket: store.socket,
+}))(Sign);

@@ -1,4 +1,4 @@
-import { emit, subscribeByCallbacks } from './common';
+import { dispatch, subscribeByCallbacks } from './common';
 
 /**
  * @param {Namespace} namespaceIn
@@ -21,8 +21,10 @@ export default function namespace(namespaceIn, callbacksIn = {}, options = {}) {
       ...common,
       socket,
       socketId: socket.id,
-      socketEmit: (actions, rooms = []) => emit(socket, actions, rooms),
-      namespaceEmit: (actions, rooms = []) => emit(namespaceIn, actions, rooms),
+      dispatch: {
+        socket: (actions, rooms = []) => dispatch(socket, actions, rooms),
+        namespace: (actions, rooms = []) => dispatch(namespaceIn, actions, rooms),
+      },
       subscribe: (sCallbacks = {}) => subscribeByCallbacks(common, sCallbacks),
     };
 

@@ -37,7 +37,7 @@ export const actions = {
   }),
 };
 
-export default function reducer(store = null, action) {
+export function reducer(store = null, action) {
   switch (action.type) {
     case types.create:
       return create(action.url, action.options);
@@ -60,3 +60,9 @@ export default function reducer(store = null, action) {
 
   return store;
 }
+
+export default {
+  types,
+  actions,
+  reducer,
+};

@@ -25,7 +25,7 @@ export const actions = {
   }),
 };
 
-export default function reducer(store = defaultStore, action) {
+export function reducer(store = defaultStore, action) {
   const { route, mode } = action;
 
   switch (action.type) {
@@ -50,3 +50,9 @@ export default function reducer(store = defaultStore, action) {
       return store;
   }
 }
+
+export default {
+  types,
+  actions,
+  reducer,
+};

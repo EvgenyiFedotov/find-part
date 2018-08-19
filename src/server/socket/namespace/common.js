@@ -2,11 +2,11 @@
  * @param {Object[]} actions
  * @param {String[]|String} [rooms]
  */
-export function emit(emitterIn, actions, roomsIn = []) {
+export function dispatch(emitterIn, actions, roomsIn = []) {
   const rooms = (typeof roomsIn === 'string') ? [roomsIn] : roomsIn;
   const emitter = rooms.reduce((memo, nameRoom) => memo.to(nameRoom), emitterIn);
 
-  emitter.emit('actions', ...actions);
+  emitter.emit('dispatch', ...actions);
 }
 
 /**
@@ -42,14 +42,14 @@ export function subscribeByCallbacks(common, callbacks = {}) {
       }
 
       eventCallbacks.forEach((callback) => {
-        subscribe(this, nameEvent, callback);
+        subscribe(common, nameEvent, callback);
       });
     });
   }
 }
 
 export default {
-  emit,
+  dispatch,
   subscribe,
   subscribeByCallbacks,
 };

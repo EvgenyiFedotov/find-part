@@ -48,8 +48,7 @@ export class App extends Component {
 App.propTypes = {
   nav: PropTypes.object,
   dispatch: PropTypes.func,
+  socket: PropTypes.object
 };
 
-export default connect(store => ({
-  nav: store.nav,
-}))(App);
+export default connect(store => store)(App);

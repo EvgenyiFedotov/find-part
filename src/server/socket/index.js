@@ -1,12 +1,11 @@
 import Io from 'socket.io';
 import namespace from './namespace';
-import handlers from './handlers';
 
-export default function (httpServer) {
+export default function (httpServer, callbacks) {
   const server = new Io(httpServer, {
     serveClient: false,
     wsEngine: 'ws',
   });
 
-  namespace(server, handlers);
+  return namespace(server, callbacks);
 }
