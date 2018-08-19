@@ -1,0 +1,14 @@
+@import '../colors';
+
+$logo-fontSize: 18px;
+
+.index-top {
+  display: flex;
+  justify-content: space-between;
+
+  .logo {
+    color: map-get($main-colors, primary);
+    font-size: $logo-fontSize;
+    cursor: pointer;
+  }
+}

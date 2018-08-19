@@ -1,4 +1,8 @@
+@import '../colors';
+
 $top-height: 65px;
+$logo-banner-fontSize: 40px;
+
 
 .wh-100 {
   width: 100%;
@@ -20,5 +24,10 @@ $top-height: 65px;
     display: grid;
     align-items: center;
     justify-items: center;
+
+    .logo-banner {
+      color: map-get($main-colors, primary);
+      font-size: $logo-banner-fontSize;
+    }
   }
 }

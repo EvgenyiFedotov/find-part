@@ -6,25 +6,32 @@ import { actions } from '../../providerStore/nav';
 
 class IndexTop extends Component {
   sign(value) {
-    this.props.dispatch(actions.setMode(`sign${value}`));
+    this.props.dispatch(actions.setMode(value));
   }
 
   render() {
     return (
       <div className="index-top">
-        <div className="logo"></div>
-        <div>
+        <div
+          className="logo"
+          onClick={this.sign.bind(this, null)}
+        >
+          FINDPART
+        </div>
+
+        <div className="buttons">
           <Button
             size="small"
             color="primary"
-            onClick={this.sign.bind(this, 'In')}
+            onClick={this.sign.bind(this, 'signIn')}
           >
             Вход
           </Button>
+
           <Button
             size="small"
             color="primary"
-            onClick={this.sign.bind(this, 'Up')}
+            onClick={this.sign.bind(this, 'signUp')}
           >
             Регистрация
           </Button>

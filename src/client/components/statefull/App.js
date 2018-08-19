@@ -19,6 +19,8 @@ export class App extends Component {
         content = <Sign mode="in" />;
       } else if (mode === 'signUp') {
         content = <Sign mode="up" />;
+      } else {
+        content = <div className="logo-banner">FINDPART</div>;
       }
     }
 
@@ -26,7 +28,6 @@ export class App extends Component {
       <div className="app">
         <div className="top">{top}</div>
         <div className="content">{content}</div>
-        <div className="footer"></div>
       </div>
     );
   }
