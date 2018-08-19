@@ -30,8 +30,12 @@ class Sign extends Component {
 
   send() {
     const { mode, socket } = this.props;
+    const method = `user/sign${mode}`;
 
-    socket.emitApi(`user/sign${mode}`, this.state);
+    socket.onceApi(method, (result) => {
+      console.log('@onceApi', result);
+    });
+    socket.emitApi(method, this.state);
   }
 
   render() {

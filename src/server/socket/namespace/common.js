@@ -20,8 +20,8 @@ export function subscribe(common, nameEvent, callback) {
   socket.on(nameEvent, (...args) => {
     const cbResult = callback(common, ...args) || {};
 
-    if ('result' in cbResult) {
-      socket.emit(`${nameEvent}_result`, cbResult.result);
+    if (cbResult instanceof Object) {
+      socket.emit(`${nameEvent}_result`, cbResult);
     }
   });
 }

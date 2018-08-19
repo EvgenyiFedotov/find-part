@@ -8,6 +8,24 @@ function emitApi(method, data = {}) {
   this.emit('api', { method, data });
 }
 
+function onApi(method, callback) {
+  this.on('api_result', (response) => {
+    if (response.method && method === response.method) {
+      callback(response.result);
+    }
+  });
+}
+
+function onceApi(method, callback) {
+  this.once('api_result', (response) => {
+    if (response.method && method === response.method) {
+      callback(response.result);
+    } else {
+      this.onceApi(method, callback);
+    }
+  });
+}
+
 /**
  * @param {String[]} [url]
  * @param {Object} options
@@ -20,6 +38,8 @@ export function create(url, options = {}) {
   });
 
   socket.emitApi = emitApi.bind(socket);
+  socket.onApi = onApi.bind(socket);
+  socket.onceApi = onceApi.bind(socket);
 
   return socket;
 }

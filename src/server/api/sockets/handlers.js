@@ -5,17 +5,19 @@ export function connection() {
 }
 
 export function api(common, params = {}) {
-  const { data } = params;
-  let { method } = params;
-
-  method = method.split('/');
-
-  const object = methods[method[0]];
-  const objectMethod = object && object[method[1]];
+  const { method, data } = params;
+  const methodArr = method.split('/');
+  const object = methods[methodArr[0]];
+  const objectMethod = object && object[methodArr[1]];
 
   if (objectMethod) {
     objectMethod(data);
   }
+
+  return {
+    method,
+    result: 'aaaa',
+  };
 }
 
 export default {
