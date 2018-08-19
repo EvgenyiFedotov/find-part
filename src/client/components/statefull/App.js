@@ -5,7 +5,19 @@ import { connect } from 'react-redux';
 import IndexTop from '../simple/IndexTop';
 import Sign from '../simple/Forms/Sign';
 
+import { actions as socketActs } from '../../providerStore/socket';
+
 export class App extends Component {
+  componentDidMount() {
+    const { dispatch } = this.props;
+
+    dispatch(socketActs.create());
+
+    dispatch(socketActs.on('dispatch', (...actions) => {
+      actions.forEach(action => dispatch(action));
+    }));
+  }
+
   render() {
     const { nav } = this.props;
     const { route, mode } = nav;
@@ -35,6 +47,7 @@ export class App extends Component {
 
 App.propTypes = {
   nav: PropTypes.object,
+  dispatch: PropTypes.func,
 };
 
 export default connect(store => ({
