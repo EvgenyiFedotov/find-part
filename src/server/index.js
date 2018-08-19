@@ -2,6 +2,7 @@ import express from 'express';
 import http from 'http';
 import { main } from './http';
 import socket from './socket';
+import database from './database';
 
 import handlers from './api/sockets/handlers';
 
@@ -18,4 +19,6 @@ socket(httpServer, {
 
 httpServer.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
+
+  database();
 });
