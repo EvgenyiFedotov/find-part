@@ -18,9 +18,9 @@ function once(methodName, callback, errback) {
   this.once('api_result', (response) => {
     const {
       status,
+      message,
       method,
       result,
-      message,
     } = response;
 
     if (method && method === methodName) {

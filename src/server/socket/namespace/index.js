@@ -25,7 +25,7 @@ export default function namespace(namespaceIn, callbacksIn = {}, options = {}) {
         socket: (actions, rooms = []) => dispatch(socket, actions, rooms),
         namespace: (actions, rooms = []) => dispatch(namespaceIn, actions, rooms),
       },
-      subscribe: (sCallbacks = {}) => subscribeByCallbacks(common, sCallbacks)
+      subscribe: (sCallbacks = {}) => subscribeByCallbacks(common, sCallbacks),
     };
 
     if (connection instanceof Function) {

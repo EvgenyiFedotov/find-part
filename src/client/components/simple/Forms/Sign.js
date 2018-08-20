@@ -13,39 +13,82 @@ function header(mode) {
   }
 }
 
+const defValues = {
+  login: '',
+  password1: '',
+  password2: '',
+};
+
+const defIsValid = {
+  login: false,
+  password1: false,
+  password2: false,
+};
+
 class Sign extends Component {
   constructor(options) {
     super(options);
 
     this.state = {
-      login: '',
-      password1: '',
-      password2: '',
+      values: defValues,
+      isValid: defIsValid,
     };
   }
 
   onChange(field, event) {
+    const { values } = this.state;
+
     this.setState({
-      [field]: event.target.value,
+      values: {
+        ...values,
+        [field]: event.target.value,
+      },
     });
   }
 
   send() {
+    const { isValid } = this.state;
     const { mode, socket, dispatch } = this.props;
     const method = `user/sign${mode}`;
 
-    socket.api.once(method, (...args) => {
-      console.log(...args);
-
+    socket.api.once(method, () => {
       if (mode === 'up') {
         dispatch(nav.actions.setMode('signIn'));
       }
+
+      this.resetIsValid();
+    }, (message, status) => {
+      if (mode === 'up') {
+        if (status === 'PASSWORD') {
+          this.setState({
+            isValid: {
+              ...isValid,
+              password1: true,
+              password2: true,
+            },
+          });
+        } else if (status === 'LOGIN') {
+          this.setState({
+            isValid: {
+              ...isValid,
+              login: true,
+            },
+          });
+        }
+      }
     });
 
-    socket.api.emit(method, this.state);
+    socket.api.emit(method, this.state.values);
+  }
+
+  resetIsValid() {
+    this.setState({
+      isValid: { ...defIsValid },
+    });
   }
 
   render() {
+    const { values, isValid } = this.state;
     const { mode } = this.props;
 
     return (
@@ -55,7 +98,8 @@ class Sign extends Component {
         <Input
           placeholder="Логин"
           className="input"
-          value={this.state.login}
+          value={values.login}
+          error={isValid.login}
           onChange={this.onChange.bind(this, 'login')}
         />
 
@@ -63,7 +107,8 @@ class Sign extends Component {
           placeholder="Пароль"
           type="password"
           className="input"
-          value={this.state.password1}
+          value={values.password1}
+          error={isValid.password1}
           onChange={this.onChange.bind(this, 'password1')}
         />
 
@@ -71,7 +116,8 @@ class Sign extends Component {
           placeholder="Повторите пароль"
           type="password"
           className="input"
-          value={this.state.password2}
+          value={values.password2}
+          error={isValid.password2}
           onChange={this.onChange.bind(this, 'password2')}
         />}
 
