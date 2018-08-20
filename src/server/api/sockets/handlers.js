@@ -9,15 +9,25 @@ export function api(common, params = {}) {
   const methodArr = method.split('/');
   const object = methods[methodArr[0]];
   const objectMethod = object && object[methodArr[1]];
+  const success = (result, message) => {
+    common.emitResult({
+      method,
+      status: 'OK',
+      result,
+      message,
+    });
+  };
+  const error = (message) => {
+    common.emitResult({
+      method,
+      status: 'ERROR',
+      message,
+    });
+  };
 
   if (objectMethod) {
-    objectMethod(data);
+    objectMethod(data, success, error);
   }
-
-  return {
-    method,
-    status: 'OK',
-  };
 }
 
 export default {

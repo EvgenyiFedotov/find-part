@@ -34,7 +34,9 @@ class Sign extends Component {
     const { mode, socket, dispatch } = this.props;
     const method = `user/sign${mode}`;
 
-    socket.api.once(method, () => {
+    socket.api.once(method, (...args) => {
+      console.log(...args);
+
       if (mode === 'up') {
         dispatch(nav.actions.setMode('signIn'));
       }

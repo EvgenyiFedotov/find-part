@@ -16,13 +16,18 @@ export function dispatch(emitterIn, actions, roomsIn = []) {
  */
 export function subscribe(common, nameEvent, callback) {
   const { socket } = common;
+  const commonExtends = { ...common };
+
+  commonExtends.emitResult = (result) => {
+    if (result instanceof Object) {
+      socket.emit(`${nameEvent}_result`, result);
+    }
+  };
 
   socket.on(nameEvent, (...args) => {
-    const cbResult = callback(common, ...args) || {};
-
-    if (cbResult instanceof Object) {
-      socket.emit(`${nameEvent}_result`, cbResult);
-    }
+    commonExtends.emitResult(
+      callback(commonExtends, ...args),
+    );
   });
 }
 
