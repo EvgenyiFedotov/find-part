@@ -1,148 +1,145 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
-import Input from '@material-ui/core/Input';
-
-import { nav } from '../../../providerStore';
-
-function header(mode) {
-  switch (mode) {
-    case 'up': return 'Регистрация';
-    default: return 'Вход';
-  }
-}
-
-const defValues = {
-  login: '',
-  password1: '',
-  password2: '',
-};
-
-const defIsValid = {
-  login: false,
-  password1: false,
-  password2: false,
-};
+import { Input, Button } from '@material-ui/core';
 
 class Sign extends Component {
-  constructor(options) {
-    super(options);
+  constructor(props) {
+    super(props);
 
     this.state = {
-      values: defValues,
-      isValid: defIsValid,
+      values: Sign.getDefValues(props.defValues),
+      isValid: Sign.getDefIsValid(props.defIsValid),
     };
+  }
+
+  static getDefValues(values = {}) {
+    return { login: '', password: '', ...values };
+  }
+
+  static getDefIsValid(values = {}) {
+    return { login: false, password: false, ...values };
   }
 
   onChange(field, event) {
     const { values } = this.state;
 
     this.setState({
-      values: {
-        ...values,
-        [field]: event.target.value,
-      },
+      values: { ...values, [field]: event.target.value.trim() },
     });
   }
 
-  send() {
-    const { isValid } = this.state;
-    const { mode, socket, dispatch } = this.props;
-    const method = `user/sign${mode}`;
+  validate() {
+    const { onValidate } = this.props;
+    const { values, isValid } = this.state;
+    let newIsValid = { ...isValid };
 
-    socket.api.once(method, () => {
-      if (mode === 'up') {
-        dispatch(nav.actions.setMode('signIn'));
-      }
+    newIsValid.login = !values.login;
+    newIsValid.password = !values.password || values.password.length < 6;
 
-      this.resetIsValid();
-    }, (message, status) => {
-      if (mode === 'up') {
-        if (status === 'PASSWORD') {
-          this.setState({
-            isValid: {
-              ...isValid,
-              password1: true,
-              password2: true,
-            },
-          });
-        } else if (status === 'LOGIN') {
-          this.setState({
-            isValid: {
-              ...isValid,
-              login: true,
-            },
-          });
-        }
-      }
-    });
+    if (onValidate instanceof Function) {
+      newIsValid = onValidate.call(this, newIsValid, this.state, this.props) || newIsValid;
+    }
 
-    socket.api.emit(method, this.state.values);
+    this.setState({ isValid: newIsValid });
+
+    return newIsValid;
   }
 
-  resetIsValid() {
-    this.setState({
-      isValid: { ...defIsValid },
-    });
+  static isValid(values = {}) {
+    return Object.keys(values).reduce((result, key) => result && !values[key], true);
+  }
+
+  onSend() {
+    const {
+      method,
+      socket,
+      onSendError,
+    } = this.props;
+    let { onSendSuccess } = this.props;
+
+    if (socket && method && Sign.isValid(this.validate())) {
+      const { api } = socket;
+      let onSendErrorBind;
+
+      if (onSendSuccess instanceof Function) {
+        onSendSuccess = onSendSuccess.bind(this);
+      }
+
+      if (onSendError instanceof Function) {
+        onSendErrorBind = (message, status, ...args) => {
+          const { isValid } = this.state;
+          const newIsValid = { ...isValid };
+
+          if (status === 'LOGIN') {
+            newIsValid.login = true;
+          } else if (status === 'PASSWORD') {
+            newIsValid.password = true;
+          }
+
+          this.setState({ isValid: newIsValid });
+
+          onSendError.call(this, message, status, ...args);
+        };
+      }
+
+      api.once(method, onSendSuccess, onSendErrorBind);
+      api.emit(method, this.state.values);
+    }
   }
 
   render() {
-    const { values, isValid } = this.state;
-    const { mode } = this.props;
+    const { header, contentAfter } = this.props;
+    let { values, isValid } = this.state;
+
+    values = values instanceof Object ? values : {};
+    isValid = isValid instanceof Object ? isValid : {};
 
     return (
       <div className="sign">
-        <div className="header">{header(mode)}</div>
+        <div className="header">{header}</div>
 
-        <Input
-          placeholder="Логин"
-          className="input"
-          value={values.login}
-          error={isValid.login}
-          onChange={this.onChange.bind(this, 'login')}
-        />
+          <Input
+            placeholder="Логин"
+            className="input"
+            value={values.login}
+            error={isValid.login}
+            onChange={this.onChange.bind(this, 'login')}
+          />
 
-        <Input
-          placeholder="Пароль"
-          type="password"
-          className="input"
-          value={values.password1}
-          error={isValid.password1}
-          onChange={this.onChange.bind(this, 'password1')}
-        />
+          <Input
+            placeholder="Пароль"
+            type="password"
+            className="input"
+            value={values.password}
+            error={isValid.password}
+            onChange={this.onChange.bind(this, 'password')}
+          />
 
-        {mode === 'up' && <Input
-          placeholder="Повторите пароль"
-          type="password"
-          className="input"
-          value={values.password2}
-          error={isValid.password2}
-          onChange={this.onChange.bind(this, 'password2')}
-        />}
+          {contentAfter && contentAfter.call(this, this.state, this.props)}
 
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={this.send.bind(this)}
-        >
-          Отправить
-        </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={this.onSend.bind(this)}
+          >
+            Отправить
+          </Button>
       </div>
     );
   }
 }
 
 Sign.propTypes = {
-  mode: PropTypes.string,
+  header: PropTypes.string,
+  contentAfter: PropTypes.func,
+  defValues: PropTypes.object,
+  defIsValid: PropTypes.object,
+  method: PropTypes.string,
+  onValidate: PropTypes.func,
   socket: PropTypes.object,
-  dispatch: PropTypes.func,
+  onSendSuccess: PropTypes.func,
+  onSendError: PropTypes.func,
 };
 
-Sign.defaultProps = {
-  mode: 'in', // up
-};
 
-export default connect(store => ({
-  socket: store.socket,
-}))(Sign);
+export default Sign;

@@ -1,22 +1,39 @@
 import { User } from '../../database/users';
 
-export default {
-  signup: (params, success, error) => {
-    const { login, password1, password2 } = params;
+function isValid(login, password) {
+  if (!login) {
+    return { message: 'Login is not valid', status: 'LOGIN' };
+  }
 
-    if (password1 === password2) {
-      new User({
-        login,
-        password: password1,
-      }).save((err) => {
+  if (!password || password.length < 6) {
+    return { message: 'Password is not valid', status: 'PASSWORD' };
+  }
+
+  return {};
+}
+
+export default {
+  signUp: (params, success, error) => {
+    let { login, password } = params;
+
+    login = login.trim();
+    password = password.trim();
+
+    const { message, status } = isValid(login, password);
+
+    if (!message) {
+      new User({ login, password }).save((err) => {
         if (err) {
-          error('User exist or not corret input params', 'LOGIN');
+          error('User exist', 'LOGIN');
         } else {
-          success(true);
+          success();
         }
       });
     } else {
-      error('Is not correct password', 'PASSWORD');
+      error(message, status);
     }
+  },
+  signIn: (params) => {
+    console.log('signIn', params);
   },
 };

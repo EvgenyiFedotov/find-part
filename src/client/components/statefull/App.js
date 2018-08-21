@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import IndexTop from '../simple/IndexTop';
-import Sign from '../simple/Forms/Sign';
+import SignIn from '../simple/Forms/SignIn';
+import SignUp from '../simple/Forms/SignUp';
 
 import { actions as socketActs } from '../../providerStore/socket';
 
@@ -28,9 +29,9 @@ export class App extends Component {
       top = <IndexTop />;
 
       if (mode === 'signIn') {
-        content = <Sign mode="in" />;
+        content = <SignIn />;
       } else if (mode === 'signUp') {
-        content = <Sign mode="up" />;
+        content = <SignUp />;
       } else {
         content = <div className="logo-banner">FINDPART</div>;
       }
@@ -48,7 +49,7 @@ export class App extends Component {
 App.propTypes = {
   nav: PropTypes.object,
   dispatch: PropTypes.func,
-  socket: PropTypes.object
+  socket: PropTypes.object,
 };
 
 export default connect(store => store)(App);

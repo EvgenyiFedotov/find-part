@@ -15,24 +15,29 @@ function on(method, callback) {
 }
 
 function once(methodName, callback, errback) {
-  this.once('api_result', (response) => {
-    const {
-      status,
-      message,
-      method,
-      result,
-    } = response;
+  const isCallback = callback instanceof Function;
+  const isErrback = errback instanceof Function;
 
-    if (method && method === methodName) {
-      if (status === 'OK') {
-        callback(result, response);
-      } else if (errback instanceof Function) {
-        errback(message, status, response);
+  if (isCallback || isErrback) {
+    this.once('api_result', (response) => {
+      const {
+        status,
+        message,
+        method,
+        result,
+      } = response;
+
+      if (method && method === methodName) {
+        if (isCallback && status === 'OK') {
+          callback(result, response);
+        } else if (isErrback) {
+          errback(message, status, response);
+        }
+      } else {
+        this.onceApi(methodName, callback);
       }
-    } else {
-      this.onceApi(methodName, callback);
-    }
-  });
+    });
+  }
 }
 
 /**
