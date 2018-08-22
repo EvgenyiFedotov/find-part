@@ -1,0 +1,18 @@
+@mixin Sign($values) {
+  .sign {
+    $margin-bottom: 1rem;
+
+    display: grid;
+    max-width: 220px;
+
+    .header {
+      margin-bottom: $margin-bottom;
+      color: map-get(map-get($values, colors), primary);
+      text-align: center;
+    }
+
+    .input {
+      margin-bottom: $margin-bottom;
+    }
+  }
+}

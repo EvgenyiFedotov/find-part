@@ -1,0 +1,5 @@
+@import './Auth';
+
+@mixin pages($values) {
+  @include Auth($values);
+}

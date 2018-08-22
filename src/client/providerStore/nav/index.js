@@ -1,5 +1,5 @@
 export const defaultStore = {
-  route: 'index',
+  route: 'auth',
   mode: null,
 };
 
