@@ -1,4 +1,4 @@
-import { dispatch, subscribeByCallbacks } from './common';
+import SuperSocket from './SuperSocket';
 
 /**
  * @param {Namespace} namespaceIn
@@ -9,37 +9,26 @@ import { dispatch, subscribeByCallbacks } from './common';
 export default function namespace(namespaceIn, callbacksIn = {}, options = {}) {
   const callbacks = callbacksIn;
   const { connection } = callbacks;
-  const { store } = options;
-  let common = {
-    store,
-    dispatch: store && store.dispatch,
-    getState: store && store.getState,
-  };
+  const superSocket = new SuperSocket({
+    namespaceIn,
+    store: options.store,
+  });
 
   namespaceIn.on('connection', (socket) => {
-    common = {
-      ...common,
-      socket,
-      socketId: socket.id,
-      dispatch: {
-        socket: (actions, rooms = []) => dispatch(socket, actions, rooms),
-        namespace: (actions, rooms = []) => dispatch(namespaceIn, actions, rooms),
-      },
-      subscribe: (sCallbacks = {}) => subscribeByCallbacks(common, sCallbacks),
-    };
+    superSocket.socket = socket;
 
     if (connection instanceof Function) {
-      connection(common);
+      connection(superSocket);
     } else if (connection instanceof Array) {
       connection.forEach((callback) => {
-        callback(common);
+        callback(superSocket);
       });
     }
 
     delete callbacks.connection;
 
-    subscribeByCallbacks(common, callbacks);
+    superSocket.subscribe(callbacks);
   });
 
-  return common;
+  return superSocket;
 }

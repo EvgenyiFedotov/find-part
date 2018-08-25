@@ -27,6 +27,10 @@ export function connect() {
   //   User.find((err, users) => console.log('users', users));
   // });
 
+  // User.find((...args) => {
+  //   console.log(...args);
+  // });
+
   return database;
 }
 

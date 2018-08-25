@@ -6,11 +6,8 @@ function checkMessage(message) {
     : 'error';
 }
 
-export function connection() {
-  console.log('connection');
-}
-
 export function api(common, params = {}) {
+  const { nameEvent } = common;
   const { method, data } = params;
   const methodArr = method.split('/');
   const object = methods[methodArr[0]];
@@ -18,16 +15,16 @@ export function api(common, params = {}) {
 
   if (objectMethod) {
     return objectMethod(data, (result, message) => {
-      common.emitResult({
-        method,
+      this.emitResult(nameEvent, {
         status: 'OK',
-        result,
         message: checkMessage(message),
+        method,
+        result,
       });
     }, (message, statusIn = 'ERROR') => {
       const status = statusIn === 'OK' ? 'ERROR' : statusIn;
 
-      common.emitResult({
+      this.emitResult(nameEvent, {
         method,
         status,
         message: checkMessage(message),
@@ -39,6 +36,5 @@ export function api(common, params = {}) {
 }
 
 export default {
-  connection,
   api,
 };

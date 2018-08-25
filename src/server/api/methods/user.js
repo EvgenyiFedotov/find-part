@@ -33,7 +33,11 @@ export default {
       error(message, status);
     }
   },
-  signIn: (params) => {
-    console.log('signIn', params);
+  signIn: (params, success) => {
+    User.findOne().byLoginPassword(params.login, params.password)
+      .exec((err, user) => {
+        success(user);
+        console.log('signIn', user);
+      });
   },
 };
