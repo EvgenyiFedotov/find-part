@@ -33,10 +33,15 @@ export default {
       error(message, status);
     }
   },
-  signIn: (params, success) => {
+  signIn: (params, success, error) => {
     User.findOne().byLoginPassword(params.login, params.password)
       .exec((err, user) => {
-        success(user);
+        if (user) {
+          success(user);
+        } else {
+          error('Error enter login and password!');
+        }
+
         console.log('signIn', user);
       });
   },

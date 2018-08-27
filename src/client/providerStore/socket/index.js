@@ -1,4 +1,4 @@
-import { create } from './common';
+import SuperSocket from '../../../common/SuperSocket/client';
 
 export const types = {
   create: 'SOCKET_CREATE',
@@ -40,7 +40,7 @@ export const actions = {
 export function reducer(store = null, action) {
   switch (action.type) {
     case types.create:
-      return create(action.url, action.options);
+      return SuperSocket.create(action.url, action.options);
     case types.set:
       return action.socket;
     case types.remove:

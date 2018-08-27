@@ -1,4 +1,4 @@
-import SuperSocket from './SuperSocket';
+import SuperSocket from '../../common/SuperSocket/server';
 
 /**
  * @param {Namespace} namespaceIn
@@ -10,7 +10,6 @@ export default function namespace(namespaceIn, callbacksIn = {}, options = {}) {
   const callbacks = callbacksIn;
   const { connection } = callbacks;
   const superSocket = new SuperSocket({
-    namespaceIn,
     store: options.store,
   });
 

@@ -9,12 +9,17 @@ class SignIn extends Component {
     console.log('onSendSuccess', ...args);
   }
 
+  onSendError(...args) {
+    console.log('onSendError', ...args);
+  }
+
   render() {
     return (
       <Sign
         socket={this.props.socket}
         method={'user/signIn'}
         onSendSuccess={this.onSendSuccess}
+        onSendError={this.onSendError}
       />
     );
   }

@@ -6,20 +6,13 @@ function emit(method, data = {}) {
   this.emit('api', { method, data });
 }
 
-function on(method, callback) {
-  this.on('api_result', (response) => {
-    if (response.method && method === response.method) {
-      callback(response.result, response);
-    }
-  });
-}
-
-function once(methodName, callback, errback) {
+function onOnce(isOnce, methodName, callback, errback) {
+  const action = isOnce ? 'once' : 'on';
   const isCallback = callback instanceof Function;
   const isErrback = errback instanceof Function;
 
   if (isCallback || isErrback) {
-    this.once('api_result', (response) => {
+    this[action]('api_result', (response) => {
       const {
         status,
         message,
@@ -33,8 +26,8 @@ function once(methodName, callback, errback) {
         } else if (isErrback) {
           errback(message, status, response);
         }
-      } else {
-        this.onceApi(methodName, callback);
+      } else if (isOnce) {
+        onOnce.call(this, isOnce, methodName, callback, errback);
       }
     });
   }
@@ -46,7 +39,7 @@ function once(methodName, callback, errback) {
 export default function (socket) {
   return {
     emit: emit.bind(socket),
-    on: on.bind(socket),
-    once: once.bind(socket),
+    on: onOnce.bind(socket, false),
+    once: onOnce.bind(socket, true),
   };
 }

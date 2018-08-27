@@ -7,12 +7,5 @@ export default function (httpServer, callbacks) {
     wsEngine: 'ws',
   });
 
-  // server.use((socket, next) => {
-  //   socket.request.headers.cookie
-  //   console.log(socket.request.headers.cookie.vc);
-  //   if (socket.request.headers.cookie) return next();
-  //   next(new Error('Authentication error'));
-  // });
-
   return namespace(server, callbacks);
 }
