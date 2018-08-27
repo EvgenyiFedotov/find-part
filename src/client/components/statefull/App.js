@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import cookie from 'browser-cookies';
 
 import Auth from './Pages/Auth';
 
@@ -15,6 +16,8 @@ export class App extends Component {
     dispatch(socketActs.on('dispatch', (...actions) => {
       actions.forEach(action => dispatch(action));
     }));
+
+    console.log(cookie.all());
   }
 
   render() {
