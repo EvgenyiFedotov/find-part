@@ -1,4 +1,4 @@
-import cookie from 'cookie';
+import cookies from 'cookie';
 
 export default class SuperSocket {
   /**
@@ -29,7 +29,7 @@ export default class SuperSocket {
       cookie: {
         get: () => {
           if (socket) {
-            return cookie.parse(this.socket.request.headers.cookie);
+            return cookies.parse(this.socket.request.headers.cookie);
           }
 
           return {};
@@ -155,13 +155,14 @@ export default class SuperSocket {
     const objectMethod = object && object[methodArr[1]];
 
     if (objectMethod instanceof Function) {
-      return objectMethod(data, (result, paramsSuccess = {}) => {
-        const { message, code } = paramsSuccess;
+      return objectMethod.call(superSocket, data, (result, paramsSuccess = {}) => {
+        const { message, code, cookie } = paramsSuccess;
 
         superSocket.emitResult(nameEvent, {
           status: 'OK',
           code: typeof code === 'number' ? code : 200,
           message: typeof message === 'string' ? message : '',
+          cookie: cookie instanceof Object ? cookie : null,
           method,
           result,
         });

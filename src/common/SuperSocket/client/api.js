@@ -1,3 +1,5 @@
+import cookies from 'browser-cookies';
+
 /**
  * @param {String} method
  * @param {Object} data
@@ -18,10 +20,35 @@ function onOnce(isOnce, methodName, callback, errback) {
         message,
         method,
         result,
+        cookie,
       } = response;
 
       if (method && method === methodName) {
         if (isCallback && status === 'OK') {
+          if (cookie instanceof Array) {
+            /**
+             * @param {Object} config
+             * @param {String} config.type
+             * @param {String} config.key
+             * @param {String} config.value
+             * @param {Object} [config.options]
+             */
+            cookie.forEach((config) => {
+              const {
+                type,
+                key,
+                value,
+                options,
+              } = config;
+
+              if (cookies[type]) {
+                cookies[type](key, value, options);
+              }
+            });
+          }
+
+          console.log(cookie);
+
           callback(result, response);
         } else if (isErrback) {
           errback(message, status, response);

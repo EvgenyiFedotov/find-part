@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import cookie from 'browser-cookies';
+import cookies from 'browser-cookies';
 
 import Auth from './Pages/Auth';
 
@@ -17,7 +17,7 @@ export class App extends Component {
       actions.forEach(action => dispatch(action));
     }));
 
-    console.log(cookie.all());
+    console.log(cookies.all());
   }
 
   render() {

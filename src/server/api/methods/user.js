@@ -33,16 +33,21 @@ export default {
       error(message, status);
     }
   },
-  signIn: (params, success, error) => {
+  signIn: function signIn(params, success, error) {
     User.findOne().byLoginPassword(params.login, params.password)
       .exec((err, user) => {
         if (user) {
-          success(user);
+          success(user, {
+            cookie: [
+              {
+                type: 'erase',
+                key: 'test',
+              },
+            ],
+          });
         } else {
           error('Error enter login and password!');
         }
-
-        console.log('signIn', user);
       });
   },
 };
