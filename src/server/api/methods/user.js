@@ -1,4 +1,5 @@
-import { User } from '../../database/users';
+import { model as User } from '../../database/users';
+import { model as Inout } from '../../database/inout';
 
 function isValid(login, password) {
   if (!login) {
@@ -37,13 +38,31 @@ export default {
     User.findOne().byLoginPassword(params.login, params.password)
       .exec((err, user) => {
         if (user) {
-          success(user, {
-            cookie: [
-              {
-                type: 'erase',
-                key: 'test',
-              },
-            ],
+          const { _id } = user;
+
+          Inout.findPublicFormat({
+            userId: _id,
+            dateOut: undefined,
+          }, (inoutErr, inoutRes) => {
+            if (inoutRes.length) {
+              success(inoutRes, {
+                code: 201,
+              });
+            } else {
+              const inout = new Inout({ userId: _id });
+
+              inout.save(() => {
+                success(true, {
+                  cookie: [
+                    {
+                      type: 'set',
+                      key: 'inout',
+                      value: inout.getId(),
+                    },
+                  ],
+                });
+              });
+            }
           });
         } else {
           error('Error enter login and password!');

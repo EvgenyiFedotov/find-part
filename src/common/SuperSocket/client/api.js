@@ -47,8 +47,6 @@ function onOnce(isOnce, methodName, callback, errback) {
             });
           }
 
-          console.log(cookie);
-
           callback(result, response);
         } else if (isErrback) {
           errback(message, status, response);
