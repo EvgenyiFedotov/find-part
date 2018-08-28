@@ -5,15 +5,15 @@ import cookies from 'browser-cookies';
 
 import Auth from './Pages/Auth';
 
-import { actions as socketActs } from '../../providerStore/socket';
+import { socket } from '../../providerStore';
 
 export class App extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
 
-    dispatch(socketActs.create());
+    dispatch(socket.actions.create());
 
-    dispatch(socketActs.on('dispatch', (...actions) => {
+    dispatch(socket.actions.on('dispatch', (...actions) => {
       actions.forEach(action => dispatch(action));
     }));
 

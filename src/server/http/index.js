@@ -21,7 +21,12 @@ function getHtml(defStore = {}) {
 }
 
 export function main(req, res) {
-  res.send(getHtml());
+  res.send(getHtml({
+    nav: {
+      route: 'auth',
+      mode: 'signIn',
+    },
+  }));
 }
 
 export default { main };

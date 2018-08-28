@@ -1,7 +1,13 @@
 import SuperSocket from '../../../common/SuperSocket/client';
 
+export const defaultStore = {
+  socket: null,
+  callStack: [],
+};
+
 export const types = {
   create: 'SOCKET_CREATE',
+  createByOptions: 'SOCKET_CREATE_BY_OPTIONS',
   set: 'SOCKET_SET',
   remove: 'SOCKET_REMOVE',
   emit: 'SOCKET_EMIT',
@@ -13,6 +19,10 @@ export const actions = {
   create: (url, options) => ({
     type: types.create,
     url,
+    options,
+  }),
+  createByOptions: options => ({
+    type: types.createByOptions,
     options,
   }),
   set: socket => ({
@@ -37,22 +47,87 @@ export const actions = {
   }),
 };
 
-export function reducer(store = null, action) {
+/**
+ * @param {SuperSocket} socket
+ * @param {Object[]} callStack
+ */
+function setCallStack(socket, callStack) {
+  callStack.forEach((action) => {
+    socket[action.type](...action.args);
+  });
+
+  return socket;
+}
+
+export function reducer(store = defaultStore, action) {
   switch (action.type) {
     case types.create:
-      return SuperSocket.create(action.url, action.options);
+      return {
+        socket: setCallStack(
+          SuperSocket.create(action.url, action.options),
+          store.callStack,
+        ),
+        callStack: [],
+      };
+    case types.createByOptions:
+      return {
+        socket: setCallStack(
+          SuperSocket.createByOptions(action.options),
+          store.callStack,
+        ),
+        callStack: [],
+      };
     case types.set:
-      return action.socket;
+      return {
+        socket: setCallStack(
+          action.socket,
+          store.callStack,
+        ),
+        callStack: [],
+      };
     case types.remove:
-      return null;
+      return {
+        socket: null,
+        callStack: [],
+      };
     case types.emit:
-      store.emit(action.nameEvent, ...action.args);
+      if (store.socket) {
+        store.socket.emit(action.nameEvent, ...action.args);
+      } else {
+        store.callStack.push({
+          type: 'emit',
+          args: [
+            action.nameEvent,
+            ...action.args,
+          ],
+        });
+      }
       break;
     case types.once:
-      store.once(action.nameEvent, action.callback);
+      if (store.socket) {
+        store.socket.once(action.nameEvent, action.callback);
+      } else {
+        store.callStack.push({
+          type: 'once',
+          args: [
+            action.nameEvent,
+            action.callback,
+          ],
+        });
+      }
       break;
     case types.on:
-      store.on(action.nameEvent, action.callback);
+      if (store.socket) {
+        store.socket.on(action.nameEvent, action.callback);
+      } else {
+        store.callStack.push({
+          type: 'on',
+          args: [
+            action.nameEvent,
+            action.callback,
+          ],
+        });
+      }
       break;
     default:
       return store;
