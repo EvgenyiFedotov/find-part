@@ -52,6 +52,7 @@ export function reducer(store = defaultStore, action) {
 }
 
 export default {
+  defaultStore,
   types,
   actions,
   reducer,

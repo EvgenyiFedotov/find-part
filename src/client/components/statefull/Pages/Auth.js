@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { actions } from '../../../providerStore/nav';
+import { nav } from '../../../providerStore';
 
 import AuthTopBar from '../../stateless/AuthTopBar.jsx';
 import SignIn from '../../simple/Forms/SignIn';
@@ -10,7 +10,7 @@ import SignUp from '../../simple/Forms/SignUp';
 
 export class Index extends Component {
   onNav(mode) {
-    this.props.dispatch(actions.setMode(mode));
+    this.props.dispatch(nav.actions.setMode(mode));
   }
 
   render() {

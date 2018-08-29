@@ -4,11 +4,17 @@ import cookies from 'browser-cookies';
  * @param {String} method
  * @param {Object} data
  */
-function emit(method, data = {}) {
+export function emit(method, data = {}) {
   this.emit('api', { method, data });
 }
 
-function onOnce(isOnce, methodName, callback, errback) {
+/**
+ * @param {Boolean} isOnce
+ * @param {String} methodName
+ * @param {Function} callback
+ * @param {Function} errback
+ */
+export function onOnce(isOnce, methodName, callback, errback) {
   const action = isOnce ? 'once' : 'on';
   const isCallback = callback instanceof Function;
   const isErrback = errback instanceof Function;

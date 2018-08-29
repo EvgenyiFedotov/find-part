@@ -13,10 +13,6 @@ export class App extends Component {
 
     dispatch(socket.actions.create());
 
-    dispatch(socket.actions.on('dispatch', (...actions) => {
-      actions.forEach(action => dispatch(action));
-    }));
-
     console.log(cookies.all());
   }
 

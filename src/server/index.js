@@ -7,7 +7,7 @@ import { connect } from './database';
 
 import handlers from './api/sockets/handlers';
 
-const PORT = 3000;
+const PORT = 5000;
 const app = express();
 const httpServer = http.Server(app);
 

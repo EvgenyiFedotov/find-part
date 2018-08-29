@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Input, Button } from '@material-ui/core';
+
+import { socket } from '../../../providerStore';
 
 class Sign extends Component {
   constructor(props) {
@@ -51,14 +54,14 @@ class Sign extends Component {
 
   onSend() {
     const {
+      dispatch,
       method,
-      socket,
       onSendError,
     } = this.props;
     let { onSendSuccess } = this.props;
 
-    if (socket && method && Sign.isValid(this.validate())) {
-      const { api } = socket;
+    if (method && Sign.isValid(this.validate())) {
+      const { runMethod } = socket.actions;
       let onSendErrorBind;
 
       if (onSendSuccess instanceof Function) {
@@ -82,8 +85,17 @@ class Sign extends Component {
         };
       }
 
-      api.once(method, onSendSuccess, onSendErrorBind);
-      api.emit(method, this.state.values);
+      dispatch(runMethod(
+        'apiOnce',
+        method,
+        onSendSuccess,
+        onSendErrorBind,
+      ));
+      dispatch(runMethod(
+        'apiEmit',
+        method,
+        this.state.values,
+      ));
     }
   }
 
@@ -136,10 +148,9 @@ Sign.propTypes = {
   defIsValid: PropTypes.object,
   method: PropTypes.string,
   onValidate: PropTypes.func,
-  socket: PropTypes.object,
   onSendSuccess: PropTypes.func,
   onSendError: PropTypes.func,
+  dispatch: PropTypes.func,
 };
 
-
-export default Sign;
+export default connect()(Sign);

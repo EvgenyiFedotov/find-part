@@ -44,7 +44,6 @@ class SignUp extends Component {
         contentAfter={this.contentAfter}
         onValidate={SignUp.onValidate}
         method={'user/signUp'}
-        socket={this.props.socket}
         onSendSuccess={SignUp.onSendSuccess.bind(this)}
       />
     );
@@ -52,10 +51,7 @@ class SignUp extends Component {
 }
 
 SignUp.propTypes = {
-  socket: PropTypes.object,
   dispatch: PropTypes.func,
 };
 
-export default connect(store => ({
-  socket: store.socket,
-}))(SignUp);
+export default connect()(SignUp);
