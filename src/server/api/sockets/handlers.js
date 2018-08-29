@@ -3,7 +3,11 @@ import SuperSocket from '../../../common/SuperSocket/server';
 
 export default {
   api: SuperSocket.apiHandler.bind(SuperSocket, methods),
-  check: () => {
-    console.log('@check');
+  check: (common) => {
+    console.log('@check', common);
+
+    return {
+      res: true,
+    };
   },
 };

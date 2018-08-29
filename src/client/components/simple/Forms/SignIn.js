@@ -4,16 +4,34 @@ import PropTypes from 'prop-types';
 
 import Sign from './Sign';
 
+import { socket } from '../../../providerStore';
+
 class SignIn extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
+    const { runMethod } = socket.actions;
 
-    // dispatch(
-    //   socketActs.once('check', () => {
-    //     console.log('check');
-    //   }),
-    // );
-    // dispatch(socketActs.emit('check', 1, 2, 300));
+    dispatch(
+      runMethod(
+        'socketRunMethod',
+        'once',
+        'check_result',
+        (...args) => {
+          console.log('check_result', ...args);
+        },
+      ),
+    );
+
+    dispatch(
+      runMethod(
+        'socketRunMethod',
+        'emit',
+        'check',
+        1,
+        'asd',
+        { a: 1, b: 777 },
+      ),
+    );
   }
 
   onSendSuccess(...args) {
