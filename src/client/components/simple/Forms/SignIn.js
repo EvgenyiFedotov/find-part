@@ -4,42 +4,34 @@ import PropTypes from 'prop-types';
 
 import Sign from './Sign';
 
-import { socket } from '../../../providerStore';
+import { nav as navi } from '../../../providerStore';
 
 class SignIn extends Component {
-  componentDidMount() {
-    const { dispatch } = this.props;
-    const { runMethod } = socket.actions;
+  onSendSuccess(result, response) {
+    const { dispatch, nav } = this.props;
 
-    dispatch(
-      runMethod(
-        'socketRunMethod',
-        'once',
-        'check_result',
-        (...args) => {
-          console.log('check_result', ...args);
-        },
-      ),
-    );
+    if (response.code === 201) {
+      dispatch(navi.actions.setParams({
+        ...nav.params,
+        inouts: result,
+      }));
+    } else {
+      dispatch(navi.actions.setRoute('dashboard'));
+    }
 
-    dispatch(
-      runMethod(
-        'socketRunMethod',
-        'emit',
-        'check',
-        1,
-        'asd',
-        { a: 1, b: 777 },
-      ),
-    );
+    // this.setState({
+    //   isValid: Sign.getDefIsValid(),
+    // });
   }
 
-  onSendSuccess(...args) {
-    console.log('onSendSuccess', ...args);
-  }
-
-  onSendError(...args) {
-    console.log('onSendError', ...args);
+  onSendError() {
+    this.setState({
+      isValid: {
+        ...this.state.isValid,
+        login: true,
+        password: true,
+      },
+    });
   }
 
   render() {
@@ -55,6 +47,7 @@ class SignIn extends Component {
 
 SignIn.propTypes = {
   dispatch: PropTypes.func,
+  nav: PropTypes.object,
 };
 
 export default connect()(SignIn);

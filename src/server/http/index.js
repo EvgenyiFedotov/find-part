@@ -24,7 +24,9 @@ export function main(req, res) {
   res.send(getHtml({
     nav: {
       route: 'auth',
-      mode: 'signIn',
+      params: {
+        mode: 'signIn',
+      },
     },
   }));
 }

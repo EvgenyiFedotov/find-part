@@ -33,7 +33,9 @@ class SignUp extends Component {
   }
 
   static onSendSuccess() {
-    this.props.dispatch(nav.actions.setMode('signIn'));
+    this.props.dispatch(nav.actions.setParams({
+      mode: 'signIn',
+    }));
   }
 
   render() {

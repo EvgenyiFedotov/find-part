@@ -151,6 +151,9 @@ Sign.propTypes = {
   onSendSuccess: PropTypes.func,
   onSendError: PropTypes.func,
   dispatch: PropTypes.func,
+  nav: PropTypes.object,
 };
 
-export default connect()(Sign);
+export default connect(store => ({
+  nav: store.nav,
+}))(Sign);

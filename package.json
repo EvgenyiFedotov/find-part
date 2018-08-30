@@ -43,6 +43,7 @@
     "browser-cookies": "^1.2.0",
     "cookie": "^0.3.1",
     "cookie-parser": "^1.4.3",
+    "dateformat": "^3.0.3",
     "express": "^4.16.3",
     "md5": "^2.2.1",
     "mongoose": "^5.0.14",

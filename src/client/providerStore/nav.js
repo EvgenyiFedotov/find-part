@@ -1,12 +1,12 @@
 export const defaultStore = {
   route: 'auth',
-  mode: null,
+  params: null,
 };
 
 export const types = {
   set: 'NAV_SET',
   setRoute: 'NAV_SET_ROUTE',
-  setMode: 'NAV_SET_MODE',
+  setParams: 'NAV_SET_PARAMS',
 };
 
 export const actions = {
@@ -19,32 +19,40 @@ export const actions = {
     type: types.setRoute,
     route,
   }),
-  setMode: mode => ({
-    type: types.setMode,
-    mode,
+  setParams: params => ({
+    type: types.setParams,
+    params,
   }),
 };
 
+/**
+ * @param {Object} params
+ */
+function checkParams(params) {
+  return {
+    ...params instanceof Object ? params : {},
+  };
+}
+
 export function reducer(store = defaultStore, action) {
-  const { route, mode } = action;
+  const { route, params } = action;
 
   switch (action.type) {
     case types.set:
-
       return {
         ...store,
         route,
-        mode,
+        params: checkParams(params),
       };
     case types.setRoute:
       return {
         ...store,
         route,
       };
-    case types.setMode:
+    case types.setParams:
       return {
         ...store,
-        mode,
+        params: checkParams(params),
       };
     default:
       return store;

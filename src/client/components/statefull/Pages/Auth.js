@@ -2,21 +2,26 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { nav } from '../../../providerStore';
+import { nav as navi } from '../../../providerStore';
 
 import AuthTopBar from '../../stateless/AuthTopBar.jsx';
 import SignIn from '../../simple/Forms/SignIn';
 import SignUp from '../../simple/Forms/SignUp';
+import Inouts from '../../simple/Inouts';
 
 export class Index extends Component {
   onNav(mode) {
-    this.props.dispatch(nav.actions.setMode(mode));
+    this.props.dispatch(navi.actions.setParams({
+      mode,
+    }));
   }
 
   render() {
+    const { mode, inouts } = this.props.nav.params;
     let content;
+    let inoutsOpen = false;
 
-    switch (this.props.nav.mode) {
+    switch (mode) {
       case 'signIn':
         content = <SignIn />;
         break;
@@ -26,6 +31,10 @@ export class Index extends Component {
       default:
         content = <div className="logo-banner">FINDPART</div>;
         break;
+    }
+
+    if (inouts) {
+      inoutsOpen = true;
     }
 
     return (
@@ -38,6 +47,8 @@ export class Index extends Component {
         </div>
 
         <div className="content">{content}</div>
+
+        <Inouts open={inoutsOpen} list={inouts} />
       </div>
     );
   }
