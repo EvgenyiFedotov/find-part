@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { nav as navi } from '../../../providerStore';
+import { nav as navi } from '../../../data';
 
 import AuthTopBar from '../../stateless/AuthTopBar.jsx';
 import SignIn from '../../simple/Forms/SignIn';

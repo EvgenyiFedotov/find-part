@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-import { model } from './inout';
+// import { model } from './inout';
 
 export function connect() {
   const database = mongoose.connection;
@@ -27,9 +27,9 @@ export function connect() {
   //   User.find((err, users) => console.log('users', users));
   // });
 
-  model.find((err, result) => {
-    console.log(result);
-  });
+  // model.find((err, result) => {
+  //   console.log(result);
+  // });
 
   return database;
 }

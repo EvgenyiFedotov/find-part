@@ -5,7 +5,7 @@ import { Input } from '@material-ui/core';
 
 import Sign from './Sign';
 
-import { nav } from '../../../providerStore';
+import { nav } from '../../../data';
 
 class SignUp extends Component {
   contentAfter(state) {

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import Sign from './Sign';
 
-import { nav as navi } from '../../../providerStore';
+import { nav as navi } from '../../../data';
 
 class SignIn extends Component {
   onSendSuccess(result, response) {

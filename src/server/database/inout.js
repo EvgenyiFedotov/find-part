@@ -7,7 +7,7 @@ export const schema = new mongoose.Schema({
   },
   dateIn: { type: Date, default: Date.now },
   dateOut: Date,
-  params: mongoose.Schema.Types.Mixed,
+  userAgent: mongoose.Schema.Types.String,
 });
 
 schema.statics.findPublicFormat = function findPublicFormat(filter = {}, callback) {
@@ -22,10 +22,13 @@ schema.methods.getId = function getId() {
 };
 
 schema.methods.publicFormat = function publicFormat() {
-  const { _id, dateIn } = this;
+  const { _id } = this;
+
   return {
     _id,
-    dateIn,
+    dateIn: this.dateIn,
+    dateOut: this.dateOut,
+    userAgent: this.userAgent,
   };
 };
 

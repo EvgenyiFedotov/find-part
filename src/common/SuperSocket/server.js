@@ -26,6 +26,15 @@ export default class SuperSocket {
           return null;
         },
       },
+      headers: {
+        get: () => {
+          if (socket) {
+            return socket.handshake.headers;
+          }
+
+          return {};
+        },
+      },
       cookie: {
         get: () => {
           if (socket) {

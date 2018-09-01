@@ -6,12 +6,12 @@ import { Provider } from 'react-redux';
 import Html from '../../client/components/stateless/Html.jsx';
 import Appl from '../../client/components/statefull/App';
 
-import providerStore from '../../client/providerStore';
+import data from '../../client/data';
 
 // import { model as Inout } from '../database/inout';
 
-function getHtml(defStore = {}) {
-  const store = createStore(providerStore, defStore);
+function getHtml(defData = {}) {
+  const store = createStore(data, defData);
 
   return renderToString(<Html content={
     <Provider store={store}>

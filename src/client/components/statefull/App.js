@@ -5,7 +5,7 @@ import cookies from 'browser-cookies';
 
 import Auth from './Pages/Auth';
 
-import { socket } from '../../providerStore';
+import { socket } from '../../data';
 
 export class App extends Component {
   componentDidMount() {

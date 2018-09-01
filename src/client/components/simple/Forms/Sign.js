@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Input, Button } from '@material-ui/core';
 
-import { socket } from '../../../providerStore';
+import { socket } from '../../../data';
 
 class Sign extends Component {
   constructor(props) {
@@ -130,7 +130,6 @@ class Sign extends Component {
           {contentAfter && contentAfter.call(this, this.state, this.props)}
 
           <Button
-            variant="contained"
             color="primary"
             onClick={this.onSend.bind(this)}
           >
