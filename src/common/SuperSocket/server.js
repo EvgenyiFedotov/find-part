@@ -10,6 +10,8 @@ export default class SuperSocket {
     let socket = params.socket || null;
     let store = params.store || null;
 
+    this.cookie = {};
+
     this.cache = {
       ...(params.cache || {}),
     };
@@ -19,6 +21,7 @@ export default class SuperSocket {
         get: () => socket,
         set: (socketIn) => {
           socket = socketIn;
+          this.cookie = cookies.parse(socket.request.headers.cookie || '');
         },
       },
       socketId: {
@@ -34,15 +37,6 @@ export default class SuperSocket {
         get: () => {
           if (socket) {
             return socket.handshake.headers;
-          }
-
-          return {};
-        },
-      },
-      cookie: {
-        get: () => {
-          if (socket) {
-            return cookies.parse(this.socket.request.headers.cookie);
           }
 
           return {};
@@ -152,6 +146,23 @@ export default class SuperSocket {
   }
 
   /**
+   * @param {Object[]} cookieValues
+   */
+  setCookie(cookieValues) {
+    if (cookieValues instanceof Array) {
+      cookieValues.forEach((cookieValue) => {
+        const { type, key, value } = cookieValue;
+
+        if (type === 'set') {
+          this.cookie[key] = value;
+        } else if (type === 'erase') {
+          delete this.cookie[key];
+        }
+      });
+    }
+  }
+
+  /**
    * @param {Socket|Namespace} emitterIn
    * @param {Object[]} actions
    * @param {String[]|String} [rooms]
@@ -181,13 +192,17 @@ export default class SuperSocket {
 
     if (objectMethod instanceof Function) {
       return objectMethod.call(superSocket, data, (result, paramsSuccess = {}) => {
-        const { message, code, cookie } = paramsSuccess;
+        const { message, code } = paramsSuccess;
+        let { cookie } = paramsSuccess;
+
+        cookie = cookie instanceof Object ? cookie : null;
+        superSocket.setCookie(cookie);
 
         superSocket.emitResult(nameEvent, {
           status: 'OK',
           code: typeof code === 'number' ? code : 200,
           message: typeof message === 'string' ? message : '',
-          cookie: cookie instanceof Object ? cookie : null,
+          cookie,
           method,
           result,
         });

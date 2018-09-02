@@ -12,13 +12,17 @@ import SignUp from '../../simple/Forms/SignUp';
 import Inouts from '../../simple/Inouts';
 import OutCurrentDevice from '../../simple/OutCurrentDevice';
 
-const header = {
-  padding: '8px 8px 0 8px',
-  color: indigo[500],
-  textAlign: 'center',
+const styles = {
+  dialog: {
+    header: {
+      padding: '8px 8px 0 8px',
+      color: indigo[500],
+      textAlign: 'center',
+    },
+  },
 };
 
-export class Index extends Component {
+export class Auth extends Component {
   onNav(mode) {
     this.props.dispatch(navi.actions.setParams({
       mode,
@@ -72,7 +76,7 @@ export class Index extends Component {
         <div className="content">{content}</div>
 
         <Dialog open={dialog.open}>
-          <Typography variant="title" gutterBottom style={header}>
+          <Typography variant="title" gutterBottom style={styles.dialog.header}>
             {dialog.header}
           </Typography>
 
@@ -83,11 +87,11 @@ export class Index extends Component {
   }
 }
 
-Index.propTypes = {
+Auth.propTypes = {
   nav: PropTypes.object,
   dispatch: PropTypes.func,
 };
 
 export default connect(store => ({
   nav: store.nav,
-}))(Index);
+}))(Auth);

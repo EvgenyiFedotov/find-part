@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import cookies from 'browser-cookies';
 
-import Auth from './Pages/Auth';
+import AuthView from './Pages/Auth';
+import DashboardView from './Pages/Dashboard';
 
 import { socket } from '../../data';
 
@@ -12,8 +12,6 @@ export class App extends Component {
     const { dispatch } = this.props;
 
     dispatch(socket.actions.create());
-
-    console.log(cookies.all());
   }
 
   render() {
@@ -21,8 +19,10 @@ export class App extends Component {
     const { route } = nav;
     let content;
 
-    if (route === 'auth') {
-      content = <Auth />;
+    if (route === 'auth' || !route) {
+      content = <AuthView />;
+    } else {
+      content = <DashboardView />;
     }
 
     return <div className="app">{content}</div>;

@@ -9,12 +9,12 @@ import SuperSocket from '../../common/SuperSocket/server';
 export default function namespace(namespaceIn, callbacksIn = {}, options = {}) {
   const callbacks = callbacksIn;
   const { connection } = callbacks;
-  const superSocket = new SuperSocket({
-    store: options.store,
-  });
 
   namespaceIn.on('connection', (socket) => {
-    superSocket.socket = socket;
+    const superSocket = new SuperSocket({
+      store: options.store,
+      socket,
+    });
 
     if (connection instanceof Function) {
       connection(superSocket);
@@ -28,6 +28,4 @@ export default function namespace(namespaceIn, callbacksIn = {}, options = {}) {
 
     superSocket.subscribe(callbacks);
   });
-
-  return superSocket;
 }

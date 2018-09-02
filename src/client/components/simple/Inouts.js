@@ -52,7 +52,7 @@ class Inouts extends Component {
         });
 
         if (Object.keys(this.state.listExit).length === list.length) {
-          this.skip();
+          // this.skip();
         }
       },
     ));

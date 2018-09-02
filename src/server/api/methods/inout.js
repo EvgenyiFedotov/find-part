@@ -42,7 +42,27 @@ export function signIn(params, success, error, superSocket) {
   }
 }
 
+export function signOut(params, success, error, superSocket) {
+  const { inout } = superSocket.cookie;
+
+  Inout.findByIdAndUpdate(inout, {
+    dateOut: new Date(),
+  }, (errUpdate) => {
+    if (!errUpdate) {
+      success(true, {
+        cookie: [
+          {
+            type: 'erase',
+            key: 'inout',
+          },
+        ],
+      });
+    }
+  });
+}
+
 export default {
   exitDevices,
   signIn,
+  signOut,
 };
