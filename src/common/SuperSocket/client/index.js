@@ -53,6 +53,17 @@ export default class SuperSocket {
 
   /**
    * @param {String} methodName
+   * @param {Object} data
+   * @param {Function} callback
+   * @param {Function} errback
+   */
+  apiCall(methodName, data, callback, errback) {
+    this.apiOnce(methodName, callback, errback);
+    this.apiEmit(methodName, data);
+  }
+
+  /**
+   * @param {String} methodName
    * @param  {...any} args
    */
   socketRunMethod(methodName, ...args) {

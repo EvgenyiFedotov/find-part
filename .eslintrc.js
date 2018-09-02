@@ -4,6 +4,7 @@ module.exports = {
     "plugin:react/recommended"
   ],
   "rules": {
-    "linebreak-style": ["error", "windows"]
+    "linebreak-style": ["error", "windows"],
+    "no-underscore-dangle": ["error", { "allow": ["_id"] }]
   },
 };

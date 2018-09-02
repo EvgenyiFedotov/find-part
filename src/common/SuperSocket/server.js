@@ -10,6 +10,10 @@ export default class SuperSocket {
     let socket = params.socket || null;
     let store = params.store || null;
 
+    this.cache = {
+      ...(params.cache || {}),
+    };
+
     Object.defineProperties(this, {
       socket: {
         get: () => socket,
@@ -136,6 +140,18 @@ export default class SuperSocket {
   }
 
   /**
+   * @param {Object} values
+   */
+  setCache(values) {
+    if (values instanceof Object) {
+      this.cache = {
+        ...this.cache,
+        ...values,
+      };
+    }
+  }
+
+  /**
    * @param {Socket|Namespace} emitterIn
    * @param {Object[]} actions
    * @param {String[]|String} [rooms]
@@ -186,7 +202,7 @@ export default class SuperSocket {
           message: typeof message === 'string' ? message : 'Server error!',
           method,
         });
-      });
+      }, superSocket);
     }
 
     return null;

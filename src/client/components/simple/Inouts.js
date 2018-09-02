@@ -16,7 +16,7 @@ import Done from '@material-ui/icons/Done';
 import indigo from '@material-ui/core/colors/indigo';
 import grey from '@material-ui/core/colors/grey';
 
-import { socket } from '../../data';
+import { socket, nav as navi } from '../../data';
 
 const padding = {
   paddingLeft: '8px',
@@ -39,39 +39,56 @@ class Inouts extends Component {
     };
   }
 
-  exitDevice(id) {
-    const { dispatch } = this.props;
+  exitDevices(ids) {
+    const { dispatch, list } = this.props;
     const { runMethod } = socket.actions;
-    const method = 'inout/exitDevice';
 
     dispatch(runMethod(
-      'apiOnce',
-      method,
+      'apiCall',
+      'inout/exitDevices',
+      ids,
       () => {
+        const idsExit = ids.reduce((res, val) => ({
+          ...res,
+          [val]: 'exit',
+        }), {});
+
         this.setState({
           listExit: {
             ...this.state.listExit,
-            [id]: 'exit',
+            ...idsExit,
           },
         });
 
-        console.log('successExitDevice');
+        if (Object.keys(this.state.listExit).length === list.length) {
+          this.skip();
+        }
       },
     ));
+  }
 
-    dispatch(runMethod(
-      'apiEmit',
-      method,
-      id,
-    ));
+  exitDevice(id) {
+    this.exitDevices([id]);
   }
 
   exitDeviceAll() {
-    console.log('exitDeviceAll', this);
+    const { list } = this.props;
+
+    this.exitDevices(list.map(el => el._id));
   }
 
-  next() {
-    console.log('next', this);
+  skip() {
+    const { dispatch } = this.props;
+    const { runMethod } = socket.actions;
+
+    dispatch(runMethod(
+      'apiCall',
+      'inout/signIn',
+      null,
+      () => {
+        dispatch(navi.actions.setRoute('dashboard'));
+      },
+    ));
   }
 
   render() {
@@ -104,14 +121,17 @@ class Inouts extends Component {
                       {item.userAgent}
                     </div>
 
-                    <IconButton
-                      color="primary"
-                      onClick={this.exitDevice.bind(this, _id)
-                    }>
-                      {
-                        listExit[_id] === 'exit' ? <Done /> : <ExitToApp />
-                      }
-                    </IconButton>
+                    {
+                      listExit[_id] === 'exit'
+                        ? <IconButton color="primary"><Done /></IconButton>
+                        : <IconButton
+                            color="primary"
+                            onClick={this.exitDevice.bind(this, _id)}
+                          >
+                            <ExitToApp />
+                          </IconButton>
+                    }
+
                   </ListItem>
                 );
               })
@@ -130,7 +150,7 @@ class Inouts extends Component {
             <Button
               size="small"
               color="primary"
-              onClick={this.next.bind(this)}
+              onClick={this.skip.bind(this)}
             >
               Далее
             </Button>

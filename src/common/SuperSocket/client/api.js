@@ -4,7 +4,7 @@ import cookies from 'browser-cookies';
  * @param {String} method
  * @param {Object} data
  */
-export function emit(method, data = {}) {
+export function emit(method, data = null) {
   this.emit('api', { method, data });
 }
 

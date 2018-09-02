@@ -1,5 +1,6 @@
 import { model as User } from '../../database/users';
 import { model as Inout } from '../../database/inout';
+import { signIn as inoutSignIn } from './inout';
 
 function isValid(login, password) {
   if (!login) {
@@ -34,7 +35,7 @@ function signUp(params, success, error) {
   }
 }
 
-function signIn(params, success, error) {
+function signIn(params, success, error, superSocket) {
   // success(true, {
   //   cookie: [
   //     {
@@ -49,6 +50,10 @@ function signIn(params, success, error) {
       if (user) {
         const { _id } = user;
 
+        superSocket.setCache({
+          user,
+        });
+
         Inout.findPublicFormat({
           userId: _id,
           dateOut: undefined,
@@ -58,22 +63,7 @@ function signIn(params, success, error) {
               code: 201,
             });
           } else {
-            const inout = new Inout({
-              userId: _id,
-              userAgent: this.headers['user-agent'],
-            });
-
-            inout.save(() => {
-              success(true, {
-                cookie: [
-                  {
-                    type: 'set',
-                    key: 'inout',
-                    value: inout.getId(),
-                  },
-                ],
-              });
-            });
+            inoutSignIn(null, success, error, superSocket);
           }
         });
       } else {
