@@ -7,8 +7,8 @@ export default class SuperSocket {
    * @param {Store} [params.store]
    */
   constructor(params = {}) {
-    let socket = params.socket || null;
-    let store = params.store || null;
+    let socket = null;
+    let store = null;
 
     this.cookie = {};
 
@@ -49,6 +49,9 @@ export default class SuperSocket {
         },
       },
     });
+
+    this.socket = params.socket || null;
+    this.store = params.store || null;
   }
 
   /**
