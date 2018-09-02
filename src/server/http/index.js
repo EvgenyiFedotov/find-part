@@ -6,13 +6,10 @@ import { Provider } from 'react-redux';
 import Html from '../../client/components/stateless/Html.jsx';
 import Appl from '../../client/components/statefull/App';
 
-import data from '../../client/data';
+import data, { nav } from '../../client/data';
+import { model as Inout } from '../database/inout';
 
-// import { model as Inout } from '../database/inout';
-
-function getHtml(defData = {}) {
-  const store = createStore(data, defData);
-
+function getHtml(store) {
   return renderToString(<Html content={
     <Provider store={store}>
       <Appl />
@@ -21,14 +18,29 @@ function getHtml(defData = {}) {
 }
 
 export function main(req, res) {
-  res.send(getHtml({
-    nav: {
-      route: 'auth',
-      params: {
-        mode: 'signIn',
-      },
-    },
-  }));
+  const store = createStore(data);
+  const { inout } = req.cookies;
+
+  if (inout) {
+    Inout.findById(inout, (errFind, resFind) => {
+      const isOutCurrentDevice = resFind && resFind.dateOut;
+
+      if (errFind || !resFind || isOutCurrentDevice) {
+        if (isOutCurrentDevice) {
+          store.dispatch(nav.actions.setParams({
+            isOutCurrentDevice: true,
+          }));
+        }
+
+        res.send(getHtml(store));
+      } else {
+        store.dispatch(nav.actions.setRoute('dashboard'));
+        res.send(getHtml(store));
+      }
+    });
+  } else {
+    res.send(getHtml(store));
+  }
 }
 
 export default { main };

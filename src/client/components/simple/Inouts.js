@@ -1,19 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
-  Dialog,
   List,
   ListItem,
   DialogActions,
   Button,
   IconButton,
-  Typography,
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import dateformat from 'dateformat';
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import Done from '@material-ui/icons/Done';
-import indigo from '@material-ui/core/colors/indigo';
 import grey from '@material-ui/core/colors/grey';
 
 import { socket, nav as navi } from '../../data';
@@ -22,12 +19,6 @@ const padding = {
   paddingLeft: '8px',
   paddingRight: '8px',
   color: grey[500],
-};
-
-const header = {
-  padding: '8px 8px 0 8px',
-  color: indigo[500],
-  textAlign: 'center',
 };
 
 class Inouts extends Component {
@@ -92,78 +83,70 @@ class Inouts extends Component {
   }
 
   render() {
-    const { open, onClose, list } = this.props;
+    const { list } = this.props;
     const { listExit } = this.state;
     const format = 'mmmm dS\' yy HH:MM:ss';
 
     return (
       <div className="inouts">
-        <Dialog open={open} onClose={onClose}>
-          <Typography variant="title" gutterBottom style={header}>
-            Не выполнен выход на других устроствах
-          </Typography>
+        <List>
+          {
+            list && list.map((item, index) => {
+              const { _id } = item;
 
-          <List>
-            {
-              list && list.map((item, index) => {
-                const { _id } = item;
+              return (
+                <ListItem
+                  key={index}
+                  style={{ justifyContent: 'space-between', ...padding }}
+                >
+                  <div>
+                    {dateformat(new Date(item.dateIn), format)}
+                  </div>
 
-                return (
-                  <ListItem
-                    key={index}
-                    style={{ justifyContent: 'space-between', ...padding }}
-                  >
-                    <div>
-                      {dateformat(new Date(item.dateIn), format)}
-                    </div>
+                  <div>
+                    {item.userAgent}
+                  </div>
 
-                    <div>
-                      {item.userAgent}
-                    </div>
+                  {
+                    listExit[_id] === 'exit'
+                      ? <IconButton color="primary"><Done /></IconButton>
+                      : <IconButton
+                          color="primary"
+                          onClick={this.exitDevice.bind(this, _id)}
+                        >
+                          <ExitToApp />
+                        </IconButton>
+                  }
 
-                    {
-                      listExit[_id] === 'exit'
-                        ? <IconButton color="primary"><Done /></IconButton>
-                        : <IconButton
-                            color="primary"
-                            onClick={this.exitDevice.bind(this, _id)}
-                          >
-                            <ExitToApp />
-                          </IconButton>
-                    }
+                </ListItem>
+              );
+            })
+          }
+        </List>
 
-                  </ListItem>
-                );
-              })
-            }
-          </List>
+        <DialogActions>
+          <Button
+            size="small"
+            color="secondary"
+            onClick={this.exitDeviceAll.bind(this)}
+          >
+            Выйти везде
+          </Button>
 
-          <DialogActions>
-            <Button
-              size="small"
-              color="secondary"
-              onClick={this.exitDeviceAll.bind(this)}
-            >
-              Выйти везде
-            </Button>
-
-            <Button
-              size="small"
-              color="primary"
-              onClick={this.skip.bind(this)}
-            >
-              Далее
-            </Button>
-          </DialogActions>
-        </Dialog>
+          <Button
+            size="small"
+            color="primary"
+            onClick={this.skip.bind(this)}
+          >
+            Далее
+          </Button>
+        </DialogActions>
       </div>
     );
   }
 }
 
 Inouts.propTypes = {
-  open: PropTypes.bool,
-  onClose: PropTypes.func,
   list: PropTypes.array,
   dispatch: PropTypes.func,
 };

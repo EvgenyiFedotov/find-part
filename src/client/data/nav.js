@@ -1,6 +1,6 @@
 export const defaultStore = {
   route: 'auth',
-  params: null,
+  params: {},
 };
 
 export const types = {
@@ -10,10 +10,10 @@ export const types = {
 };
 
 export const actions = {
-  set: (route, mode) => ({
+  set: (route, params) => ({
     type: types.set,
     route,
-    mode,
+    params,
   }),
   setRoute: route => ({
     type: types.setRoute,

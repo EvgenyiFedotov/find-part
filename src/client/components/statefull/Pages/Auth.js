@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import indigo from '@material-ui/core/colors/indigo';
+import { Dialog, Typography } from '@material-ui/core';
 
 import { nav as navi } from '../../../data';
 
@@ -8,6 +10,13 @@ import AuthTopBar from '../../stateless/AuthTopBar.jsx';
 import SignIn from '../../simple/Forms/SignIn';
 import SignUp from '../../simple/Forms/SignUp';
 import Inouts from '../../simple/Inouts';
+import OutCurrentDevice from '../../simple/OutCurrentDevice';
+
+const header = {
+  padding: '8px 8px 0 8px',
+  color: indigo[500],
+  textAlign: 'center',
+};
 
 export class Index extends Component {
   onNav(mode) {
@@ -17,11 +26,15 @@ export class Index extends Component {
   }
 
   render() {
-    const { mode, inouts } = this.props.nav.params;
+    const { params } = this.props.nav;
     let content;
-    let inoutsOpen = false;
+    let dialog = {
+      open: false,
+      header: '',
+      content: null,
+    };
 
-    switch (mode) {
+    switch (params.mode) {
       case 'signIn':
         content = <SignIn />;
         break;
@@ -33,8 +46,18 @@ export class Index extends Component {
         break;
     }
 
-    if (inouts) {
-      inoutsOpen = true;
+    if (params.isOutCurrentDevice) {
+      dialog = {
+        open: true,
+        header: 'С текущего устройства был выполнен выход',
+        content: <OutCurrentDevice />,
+      };
+    } else if (params.inouts) {
+      dialog = {
+        open: true,
+        header: 'Не выполнен выход на других устроствах',
+        content: <Inouts list={params.inouts} />,
+      };
     }
 
     return (
@@ -48,7 +71,13 @@ export class Index extends Component {
 
         <div className="content">{content}</div>
 
-        <Inouts open={inoutsOpen} list={inouts} />
+        <Dialog open={dialog.open}>
+          <Typography variant="title" gutterBottom style={header}>
+            {dialog.header}
+          </Typography>
+
+          {dialog.content}
+        </Dialog>
       </div>
     );
   }
