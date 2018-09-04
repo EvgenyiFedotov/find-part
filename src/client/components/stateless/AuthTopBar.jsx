@@ -19,6 +19,7 @@ export default function AuthTopBar(params = {}) {
             variant="title"
             color="primary"
             onClick={onNav && onNav.bind(this, null)}
+            style={styles.logo}
           >
             {logo}
           </Typography>
