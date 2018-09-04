@@ -1,24 +1,20 @@
-import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { createStore } from 'redux';
-import { Provider } from 'react-redux';
 
-import Html from '../../client/components/stateless/Html.jsx';
-import Appl from '../../client/components/statefull/App';
-
+import MainApp from '../../client/components/stateless/MainApp.jsx';
 import data, { nav } from '../../client/data';
 import { model as Inout } from '../database/inout';
+import Html from '../../client/components/stateless/Html.jsx';
 
 function getHtml(store) {
-  return renderToString(<Html content={
-    <Provider store={store}>
-      <Appl />
-    </Provider>
-  } store={store.getState()} />);
+  return Html(
+    renderToString(MainApp(store)),
+    JSON.stringify(store.getState()),
+  );
 }
 
 export function main(req, res) {
-  const store = createStore(data);
+  const store = createStore(data, {});
   const { inout } = req.cookies;
 
   if (inout) {

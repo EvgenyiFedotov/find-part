@@ -1,35 +1,47 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
+import { AppBar, Toolbar, Typography } from '@material-ui/core';
+
+const styles = {
+  logo: {
+    flexGrow: 1,
+  },
+};
 
 export default function AuthTopBar(params = {}) {
   const { logo, onNav } = params;
 
   return (
-    <div className="auth-top-bar">
-      <div
-        className="logo"
-        onClick={onNav && onNav.bind(this, null)}
-      >
-        {logo}
-      </div>
+    <div>
+      <AppBar position="absolute" color="default">
+        <Toolbar>
+          <Typography
+            variant="title"
+            color="primary"
+            onClick={onNav && onNav.bind(this, null)}
+          >
+            {logo}
+          </Typography>
 
-      <div className="buttons">
-        <Button
-          size="small"
-          color="primary"
-          onClick={onNav && onNav.bind(this, 'signIn')}
-        >
-          Вход
-        </Button>
+          <div>
+            <Button
+              size="small"
+              color="primary"
+              onClick={onNav && onNav.bind(this, 'signIn')}
+            >
+              Вход
+            </Button>
 
-        <Button
-          size="small"
-          color="primary"
-          onClick={onNav && onNav.bind(this, 'signUp')}
-        >
-          Регистрация
-        </Button>
-      </div>
+            <Button
+              size="small"
+              color="primary"
+              onClick={onNav && onNav.bind(this, 'signUp')}
+            >
+              Регистрация
+            </Button>
+          </div>
+        </Toolbar>
+      </AppBar>
     </div>
   );
 }
