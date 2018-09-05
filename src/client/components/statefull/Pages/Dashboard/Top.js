@@ -2,59 +2,51 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
-  Button,
   Typography,
   Toolbar,
   AppBar,
   IconButton,
 } from '@material-ui/core';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import MenuIcon from '@material-ui/icons/Menu';
+import classNames from 'classnames';
 import styles from './styles';
-import { socket, nav } from '../../../../data';
 
 /**
  * @param {Object} [params]
  */
 export class Top extends Component {
-  exit() {
-    const { dispatch } = this.props;
-
-    dispatch(socket.actions.runMethod(
-      'apiCall',
-      'inout/signOut',
-      null,
-      () => {
-        dispatch(nav.actions.setRoute('auth'));
-      },
-    ));
-  }
-
   render() {
-    const { classes } = this.props;
+    const {
+      classes,
+      shift,
+      title,
+      onClickMenu,
+    } = this.props;
 
     return (
-      <AppBar position="absolute" color="default" className={classes.appBar}>
-        <Toolbar className={classes.toolbar}>
-        <IconButton>
-          <ChevronLeftIcon />
-        </IconButton>
+      <AppBar
+        position="absolute"
+        color="default"
+        className={classNames(classes.appBar, {
+          [classes.appBarShift]: shift,
+        })}
+      >
+        <Toolbar disableGutters={!shift}>
+          <IconButton
+            className={classNames(classes.appBarMenuButton, {
+              [classes.hide]: shift,
+            })}
+            onClick={onClickMenu && onClickMenu.bind(this, true)}
+          >
+            <MenuIcon />
+          </IconButton>
+
           <Typography
             variant="title"
-            color="primary"
             className={classes.title}
           >
-            Title
+            {title}
           </Typography>
-
-          <div>
-            <Button
-              size="small"
-              color="primary"
-              onClick={this.exit.bind(this)}
-            >
-              Выход
-            </Button>
-          </div>
         </Toolbar>
       </AppBar>
     );
@@ -64,6 +56,9 @@ export class Top extends Component {
 Top.propTypes = {
   dispatch: PropTypes.func,
   classes: PropTypes.object,
+  shift: PropTypes.bool,
+  title: PropTypes.string,
+  onClickMenu: PropTypes.func,
 };
 
 export default connect()(styles(Top));
