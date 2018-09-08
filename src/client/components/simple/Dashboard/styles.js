@@ -3,6 +3,14 @@ import { withStyles } from '@material-ui/core/styles';
 const leftMenu = 240;
 
 const styles = theme => ({
+  root: {
+    flexGrow: 1,
+    height: '100%',
+    zIndex: 1,
+    overflow: 'hidden',
+    position: 'relative',
+    display: 'flex',
+  },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
@@ -23,6 +31,7 @@ const styles = theme => ({
     marginRight: 36,
   },
   leftMenu: {
+    position: 'relative',
     overflowX: 'hidden',
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
@@ -42,7 +51,7 @@ const styles = theme => ({
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
-  leftMenuToolbar: {
+  toolbar: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
@@ -54,6 +63,11 @@ const styles = theme => ({
   },
   hide: {
     display: 'none',
+  },
+  content: {
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.default,
+    padding: theme.spacing.unit * 3,
   },
 });
 
