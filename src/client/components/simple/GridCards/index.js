@@ -31,6 +31,10 @@ export class GridCards extends Component {
     }
   }
 
+  onSave() {
+    this.onCloseDialog();
+  }
+
   onCloseDialog() {
     this.setState({ openDialog: false });
   }
@@ -68,6 +72,7 @@ export class GridCards extends Component {
             open={this.state.openDialog}
             data={this.state.data}
             onClose={this.onCloseDialog.bind(this)}
+            onSave={this.onSave.bind(this)}
             content={dialog}
           />
         </div>
