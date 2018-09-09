@@ -65,9 +65,10 @@ const styles = theme => ({
     display: 'none',
   },
   content: {
+    position: 'relative',
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
-    padding: theme.spacing.unit * 3,
+    // padding: theme.spacing.unit * 3,
   },
 });
 

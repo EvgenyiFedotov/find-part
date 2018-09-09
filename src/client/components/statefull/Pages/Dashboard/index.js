@@ -12,7 +12,7 @@ export class Dashboard extends Component {
       <DashboardView
         items={menu(this)}
         title="FindPart"
-        currentItem={nav.params.section}
+        currentItem={nav.params.section || 'companies'}
       >
         <div>TEST CONTENT</div>
       </DashboardView>

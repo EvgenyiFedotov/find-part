@@ -4,6 +4,8 @@ import LoyaltyIcon from '@material-ui/icons/Loyalty';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
+import CompaniesView from './Companies.jsx';
+
 import { socket, nav as navi } from '../../../../data';
 
 function setSection(dashboard, section) {
@@ -23,7 +25,7 @@ export const menu = (dashboard) => {
       icon: <WorkIcon />,
       text: 'Компании',
       title: 'Компании',
-      content: <div>Компании</div>,
+      content: <CompaniesView />,
       onClick: setSection.bind(this, dashboard, 'companies'),
     },
     discounts: {
