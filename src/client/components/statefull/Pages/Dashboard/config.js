@@ -4,7 +4,8 @@ import LoyaltyIcon from '@material-ui/icons/Loyalty';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
-import CompaniesView from './Companies.jsx';
+import GridCardsView from '../../../simple/GridCards';
+import DialogCompanyView from './DialogCompany';
 
 import { socket, nav as navi } from '../../../../data';
 
@@ -17,22 +18,32 @@ function setSection(dashboard, section) {
   }));
 }
 
+const handlersCard = {
+  onEdit: (...args) => {
+    console.log('onEdit', args);
+  },
+};
+
 export const menu = (dashboard) => {
-  const { dispatch } = dashboard.props;
+  const { dispatch, companies } = dashboard.props;
 
   return {
     companies: {
       icon: <WorkIcon />,
       text: 'Компании',
       title: 'Компании',
-      content: <CompaniesView />,
+      content: <GridCardsView
+        items={companies}
+        handlersCard={handlersCard}
+        dialog={ props => <DialogCompanyView {...props} />}
+      />,
       onClick: setSection.bind(this, dashboard, 'companies'),
     },
     discounts: {
       icon: <LoyaltyIcon />,
-      text: 'Акции',
-      title: 'Акции',
-      content: <div>Акции</div>,
+      text: 'Скидки',
+      title: 'Скидки',
+      content: <div>Скидки</div>,
       divider: true,
       onClick: setSection.bind(this, dashboard, 'discounts'),
     },

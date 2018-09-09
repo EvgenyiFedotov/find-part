@@ -6,6 +6,7 @@ export const schema = new mongoose.Schema({
     required: [true, 'author is empty'],
   },
   name: mongoose.Schema.Types.String,
+  note: mongoose.Schema.Types.String,
   avatar: mongoose.Schema.Types.String,
   public: mongoose.Schema.Types.Boolean,
   created: mongoose.Schema.Types.Date,

@@ -22,9 +22,11 @@ export class Dashboard extends Component {
 
 Dashboard.propTypes = {
   nav: PropTypes.object,
+  companies: PropTypes.array,
   dispatch: PropTypes.func,
 };
 
 export default connect(store => ({
   nav: store.nav,
+  companies: store.companies,
 }))(Dashboard);
