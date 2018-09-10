@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { TextField, Paper } from '@material-ui/core';
 import Dropzone from 'react-dropzone';
+import { connect } from 'react-redux';
+
+import { companies, socket } from '../../../../data';
 
 const styles = theme => ({
   input: {
@@ -49,7 +52,10 @@ export class DialogCompany extends Component {
     const { value } = ev.currentTarget;
 
     if (validate) {
-      validate(!!(nameField === 'name' && value));
+      validate(!!(
+        (nameField === 'name' && value)
+        || this.state.name
+      ));
     }
 
     this.setState({ [nameField]: value });
@@ -64,7 +70,22 @@ export class DialogCompany extends Component {
   }
 
   save() {
-    console.log('save', this.state);
+    const { dispatch } = this.props;
+    const { _id } = this.state;
+
+    if (!_id) {
+      dispatch(socket.actions.runMethod(
+        'apiCall',
+        'companies/add',
+        this.state,
+        () => {
+        },
+      ));
+
+      dispatch(companies.actions.add(this.state));
+    } else {
+      dispatch(companies.actions.edit(this.state));
+    }
   }
 
   render() {
@@ -111,6 +132,7 @@ DialogCompany.propTypes = {
   data: PropTypes.object,
   validate: PropTypes.func,
   onRef: PropTypes.func,
+  dispatch: PropTypes.func,
 };
 
-export default withStyles(styles)(DialogCompany);
+export default connect()(withStyles(styles)(DialogCompany));
