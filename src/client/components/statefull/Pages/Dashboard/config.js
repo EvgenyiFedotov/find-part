@@ -18,12 +18,6 @@ function setSection(dashboard, section) {
   }));
 }
 
-const handlersCard = {
-  onEdit: (...args) => {
-    console.log('onEdit', args);
-  },
-};
-
 export const menu = (dashboard) => {
   const { dispatch, companies } = dashboard.props;
 
@@ -34,8 +28,7 @@ export const menu = (dashboard) => {
       title: 'Компании',
       content: <GridCardsView
         items={companies}
-        handlersCard={handlersCard}
-        dialog={ props => <DialogCompanyView {...props} />}
+        dialog={ props => <DialogCompanyView {...props} /> }
       />,
       onClick: setSection.bind(this, dashboard, 'companies'),
     },

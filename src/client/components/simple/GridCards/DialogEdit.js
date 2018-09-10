@@ -33,6 +33,19 @@ export class DialogEdit extends Component {
     this.setState({ buttonSaveDisabled: !value });
   }
 
+  onSave() {
+    const { dialog } = this;
+    const { onSave } = this.props;
+
+    if (dialog && dialog.save) {
+      dialog.save();
+    }
+
+    if (onSave instanceof Function) {
+      onSave(dialog || null);
+    }
+  }
+
   render() {
     const {
       classes,
@@ -40,7 +53,6 @@ export class DialogEdit extends Component {
       data,
       open,
       onClose,
-      onSave,
     } = this.props;
 
     return (
@@ -64,7 +76,7 @@ export class DialogEdit extends Component {
 
             <Button
               color="primary"
-              onClick={onSave}
+              onClick={this.onSave.bind(this)}
               disabled={this.state.buttonSaveDisabled}
             >
               Сохранить
@@ -77,6 +89,9 @@ export class DialogEdit extends Component {
           { content && content({
             data,
             validate: this.validate.bind(this),
+            onRef: (dialog) => {
+              this.dialog = dialog;
+            },
           })}
         </div>
       </Dialog>

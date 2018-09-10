@@ -20,10 +20,16 @@ export class DialogCompany extends Component {
   constructor(props) {
     super(props);
 
-    const { data } = props;
-    const { avatar, name, note } = data || {};
+    const { data, onRef } = props;
+    const {
+      _id,
+      avatar,
+      name,
+      note,
+    } = data || {};
 
     this.state = {
+      _id: _id || null,
       avatar: avatar || null,
       name: name || '',
       note: note || '',
@@ -32,10 +38,21 @@ export class DialogCompany extends Component {
     if (props.validate) {
       props.validate(!!this.state.name);
     }
+
+    if (onRef instanceof Function) {
+      onRef(this);
+    }
   }
 
   onChange(nameField, ev) {
-    this.setState({ [nameField]: ev.currentTarget.value });
+    const { validate } = this.props;
+    const { value } = ev.currentTarget;
+
+    if (validate) {
+      validate(!!(nameField === 'name' && value));
+    }
+
+    this.setState({ [nameField]: value });
   }
 
   onDrop(files) {
@@ -44,6 +61,10 @@ export class DialogCompany extends Component {
         avatar: files[0].preview,
       });
     }
+  }
+
+  save() {
+    console.log('save', this.state);
   }
 
   render() {
@@ -89,6 +110,7 @@ DialogCompany.propTypes = {
   classes: PropTypes.object,
   data: PropTypes.object,
   validate: PropTypes.func,
+  onRef: PropTypes.func,
 };
 
 export default withStyles(styles)(DialogCompany);

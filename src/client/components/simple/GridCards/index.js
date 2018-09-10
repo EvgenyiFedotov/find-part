@@ -19,24 +19,39 @@ export class GridCards extends Component {
   }
 
   onEdit(data = null) {
-    const { onAdd } = this.props;
+    const { onAdd, onEdit } = this.props;
 
     this.setState({
       openDialog: true,
       data,
     });
 
-    if (onAdd instanceof Function) {
-      onAdd();
+    if (data === null && onAdd instanceof Function) {
+      onAdd(null);
+    } else if (data instanceof Object
+      && onEdit instanceof Function) {
+      onEdit(data);
     }
   }
 
-  onSave() {
-    this.onCloseDialog();
+  onCloseDialog() {
+    const { onClose } = this.props;
+
+    this.setState({ openDialog: false });
+
+    if (onClose instanceof Function) {
+      onClose();
+    }
   }
 
-  onCloseDialog() {
-    this.setState({ openDialog: false });
+  onSave(...args) {
+    const { onSave } = this.props;
+
+    if (onSave instanceof Function) {
+      onSave(...args);
+    }
+
+    this.onCloseDialog();
   }
 
   render() {
@@ -85,6 +100,9 @@ GridCards.propTypes = {
   classes: PropTypes.object,
   items: PropTypes.array,
   onAdd: PropTypes.func,
+  onEdit: PropTypes.func,
+  onClose: PropTypes.func,
+  onSave: PropTypes.func,
   dialog: PropTypes.func,
 };
 
