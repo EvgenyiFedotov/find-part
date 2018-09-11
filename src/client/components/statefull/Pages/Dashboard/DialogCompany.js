@@ -63,8 +63,11 @@ export class DialogCompany extends Component {
 
   onDrop(files) {
     if (files && files.length) {
+      console.log(files[0]);
+
       this.setState({
         avatar: files[0].preview,
+        file: files[0],
       });
     }
   }

@@ -1,4 +1,3 @@
-import { Buffer } from 'buffer';
 import fs from 'fs';
 import companies from '../../database/companies';
 
@@ -7,18 +6,14 @@ export function fetch(params, success, error, superSocket) {
 }
 
 export function add(params) {
-  const buf = Buffer.from(params.avatar, 'base64').toString('binary');
-  console.log('add', params);
-  console.log(buf);
+  console.log(params, __filename);
 
-  fs.writeFile('test.jpg', buf, 'binary', (err) => {
-    console.log(err);
+  fs.writeFile('./dist/client/images/test3.jpg', params.file, (err) => {
+    if (err) {
+      return console.log(err);
+    }
 
-    // if (err) {
-      // console.log('err', err);
-    // } else {
-      // return res.json({'status': 'success'});
-    // }
+    console.log('The file was saved!');
   });
 }
 
