@@ -49,10 +49,10 @@ export class DialogEdit extends Component {
   render() {
     const {
       classes,
-      content,
       data,
       open,
       onClose,
+      children,
     } = this.props;
 
     return (
@@ -86,7 +86,8 @@ export class DialogEdit extends Component {
 
         <div className={classes.dialogEditContent}>
           <div className={classes.toolbar}></div>
-          { content && content({
+
+          { children && children({
             data,
             validate: this.validate.bind(this),
             onRef: (dialog) => {
@@ -101,7 +102,7 @@ export class DialogEdit extends Component {
 
 DialogEdit.propTypes = {
   classes: PropTypes.object,
-  content: PropTypes.func,
+  children: PropTypes.func,
   data: PropTypes.object,
   open: PropTypes.bool,
   onClose: PropTypes.func,

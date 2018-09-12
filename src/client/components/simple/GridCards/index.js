@@ -88,8 +88,9 @@ export class GridCards extends Component {
             data={this.state.data}
             onClose={this.onCloseDialog.bind(this)}
             onSave={this.onSave.bind(this)}
-            content={dialog}
-          />
+          >
+            {dialog}
+          </DialogEditView>
         </div>
       </div>
     );
