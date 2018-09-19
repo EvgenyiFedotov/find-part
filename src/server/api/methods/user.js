@@ -50,9 +50,7 @@ function signIn(params, success, error, superSocket) {
       if (user) {
         const { _id } = user;
 
-        superSocket.setCache({
-          user,
-        });
+        superSocket.setCache({ user });
 
         Inout.findPublicFormat({
           userId: _id,
