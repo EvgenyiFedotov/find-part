@@ -1,10 +1,10 @@
 import React from 'react';
 import JssProvider from 'react-jss/lib/JssProvider';
 import { createGenerateClassName } from '@material-ui/core/styles';
-import { Provider } from 'react-redux';
-import Appl from '../statefull/App';
+import Route from './components/statefull/Route.jsx';
+// import { Provider } from 'react-redux';
 
-export default function MainApp(store) {
+export default function App() {
   const generateClassName = createGenerateClassName({
     dangerouslyUseGlobalCSS: true,
     productionPrefix: 'c',
@@ -12,9 +12,7 @@ export default function MainApp(store) {
 
   return (
     <JssProvider generateClassName={generateClassName}>
-      <Provider store={store}>
-        <Appl />
-      </Provider>
+      <Route></Route>
     </JssProvider>
   );
 }

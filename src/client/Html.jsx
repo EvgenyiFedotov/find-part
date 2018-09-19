@@ -1,8 +1,9 @@
 /**
+ * @param {String} title
  * @param {String} content
  * @param {String} store
  */
-export default function Html(content, store, title) {
+export default function Html({ content, store, title }) {
   return `
     <html>
       <head>
