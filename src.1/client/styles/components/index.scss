@@ -1,0 +1,9 @@
+@import './simple/index';
+@import './statefull/index';
+@import './stateless/index';
+
+@mixin components($values) {
+  @include simple($values);
+  @include statefull($values);
+  @include stateless($values);
+}

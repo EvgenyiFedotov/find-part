@@ -1,0 +1,5 @@
+@import './forms/index';
+
+@mixin simple($values) {
+  @include forms($values);
+}

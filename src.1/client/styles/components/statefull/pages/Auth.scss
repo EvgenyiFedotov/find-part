@@ -1,0 +1,32 @@
+@mixin wh-100() {
+  width: 100%;
+  height: 100%;
+}
+
+@mixin Auth($values) {
+  $top-padding: 1rem;
+
+  .auth {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-rows: calc(32px + (#{$top-padding} * 2)) 1fr;
+
+    & > .top {
+      @include wh-100();
+      padding: $top-padding;
+    }
+
+    & > .content {
+      @include wh-100();
+      display: grid;
+      align-items: center;
+      justify-items: center;
+
+      .logo-banner {
+        color: map-get(map-get($values, colors), primary);
+        font-size: 40px;
+      }
+    }
+  }
+}
