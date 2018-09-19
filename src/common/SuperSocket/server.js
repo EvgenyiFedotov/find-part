@@ -42,16 +42,9 @@ export default class SuperSocket {
           return {};
         },
       },
-      store: {
-        get: () => store,
-        set: (storeIn) => {
-          store = storeIn;
-        },
-      },
     });
 
     this.socket = params.socket || null;
-    this.store = params.store || null;
   }
 
   /**
@@ -76,22 +69,6 @@ export default class SuperSocket {
     }
 
     return this;
-  }
-
-  dispatch(...args) {
-    if (this.store) {
-      this.store.dispatch(...args);
-    }
-
-    return this;
-  }
-
-  getState() {
-    if (this.store) {
-      return this.getState();
-    }
-
-    return {};
   }
 
   emitResult(nameEvent, result) {
