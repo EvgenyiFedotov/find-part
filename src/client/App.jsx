@@ -2,10 +2,9 @@ import React from 'react';
 import JssProvider from 'react-jss/lib/JssProvider';
 import { createGenerateClassName } from '@material-ui/core/styles';
 import Route from './components/statefull/Route.jsx';
-// import { Provider } from 'react-redux';
 import pages from './components/pages';
 
-export default function App() {
+export default function App(props) {
   const generateClassName = createGenerateClassName({
     dangerouslyUseGlobalCSS: true,
     productionPrefix: 'c',
@@ -13,7 +12,7 @@ export default function App() {
 
   return (
     <JssProvider generateClassName={generateClassName}>
-      <Route pages={pages} />
+      <Route page="Auth" pages={pages} {...props} />
     </JssProvider>
   );
 }

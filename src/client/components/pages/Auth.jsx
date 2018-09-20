@@ -1,15 +1,24 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { createStore } from 'redux';
-import { Provider, connect } from 'react-redux';
+import { Provider } from 'react-redux';
 
 class Auth extends Component {
   render() {
     console.log(this.props);
 
     return (
-      <div></div>
+      <Provider store={
+        createStore((store = { test: 123 }) => store, this.props.stateStore)
+      }>
+        <div>Auth</div>
+      </Provider>
     );
   }
 }
 
-export default connect(store => store)(Auth);
+Auth.propTypes = {
+  stateStore: PropTypes.object,
+};
+
+export default Auth;

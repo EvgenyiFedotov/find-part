@@ -17,6 +17,7 @@ app.get('/', (req, res) => {
   const response = Html({
     title: 'FindPart',
     content: renderToString(App()),
+    stateStore: {},
   });
 
   res.send(response);

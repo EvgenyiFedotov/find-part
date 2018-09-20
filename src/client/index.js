@@ -1,12 +1,11 @@
 /* global document */
 import ReactDOM from 'react-dom';
 import App from './App.jsx';
-// import { createStore } from 'redux';
 
-// let store = document.getElementById('store').getAttribute('data-json');
-// store = typeof store === 'string' ? JSON.parse(store) : {};
+let stateStore = document.getElementById('stateStore').getAttribute('data-json');
+stateStore = typeof stateStore === 'string' ? JSON.parse(stateStore) : {};
 
 ReactDOM.hydrate(
-  App(),
+  App({ stateStore }),
   document.getElementById('root'),
 );
