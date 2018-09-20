@@ -2,10 +2,10 @@
 import ReactDOM from 'react-dom';
 import App from './App.jsx';
 
-let stateStore = document.getElementById('stateStore').getAttribute('data-json');
-stateStore = typeof stateStore === 'string' ? JSON.parse(stateStore) : {};
+let defStore = document.getElementById('defStore').getAttribute('data-json');
+defStore = typeof defStore === 'string' ? JSON.parse(defStore) : {};
 
 ReactDOM.hydrate(
-  App({ stateStore }),
+  App({ defStore }).content,
   document.getElementById('root'),
 );

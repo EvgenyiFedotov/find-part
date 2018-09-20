@@ -13,6 +13,11 @@ module.exports = [
     },
     mode,
     devtool,
+    node: {
+      fs: 'empty',
+      net: 'empty',
+      tls: 'empty',
+    },
   }),
   createConfig({
     entry: {

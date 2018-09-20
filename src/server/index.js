@@ -13,11 +13,19 @@ const httpServer = http.Server(app);
 app.use(cookieParser());
 app.use(express.static('dist/client'));
 
+app.get('/api', (req, res) => {
+  res.send({
+    test: 123,
+    test2: 'asd',
+  });
+});
+
 app.get('/', (req, res) => {
+  const clietnApp = App();
   const response = Html({
     title: 'FindPart',
-    content: renderToString(App()),
-    stateStore: {},
+    content: renderToString(clietnApp.content),
+    defStore: clietnApp.store ? clietnApp.store.getState() : undefined,
   });
 
   res.send(response);

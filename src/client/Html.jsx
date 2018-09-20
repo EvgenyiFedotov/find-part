@@ -1,9 +1,9 @@
 /**
  * @param {String} title
  * @param {String} content
- * @param {String} store
+ * @param {String} defStore
  */
-export default function Html({ content, stateStore, title }) {
+export default function Html({ content, defStore, title }) {
   return `
     <html>
       <head>
@@ -14,7 +14,7 @@ export default function Html({ content, stateStore, title }) {
 
       <body>
         <div id="root">${content}</div>
-        <script id="stateStore" type="text/plain" data-json='${JSON.stringify(stateStore || null)}'></script>
+        <script id="defStore" type="text/plain" data-json='${JSON.stringify(defStore || null)}'></script>
         <script src="index.js"></script>
       </body>
     </html>
