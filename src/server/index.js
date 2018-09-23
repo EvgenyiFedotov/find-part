@@ -15,13 +15,13 @@ app.use(express.static('dist/client'));
 
 app.get('/api', (req, res) => {
   res.send({
-    test: 123,
+    test: 'value from server',
     test2: 'asd',
   });
 });
 
 app.get('/', (req, res) => {
-  const clietnApp = App();
+  const clietnApp = App({ cookies: req.cookies });
   const response = Html({
     title: 'FindPart',
     content: renderToString(clietnApp.content),
