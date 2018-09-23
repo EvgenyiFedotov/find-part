@@ -12,7 +12,7 @@ export default function Html({ content, defStore, title }) {
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" />
       </head>
 
-      <body>
+      <body style="padding: 0; margin: 0;">
         <div id="root">${content}</div>
         <script id="defStore" type="text/plain" data-json='${JSON.stringify(defStore || null)}'></script>
         <script src="index.js"></script>

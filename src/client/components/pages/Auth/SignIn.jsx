@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button } from '@material-ui/core';
 
+import Page from '../../statefull/Page.jsx';
 import actions from '../../../data/actions';
 
 class SignIn extends Component {
@@ -14,19 +15,21 @@ class SignIn extends Component {
 
   render() {
     return (
-      <div>
-        <div>
-          SignIn
-        </div>
-
+      <Page
+        title="FindPart"
+        toolbarButtons={[
+          { value: 'Вход' },
+          { value: 'Регистрация' },
+        ]}
+      >
         <div>
           {this.props.params.test}
         </div>
 
         <div>
-          <Button onClick={this.onClick.bind(this)}>To SignUp</Button>
+          <Button color="primary" onClick={this.onClick.bind(this)}>To SignUp</Button>
         </div>
-      </div>
+      </Page>
     );
   }
 }
