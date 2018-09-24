@@ -2,34 +2,28 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 
-import Page from '../../statefull/Page.jsx';
-import actions from '../../../data/actions';
+const styles = () => ({
+  content: {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 class SignIn extends Component {
-  onClick() {
-    const { dispatch } = this.props;
-
-    dispatch(actions.navigation.value('signUp'));
-  }
-
   render() {
-    return (
-      <Page
-        title="FindPart"
-        toolbarButtons={[
-          { value: 'Вход' },
-          { value: 'Регистрация' },
-        ]}
-      >
-        <div>
-          {this.props.params.test}
-        </div>
+    const { classes } = this.props;
 
+    return (
+      <div className={classes.content}>
         <div>
-          <Button color="primary" onClick={this.onClick.bind(this)}>To SignUp</Button>
+          <Button color="primary">To SignUp</Button>
         </div>
-      </Page>
+      </div>
     );
   }
 }
@@ -37,6 +31,9 @@ class SignIn extends Component {
 SignIn.propTypes = {
   dispatch: PropTypes.func,
   params: PropTypes.object,
+  classes: PropTypes.object,
 };
 
-export default connect(store => store.navigation)(SignIn);
+const SignInWithStyles = withStyles(styles)(SignIn);
+
+export default connect()(SignInWithStyles);

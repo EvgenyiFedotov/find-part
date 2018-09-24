@@ -3,20 +3,34 @@ import { connect } from 'react-redux';
 
 /**
  * @param {Object} mapNavigation
- * @param {String} defValue
- * @param {Object} defParams
+ * @param {Object} [oprions]
+ * @param {String} [options.defValue]
+ * @param {Object} [options.defParams]
+ * @param {Object} [options.Container]
+ * @param {React.Component} [options.Container.component]
+ * @param {Object} [options.Container.props]
  */
-export default function createNavigation(mapNavigation = {}, defValue = null, defParams = {}) {
+export default function createNavigation(mapNavigation = {}, options = {}) {
   class Navigator extends Component {
     render() {
       const { value, params } = this.props;
-      const Config = mapNavigation[value || defValue];
+      const { defaultValue = null, commonProps = {}, Container } = options;
+      const Config = mapNavigation[value || defaultValue];
+      const createView = () => <Config.component
+        {...commonProps}
+        {...Config.props}
+        {...params}
+      />;
 
       return (
         <div className="navigator">
-          {!!Config && (
-            <Config.view {...(params || defParams)} {...Config.props} />
+          {!!Container && (
+            <Container.component {...Container.props}>
+              {createView()}
+            </Container.component>
           )}
+
+          {(!!Config && !Container) && createView()}
         </div>
       );
     }

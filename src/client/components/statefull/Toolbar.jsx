@@ -24,7 +24,7 @@ class Toolbar extends Component {
 
     return (
       <AppBar
-        position="absolute"
+        position="fixed"
         color="default"
       >
         <ToolbarView>

@@ -8,13 +8,15 @@ const styles = theme => ({
   page: {
     display: 'flex',
   },
-  toolbar: {
-    ...theme.mixins.toolbar,
-  },
   content: {
+    boxSizing: 'border-box',
     backgroundColor: theme.palette.background.default,
     width: '100%',
     height: '100%',
+    paddingTop: theme.spacing.unit * 7,
+    [theme.breakpoints.up('sm')]: {
+      paddingTop: theme.spacing.unit * 8,
+    },
   },
 });
 
@@ -30,8 +32,6 @@ class Page extends Component {
         />
 
         <div className={classes.content}>
-          <div className={classes.toolbar}></div>
-
           {this.props.children}
         </div>
       </div>
