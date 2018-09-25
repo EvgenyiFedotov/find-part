@@ -1,18 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Button } from '@material-ui/core';
+import { Button, TextField } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
-const styles = () => ({
-  content: {
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
+import styles from './styles';
 
 class SignIn extends Component {
   render() {
@@ -20,8 +12,24 @@ class SignIn extends Component {
 
     return (
       <div className={classes.content}>
-        <div>
-          <Button color="primary">To SignUp</Button>
+        <div className={classes.form}>
+          <TextField
+            label="Логин"
+            className={classes.text}
+          />
+
+          <TextField
+            label="Пароль"
+            type="password"
+            className={classes.text}
+          />
+
+          <Button
+            color="primary"
+            className={classes.submitButton}
+          >
+            Отправить
+          </Button>
         </div>
       </div>
     );
