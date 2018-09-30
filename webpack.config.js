@@ -19,6 +19,7 @@ module.exports = [
       tls: 'empty',
     },
   }),
+
   createConfig({
     entry: {
       index: './src/server/index.js',

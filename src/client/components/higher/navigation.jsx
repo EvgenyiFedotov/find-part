@@ -16,11 +16,16 @@ export default function createNavigation(mapNavigation = {}, options = {}) {
       const { value, params } = this.props;
       const { defaultValue = null, commonProps = {}, Container } = options;
       const Config = mapNavigation[value || defaultValue];
-      const createView = () => <Config.component
-        {...commonProps}
-        {...Config.props}
-        {...params}
-      />;
+      const createView = () => ((Config && !!Config.component)
+        ? (
+          <Config.component
+            {...commonProps}
+            {...Config.props}
+            {...params}
+          />
+        )
+        : null
+      );
 
       return (
         <div className="navigator">

@@ -38,5 +38,8 @@ module.exports = function createConfig(config = {}) {
     stats: {
       warnings: false,
     },
+    watchOptions: {
+      aggregateTimeout: 1000,
+    },
   };
 };

@@ -3,8 +3,8 @@ import http from 'http';
 import cookieParser from 'cookie-parser';
 import { renderToString } from 'react-dom/server';
 import { connect } from './database';
-import Html from '../client/Html.jsx';
 import App from '../client/App.jsx';
+import Html from '../client/Html.jsx';
 
 const PORT = 5000;
 const app = express();
@@ -22,10 +22,12 @@ app.get('/api', (req, res) => {
 
 app.get('/', (req, res) => {
   const clietnApp = App({ cookies: req.cookies });
+  const content = renderToString(clietnApp.content);
+
   const response = Html({
     title: 'FindPart',
-    content: renderToString(clietnApp.content),
-    defStore: clietnApp.store ? clietnApp.store.getState() : undefined,
+    content,
+    defStore: clietnApp.store ? clietnApp.store.getState() : null,
   });
 
   res.send(response);
