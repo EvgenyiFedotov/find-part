@@ -1,16 +1,11 @@
 /* global document */
 import ReactDOM from 'react-dom';
-import { createStore } from 'redux';
-import data from './data';
-import MainApp from './components/stateless/MainApp.jsx';
-import './styles/index.scss';
+import App from './App.jsx';
 
-let store = document.getElementById('store').getAttribute('data-json');
-store = typeof store === 'string' ? JSON.parse(store) : {};
-
-store = createStore(data, store);
+let defStore = document.getElementById('defStore').getAttribute('data-json');
+defStore = typeof defStore === 'string' ? JSON.parse(defStore) : {};
 
 ReactDOM.hydrate(
-  MainApp(store),
+  App({ defStore }).content,
   document.getElementById('root'),
 );

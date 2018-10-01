@@ -1,11 +1,10 @@
 import express from 'express';
 import http from 'http';
 import cookieParser from 'cookie-parser';
-import { main } from './http';
-import socket from './socket';
+import { renderToString } from 'react-dom/server';
 import { connect } from './database';
-
-import handlers from './api/sockets/handlers';
+import Html from '../client/Html.jsx';
+import App from '../client/App.jsx';
 
 const PORT = 5000;
 const app = express();
@@ -13,10 +12,23 @@ const httpServer = http.Server(app);
 
 app.use(cookieParser());
 app.use(express.static('dist/client'));
-app.get('/', main);
 
-socket(httpServer, {
-  ...handlers,
+app.get('/api', (req, res) => {
+  res.send({
+    test: 'value from server',
+    test2: 'asd',
+  });
+});
+
+app.get('/', (req, res) => {
+  const clietnApp = App({ cookies: req.cookies });
+  const response = Html({
+    title: 'FindPart',
+    content: renderToString(clietnApp.content),
+    defStore: clietnApp.store ? clietnApp.store.getState() : undefined,
+  });
+
+  res.send(response);
 });
 
 httpServer.listen(PORT, () => {
