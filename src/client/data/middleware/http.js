@@ -1,16 +1,29 @@
-import request from 'request';
+import axios from 'axios';
 
-function add({ dispatch, getState }) {
-  return next => (action) => {
-    console.log('@1', dispatch, getState(), next, action);
+import types, { getTypesValues } from '../types';
 
-    request.get(`${location.origin}/api`, (err, res, body) => {
-      const bodyObj = JSON.parse(body);
+export default function http() {
+  return () => next => (action) => {
+    const { type } = action;
 
-      next({
-        type: 'CHANGE',
-        test: bodyObj.test,
-      });
-    });
+    if (getTypesValues(types.http).indexOf(type) !== -1) {
+      const { url, params, callback } = action;
+
+      if (url) {
+        if (type === types.http.get) {
+          axios.get(url, {
+            params,
+          }).then((...args) => {
+            console.log(args);
+          });
+        } else if (type === types.http.post) {
+          axios.post(url, params).then((...args) => {
+            console.log(args);
+          });
+        }
+      }
+    } else {
+      next(action);
+    }
   };
 }

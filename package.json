@@ -42,6 +42,7 @@
   "dependencies": {
     "@material-ui/core": "^3.1.1",
     "@material-ui/icons": "^3.0.1",
+    "axios": "^0.18.0",
     "browser-cookies": "^1.2.0",
     "classnames": "^2.2.6",
     "cookie": "^0.3.1",
@@ -57,7 +58,6 @@
     "react-jss": "^8.6.1",
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",
-    "request": "^2.88.0",
     "socket.io": "^2.1.1",
     "socket.io-client": "^2.1.1"
   },
