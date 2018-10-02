@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 
-import modules from './components/modules';
+import pages from './components/pages';
 
 export default function App(props = {}) {
   const {
@@ -43,14 +43,14 @@ export default function App(props = {}) {
   }
 
   const currentPage = page || 'Auth';
-  const Module = modules[currentPage];
-  const createModuleContent = () => {
-    return !!Module && !!Module.content
-    && <Module.content />;
+  const Page = pages[currentPage];
+  const createPageContent = () => {
+    return !!Page && !!Page.content
+    && <Page.content />;
   };
-  const store = Module && !!Module.reducers
+  const store = Page && !!Page.reducers
     && createStore(
-      Module.reducers,
+      Page.reducers,
       {
         ...(
           (cookies && cookies[currentPage])
@@ -59,7 +59,7 @@ export default function App(props = {}) {
         ),
         ...defStore,
       },
-      applyMiddleware(...(Module.middleware || [])),
+      applyMiddleware(...(Page.middleware || [])),
     );
 
   return {
@@ -69,11 +69,11 @@ export default function App(props = {}) {
           <div className="app">
             {!!store && (
               <Provider store={store}>
-                {createModuleContent()}
+                {createPageContent()}
               </Provider>
             )}
 
-            {!store && createModuleContent()}
+            {!store && createPageContent()}
           </div>
         </MuiThemeProvider>
       </JssProvider>
