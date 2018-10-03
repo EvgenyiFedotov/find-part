@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { User } from './database';
+import { User, Session } from './database';
 
 const auth = new Router();
 
@@ -9,7 +9,12 @@ auth.get('/signin', (req, res) => {
 
   User.findOne({ login, password }, (error, user) => {
     if (user) {
-      res.send({ success: true });
+      Session.find({ userId: user._id }, (errorFind, sessions) => {
+        res.send({
+          success: true,
+          sessions,
+        });
+      });
     } else {
       res.send({
         success: false,

@@ -3,9 +3,17 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, TextField } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import Loadable from 'react-loadable';
 
 import styles from './styles';
 import actions from '../../../data/actions';
+
+const TestLoad = Loadable({
+  loader: () => import('./test'),
+  loading() {
+    return (<div>Loading...</div>);
+  },
+});
 
 class SignIn extends Component {
   constructor(props) {
@@ -73,6 +81,10 @@ class SignIn extends Component {
           >
             Отправить
           </Button>
+
+          {(values.login && values.login.length > 4) && (
+            <TestLoad value={values.login} />
+          )}
         </div>
       </div>
     );

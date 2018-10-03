@@ -13,8 +13,27 @@ export const Users = new mongoose.Schema({
   },
 });
 
-export const User = mongoose.model('user', Users);
+export const User = mongoose.model('User', Users);
+
+export const Sessions = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: [true, 'userId is empty'],
+  },
+  dateIn: { type: Date, default: Date.now },
+  dateOut: Date,
+  userAgent: mongoose.Schema.Types.String,
+});
+
+export const Session = mongoose.model('Sessions', Sessions);
 
 export default {
-  Users,
+  Users: {
+    schema: Users,
+    models: { User },
+  },
+  Sessions: {
+    schema: Sessions,
+    models: { Session },
+  },
 };

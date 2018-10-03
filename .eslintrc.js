@@ -5,6 +5,14 @@ module.exports = {
   ],
   "rules": {
     "linebreak-style": ["error", "windows"],
-    "no-underscore-dangle": ["error", { "allow": ["_id"] }]
+    "no-underscore-dangle": ["error", { "allow": ["_id"] }],
+    
+    "no-restricted-imports": [0],
+  },
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    }
   },
 };
