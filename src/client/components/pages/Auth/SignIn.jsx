@@ -12,26 +12,39 @@ class SignIn extends Component {
     super(props);
 
     this.state = {
-      login: '',
-      password: '',
+      values: {},
+      errors: {},
     };
   }
 
   onChange(key, ev) {
     this.setState({
-      [key]: ev.target.value,
+      values: {
+        ...this.state.values,
+        [key]: ev.target.value,
+      },
     });
   }
 
   onClick() {
     this.props.dispatch(actions.http.get(
       '/api/signin',
-      this.state,
+      this.state.values,
+      (response) => {
+        if (response.success) {
+          this.setState({ values: {} });
+        }
+
+        this.setState({
+          errors: response.errors || {},
+        });
+      },
     ));
   }
 
   render() {
     const { classes } = this.props;
+    const { values, errors } = this.state;
 
     return (
       <div className={classes.content}>
@@ -39,6 +52,8 @@ class SignIn extends Component {
           <TextField
             label="Логин"
             className={classes.text}
+            value={values.login || ''}
+            error={!!errors.login}
             onChange={this.onChange.bind(this, 'login')}
           />
 
@@ -46,6 +61,8 @@ class SignIn extends Component {
             label="Пароль"
             type="password"
             className={classes.text}
+            value={values.password || ''}
+            error={!!errors.password}
             onChange={this.onChange.bind(this, 'password')}
           />
 

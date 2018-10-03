@@ -5,17 +5,24 @@ import { User } from './database';
 const auth = new Router();
 
 auth.get('/signin', (req, res) => {
-  console.log(req.query);
+  const { login, password } = req.query;
 
-  res.send({
-    test: 'value from server',
-    test2: 'asd',
+  User.findOne({ login, password }, (error, user) => {
+    if (user) {
+      res.send({ success: true });
+    } else {
+      res.send({
+        success: false,
+        errors: {
+          login: 'Логин или пароль введены некорректно',
+          password: 'Логин или пароль введены некорректно',
+        },
+      });
+    }
   });
 });
 
 auth.post('/signup', (req, res) => {
-  console.log(req.body);
-
   const { login, password, passwordRepeat } = req.body;
 
   if (password === passwordRepeat && password.length >= 6) {
