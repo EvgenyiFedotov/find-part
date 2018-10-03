@@ -12,27 +12,43 @@ class SignUp extends Component {
     super(props);
 
     this.state = {
-      login: '',
-      password: '',
-      passwordRepeat: '',
+      values: {},
+      errors: {},
     };
   }
 
   onChange(key, ev) {
     this.setState({
-      [key]: ev.target.value,
+      values: {
+        ...this.state.values,
+        [key]: ev.target.value,
+      },
     });
   }
 
   onClick() {
-    this.props.dispatch(actions.http.post(
+    const { dispatch } = this.props;
+
+    dispatch(actions.http.post(
       '/api/signup',
-      this.state,
+      this.state.values,
+      (response) => {
+        if (response.success) {
+          this.setState({ values: {} });
+        }
+
+        this.setState({
+          errors: response.errors || {},
+        });
+
+        dispatch(actions.navigation.value('signIn'));
+      },
     ));
   }
 
   render() {
     const { classes } = this.props;
+    const { values, errors } = this.state;
 
     return (
       <div className={classes.content}>
@@ -40,6 +56,8 @@ class SignUp extends Component {
           <TextField
             label="Логин"
             className={classes.text}
+            value={values.login || ''}
+            error={!!errors.login}
             onChange={this.onChange.bind(this, 'login')}
           />
 
@@ -47,6 +65,8 @@ class SignUp extends Component {
             label="Пароль"
             type="password"
             className={classes.text}
+            value={values.password || ''}
+            error={!!errors.password}
             onChange={this.onChange.bind(this, 'password')}
           />
 
@@ -54,6 +74,8 @@ class SignUp extends Component {
             label="Повторите пароль"
             type="password"
             className={classes.text}
+            value={values.passwordRepeat || ''}
+            error={!!errors.passwordRepeat}
             onChange={this.onChange.bind(this, 'passwordRepeat')}
           />
 

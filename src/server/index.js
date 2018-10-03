@@ -1,12 +1,12 @@
-import express, { Router } from 'express';
+import express from 'express';
 import http from 'http';
 import cookieParser from 'cookie-parser';
 import { renderToString } from 'react-dom/server';
 
-import { connect } from './database';
+import databaseConnect from './databaseConnect';
 import App from '../client/App.jsx';
 import Html from '../client/Html.jsx';
-import api from './api';
+import modules from './modules';
 
 const PORT = 5000;
 const app = express();
@@ -16,7 +16,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.static('dist/client'));
 
-app.use('/api', api.auth);
+app.use('/api', modules.auth.api);
 
 app.get('/', (req, res) => {
   const clietnApp = App({ cookies: req.cookies });
@@ -34,5 +34,5 @@ app.get('/', (req, res) => {
 httpServer.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 
-  connect();
+  databaseConnect();
 });

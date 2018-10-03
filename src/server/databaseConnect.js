@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-export function connect() {
+export default function databaseConnect() {
   const database = mongoose.connection;
   const { error, log } = console;
 
@@ -16,7 +16,3 @@ export function connect() {
 
   return database;
 }
-
-export default {
-  connect,
-};

@@ -13,12 +13,16 @@ export default function http() {
         if (type === types.http.get) {
           axios.get(url, {
             params,
-          }).then((...args) => {
-            console.log(args);
+          }).then((result) => {
+            console.log(result);
           });
         } else if (type === types.http.post) {
-          axios.post(url, params).then((...args) => {
-            console.log(args);
+          axios.post(url, params).then((result) => {
+            if (callback instanceof Function) {
+              const { data } = result;
+
+              callback(data, result);
+            }
           });
         }
       }
