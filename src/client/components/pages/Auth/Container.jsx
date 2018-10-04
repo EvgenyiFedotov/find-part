@@ -13,6 +13,8 @@ class Container extends Component {
   }
 
   render() {
+    const { children } = this.props;
+
     return (
       <Page
         title="FindPart"
@@ -27,7 +29,7 @@ class Container extends Component {
           },
         ]}
       >
-        {this.props.children}
+        {children}
       </Page>
     );
   }
@@ -36,10 +38,7 @@ class Container extends Component {
 Container.propTypes = {
   dispatch: PropTypes.func,
   params: PropTypes.object,
-  children: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.array,
-  ]),
+  children: PropTypes.any,
 };
 
 export default connect(store => store.navigation)(Container);

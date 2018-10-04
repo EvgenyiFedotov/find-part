@@ -35,13 +35,13 @@ class SignUp extends Component {
       (response) => {
         if (response.success) {
           this.setState({ values: {} });
+
+          dispatch(actions.navigation.value('signIn'));
+        } else {
+          this.setState({
+            errors: response.errors || {},
+          });
         }
-
-        this.setState({
-          errors: response.errors || {},
-        });
-
-        dispatch(actions.navigation.value('signIn'));
       },
     ));
   }

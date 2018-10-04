@@ -1,13 +1,12 @@
 /* global document */
+import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App.jsx';
 
-let defStore = document.getElementById('defStore').getAttribute('data-json');
-defStore = typeof defStore === 'string' ? JSON.parse(defStore) : {};
-
-const { content } = App({ defStore });
+// let defStore = document.getElementById('defStore').getAttribute('data-json');
+// defStore = typeof defStore === 'string' ? JSON.parse(defStore) : {};
 
 ReactDOM.hydrate(
-  content,
+  <App />,
   document.getElementById('root'),
 );

@@ -1,6 +1,7 @@
 import express from 'express';
 import http from 'http';
 import cookieParser from 'cookie-parser';
+import React from 'react';
 import { renderToString } from 'react-dom/server';
 
 import databaseConnect from './databaseConnect';
@@ -18,14 +19,12 @@ app.use(express.static('dist/client'));
 
 app.use('/api', modules.auth.api);
 
-app.get('/', (req, res) => {
-  const clietnApp = App({ cookies: req.cookies });
-  const content = renderToString(clietnApp.content);
+app.get('/auth/asdasd/asdasd/asd', (req, res) => {
+  console.log(req.cookies);
 
   const response = Html({
     title: 'FindPart',
-    content,
-    defStore: clietnApp.store ? clietnApp.store.getState() : null,
+    content: renderToString(<App location={req.url} />),
   });
 
   res.send(response);

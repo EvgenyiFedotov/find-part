@@ -1,31 +1,51 @@
-import { combineReducers } from 'redux';
+import React, { Component } from 'react';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
+import browserCookies from 'browser-cookies';
 
-import createNavigation from '../../higher/navigation.jsx';
 import reducers from '../../../data/reducers';
 import types, { getTypesValues } from '../../../data/types';
 import middleware from '../../../data/middleware';
+import actions from '../../../data/actions';
 
 import Container from './Container.jsx';
 import SignIn from './SignIn.jsx';
 import SignUp from './SignUp.jsx';
+import NavigationItem from '../../stateless/NavigationItem.jsx';
 
-export default {
-  content: createNavigation({
-    signIn: { component: SignIn },
-    signUp: { component: SignUp },
-  }, {
-    defaultValue: 'signIn',
-    Container: {
-      component: Container,
-    },
-  }),
-
-  reducers: combineReducers({
+const store = createStore(
+  combineReducers({
     navigation: reducers.navigation,
   }),
-
-  middleware: [
-    middleware.cookiesPage(getTypesValues(types.navigation), 'Auth', 'navigation'),
+  applyMiddleware(
+    middleware.cookiesPage(
+      getTypesValues(types.navigation),
+      'auth',
+      'navigation',
+    ),
     middleware.http(),
-  ],
-};
+  ),
+);
+
+export default class Auth extends Component {
+  componentDidMount() {
+    const cookies = JSON.parse(browserCookies.get('auth'));
+
+    if (cookies) {
+      store.dispatch(actions.navigation.value(cookies.navigation.value));
+      store.dispatch(actions.navigation.params(cookies.navigation.params));
+    }
+  }
+
+  render() {
+    return (
+      <Provider store={store}>
+        <Container>
+          <NavigationItem component={SignIn} />
+          <NavigationItem path="signIn" component={SignIn} />
+          <NavigationItem path="signUp" component={SignUp} />
+        </Container>
+      </Provider>
+    );
+  }
+}

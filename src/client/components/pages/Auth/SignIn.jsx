@@ -41,11 +41,11 @@ class SignIn extends Component {
       (response) => {
         if (response.success) {
           this.setState({ values: {} });
+        } else {
+          this.setState({
+            errors: response.errors || {},
+          });
         }
-
-        this.setState({
-          errors: response.errors || {},
-        });
       },
     ));
   }

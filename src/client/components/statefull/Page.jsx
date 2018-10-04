@@ -40,10 +40,7 @@ class Page extends Component {
 }
 
 Page.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.array,
-  ]),
+  children: PropTypes.any,
   title: PropTypes.string,
   toolbarButtons: PropTypes.array,
   classes: PropTypes.object,

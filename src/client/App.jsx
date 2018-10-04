@@ -8,21 +8,23 @@ import {
 import { SheetsRegistry } from 'react-jss/lib/jss';
 import blue from '@material-ui/core/colors/blue';
 import red from '@material-ui/core/colors/red';
-
 import PropTypes from 'prop-types';
-import { createStore, applyMiddleware } from 'redux';
-import { Provider } from 'react-redux';
+import {
+  BrowserRouter,
+  StaticRouter,
+  Route,
+  Switch,
+} from 'react-router-dom';
 
 import pages from './components/pages';
 
-export default function App(props = {}) {
-  const {
-    page,
-    defStore,
-    cookies,
-    isClient = false,
-  } = props;
+const { Auth } = pages;
 
+export default function App({
+  isClient = false,
+  context = {},
+  location = '/',
+}) {
   const generateClassName = createGenerateClassName({
     dangerouslyUseGlobalCSS: true,
     productionPrefix: 'c',
@@ -37,52 +39,41 @@ export default function App(props = {}) {
   let sheetsRegistry = null;
   let sheetsManager = null;
 
+  const routers = (
+    <Switch>
+      <Route component={Auth}/>
+    </Switch>
+  );
+
   if (!isClient) {
     sheetsRegistry = new SheetsRegistry();
     sheetsManager = new Map();
   }
 
-  const currentPage = page || 'Auth';
-  const Page = pages[currentPage];
-  const createPageContent = () => {
-    return !!Page && !!Page.content
-    && <Page.content />;
-  };
-  const store = Page && !!Page.reducers
-    && createStore(
-      Page.reducers,
-      {
-        ...(
-          (cookies && cookies[currentPage])
-            ? JSON.parse(cookies[currentPage])
-            : null
-        ),
-        ...defStore,
-      },
-      applyMiddleware(...(Page.middleware || [])),
-    );
+  return (
+    <JssProvider registry={sheetsRegistry} generateClassName={generateClassName}>
+      <MuiThemeProvider theme={theme} sheetsManager={sheetsManager}>
+        {isClient && (
+          <BrowserRouter>
+            {routers}
+          </BrowserRouter>
+        )}
 
-  return {
-    content: (
-      <JssProvider registry={sheetsRegistry} generateClassName={generateClassName}>
-        <MuiThemeProvider theme={theme} sheetsManager={sheetsManager}>
-          <div className="app">
-            {!!store && (
-              <Provider store={store}>
-                {createPageContent()}
-              </Provider>
-            )}
-
-            {!store && createPageContent()}
-          </div>
-        </MuiThemeProvider>
-      </JssProvider>
-    ),
-    store,
-  };
+        {!isClient && (
+          <StaticRouter
+            location={location}
+            context={context}
+          >
+            {routers}
+          </StaticRouter>
+        )}
+      </MuiThemeProvider>
+    </JssProvider>
+  );
 }
 
 App.propTypes = {
-  page: PropTypes.string,
-  defStore: PropTypes.any,
+  isClient: PropTypes.bool,
+  context: PropTypes.object,
+  location: PropTypes.string,
 };

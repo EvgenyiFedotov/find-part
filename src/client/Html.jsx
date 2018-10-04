@@ -21,7 +21,7 @@ export default function Html({
         <div id="root">${content}</div>
         <style id="jss-server-side">${css}</style>
         <script id="defStore" type="text/plain" data-json='${JSON.stringify(defStore || null)}'></script>
-        <script src="index.js"></script>
+        <script src="/index.js"></script>
       </body>
     </html>
   `;
