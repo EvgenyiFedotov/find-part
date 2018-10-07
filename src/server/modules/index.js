@@ -1,4 +1,5 @@
 import auth from './auth';
+import dashboard from './dashboard';
 
 export function cookiesByUrl(req, res, next) {
   let url = req.originalUrl;
@@ -17,4 +18,5 @@ export function cookiesByUrl(req, res, next) {
 
 export default {
   auth,
+  dashboard,
 };

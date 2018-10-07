@@ -18,10 +18,10 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.static('dist/client'));
 app.use(cookiesByUrl);
+app.use(modules.auth.api);
+app.use(modules.dashboard.api);
 
-app.use('/api', modules.auth.api);
-
-app.get('/', (req, res) => {
+app.get('*', (req, res) => {
   const context = {};
 
   const response = Html({

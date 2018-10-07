@@ -30,7 +30,7 @@ class SignUp extends Component {
     const { dispatch } = this.props;
 
     dispatch(actions.http.post(
-      '/api/signup',
+      '/api/auth/signup',
       this.state.values,
       (response) => {
         if (response.success) {

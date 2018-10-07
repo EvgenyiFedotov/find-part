@@ -10,6 +10,8 @@ module.exports = [
     },
     output: {
       path: `${__dirname}/dist/client`,
+      chunkFilename: '[name].chunk.js',
+      publicPath: '/',
     },
     mode,
     devtool,

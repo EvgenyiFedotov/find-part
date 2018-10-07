@@ -35,12 +35,22 @@ class SignIn extends Component {
   }
 
   onClick() {
-    this.props.dispatch(actions.http.get(
-      '/api/signin',
+    const { dispatch } = this.props;
+
+    dispatch(actions.http.get(
+      '/api/auth/signin',
       this.state.values,
       (response) => {
         if (response.success) {
+          const { sessions } = response;
+
           this.setState({ values: {} });
+
+          if (sessions && sessions.length) {
+            console.log('@sessions', sessions);
+          } else {
+            dispatch(actions.location.toPage('/dashboard'));
+          }
         } else {
           this.setState({
             errors: response.errors || {},

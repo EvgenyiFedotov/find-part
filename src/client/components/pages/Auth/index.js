@@ -29,6 +29,7 @@ export default class Auth extends Component {
             'navigation',
           ),
           middleware.http(),
+          middleware.location(),
         ),
       ),
     };

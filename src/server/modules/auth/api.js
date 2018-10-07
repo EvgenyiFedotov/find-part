@@ -4,15 +4,21 @@ import { User, Session } from './database';
 
 const auth = new Router();
 
-auth.get('/signin', (req, res) => {
+auth.get('/api/auth/signin', (req, res) => {
   const { login, password } = req.query;
 
   User.findOne({ login, password }, (error, user) => {
     if (user) {
-      Session.find({ userId: user._id }, (errorFind, sessions) => {
+      const session = new Session({
+        userId: user._id,
+        userAgent: req.headers['user-agent'],
+      });
+
+      session.save(() => {
+        res.cookie('session', session._id);
+
         res.send({
           success: true,
-          sessions,
         });
       });
     } else {
@@ -27,7 +33,7 @@ auth.get('/signin', (req, res) => {
   });
 });
 
-auth.post('/signup', (req, res) => {
+auth.post('/api/auth/signup', (req, res) => {
   const { login, password, passwordRepeat } = req.body;
 
   if (password === passwordRepeat && password.length >= 6) {
@@ -53,6 +59,20 @@ auth.post('/signup', (req, res) => {
       },
     });
   }
+});
+
+auth.use('/api/auth*', (req, res, next) => {
+  const { session } = req.cookies;
+
+  if (!session) {
+    res.sendStatus(404);
+  } else {
+    next();
+  }
+});
+
+auth.use('/api/signOut', (req, res) => {
+  res.send('res.signOut');
 });
 
 export default auth;
