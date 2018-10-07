@@ -5,19 +5,31 @@ import {
   createMuiTheme,
   createGenerateClassName,
 } from '@material-ui/core/styles';
-import { SheetsRegistry } from 'react-jss/lib/jss';
 import blue from '@material-ui/core/colors/blue';
 import red from '@material-ui/core/colors/red';
 import PropTypes from 'prop-types';
 import { Route, Switch } from 'react-router-dom';
+import Loadable from 'react-loadable';
 
-import pages from './components/pages';
+import Auth, { getStore as getStoreAuth } from './components/pages/Auth';
 
-const { Auth } = pages;
+const Dashboard = Loadable({
+  loader: () => import(/* webpackChunkName: "dashboard" */ './components/pages/Dashboard'),
+  loading() {
+    return (<div>Loading...</div>);
+  },
+  delay: 1000,
+  modules: ['/dashboard'],
+  render(loaded, props) {
+    const Component = loaded.default;
+    return <Component store={loaded.getStore(props)}/>;
+  },
+});
 
 export default function App({
-  isClient = false,
   cookiesByUrl = null,
+  sheetsRegistry = null,
+  sheetsManager = null,
 }) {
   const generateClassName = createGenerateClassName({
     dangerouslyUseGlobalCSS: true,
@@ -27,23 +39,19 @@ export default function App({
     palette: {
       primary: blue,
       accent: red,
-      type: 'light',
+      type: 'dark',
     },
   });
-  let sheetsRegistry = null;
-  let sheetsManager = null;
-
-  if (!isClient) {
-    sheetsRegistry = new SheetsRegistry();
-    sheetsManager = new Map();
-  }
 
   return (
     <JssProvider registry={sheetsRegistry} generateClassName={generateClassName}>
       <MuiThemeProvider theme={theme} sheetsManager={sheetsManager}>
         <Switch>
+          <Route path="/dashboard" render={() => (
+            <Dashboard cookiesByUrl={cookiesByUrl} />
+          )} />
           <Route render={() => (
-            <Auth cookiesByUrl={cookiesByUrl} />
+            <Auth store={getStoreAuth({ cookiesByUrl })} />
           )}/>
         </Switch>
       </MuiThemeProvider>
@@ -54,4 +62,6 @@ export default function App({
 App.propTypes = {
   isClient: PropTypes.bool,
   cookiesByUrl: PropTypes.object,
+  sheetsRegistry: PropTypes.object,
+  sheetsManager: PropTypes.object,
 };

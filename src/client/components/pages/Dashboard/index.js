@@ -7,10 +7,7 @@ import reducers from '../../../data/reducers';
 import types, { getTypesValues } from '../../../data/types';
 import middleware from '../../../data/middleware';
 
-import Container from './Container.jsx';
-import SignIn from './SignIn.jsx';
-import SignUp from './SignUp.jsx';
-import NavigationItem from '../../stateless/NavigationItem.jsx';
+import Page from '../../statefull/Page.jsx';
 
 export const getStore = (props = {}) => {
   const { cookiesByUrl } = props;
@@ -23,7 +20,7 @@ export const getStore = (props = {}) => {
     applyMiddleware(
       middleware.cookiesPage(
         getTypesValues(types.navigation),
-        '/auth',
+        '/dashboard',
         'navigation',
       ),
       middleware.http(),
@@ -32,20 +29,18 @@ export const getStore = (props = {}) => {
   );
 };
 
-export default class Auth extends Component {
+export default class Dashboard extends Component {
   render() {
     return (
       <Provider store={this.props.store}>
-        <Container>
-          <NavigationItem component={SignIn} />
-          <NavigationItem path="signIn" component={SignIn} />
-          <NavigationItem path="signUp" component={SignUp} />
-        </Container>
+        <Page
+          title="FindPart:Dashboard"
+        />
       </Provider>
     );
   }
 }
 
-Auth.propTypes = {
+Dashboard.propTypes = {
   store: PropTypes.object,
 };

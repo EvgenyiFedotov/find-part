@@ -6,6 +6,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import browserCookies from 'browser-cookies';
+import Loadable from 'react-loadable';
 
 import App from './App.jsx';
 
@@ -18,9 +19,11 @@ url = url === '/' ? '/auth' : url;
 
 const cookiesByUrl = JSON.parse(browserCookies.get(url));
 
-ReactDOM.hydrate(
-  <BrowserRouter>
-    <App cookiesByUrl={cookiesByUrl} />
-  </BrowserRouter>,
-  document.getElementById('root'),
-);
+Loadable.preloadReady().then(() => {
+  ReactDOM.hydrate(
+    <BrowserRouter>
+      <App cookiesByUrl={cookiesByUrl} />
+    </BrowserRouter>,
+    document.getElementById('root'),
+  );
+});

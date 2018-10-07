@@ -10,7 +10,7 @@ module.exports = [
     },
     output: {
       path: `${__dirname}/dist/client`,
-      chunkFilename: '[name].chunk.js',
+      chunkFilename: '[name].js',
       publicPath: '/',
     },
     mode,

@@ -8,12 +8,14 @@ export default function Html({
   defStore,
   title,
   css = '',
+  scriptsPreload = [],
 }) {
   return `
     <html>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>${title || ''}</title>
+        ${scriptsPreload.map(path => `<script src="${path}.js"></script>`).join('\n')}
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" />
       </head>
 
