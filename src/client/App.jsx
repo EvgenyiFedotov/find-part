@@ -9,12 +9,7 @@ import { SheetsRegistry } from 'react-jss/lib/jss';
 import blue from '@material-ui/core/colors/blue';
 import red from '@material-ui/core/colors/red';
 import PropTypes from 'prop-types';
-import {
-  BrowserRouter,
-  StaticRouter,
-  Route,
-  Switch,
-} from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
 import pages from './components/pages';
 
@@ -22,8 +17,7 @@ const { Auth } = pages;
 
 export default function App({
   isClient = false,
-  context = {},
-  location = '/',
+  cookiesByUrl = null,
 }) {
   const generateClassName = createGenerateClassName({
     dangerouslyUseGlobalCSS: true,
@@ -39,12 +33,6 @@ export default function App({
   let sheetsRegistry = null;
   let sheetsManager = null;
 
-  const routers = (
-    <Switch>
-      <Route component={Auth}/>
-    </Switch>
-  );
-
   if (!isClient) {
     sheetsRegistry = new SheetsRegistry();
     sheetsManager = new Map();
@@ -53,20 +41,11 @@ export default function App({
   return (
     <JssProvider registry={sheetsRegistry} generateClassName={generateClassName}>
       <MuiThemeProvider theme={theme} sheetsManager={sheetsManager}>
-        {isClient && (
-          <BrowserRouter>
-            {routers}
-          </BrowserRouter>
-        )}
-
-        {!isClient && (
-          <StaticRouter
-            location={location}
-            context={context}
-          >
-            {routers}
-          </StaticRouter>
-        )}
+        <Switch>
+          <Route render={() => (
+            <Auth cookiesByUrl={cookiesByUrl} />
+          )}/>
+        </Switch>
       </MuiThemeProvider>
     </JssProvider>
   );
@@ -74,6 +53,5 @@ export default function App({
 
 App.propTypes = {
   isClient: PropTypes.bool,
-  context: PropTypes.object,
-  location: PropTypes.string,
+  cookiesByUrl: PropTypes.object,
 };

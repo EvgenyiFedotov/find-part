@@ -1,45 +1,42 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
-import browserCookies from 'browser-cookies';
 
 import reducers from '../../../data/reducers';
 import types, { getTypesValues } from '../../../data/types';
 import middleware from '../../../data/middleware';
-import actions from '../../../data/actions';
 
 import Container from './Container.jsx';
 import SignIn from './SignIn.jsx';
 import SignUp from './SignUp.jsx';
 import NavigationItem from '../../stateless/NavigationItem.jsx';
 
-const store = createStore(
-  combineReducers({
-    navigation: reducers.navigation,
-  }),
-  applyMiddleware(
-    middleware.cookiesPage(
-      getTypesValues(types.navigation),
-      'auth',
-      'navigation',
-    ),
-    middleware.http(),
-  ),
-);
-
 export default class Auth extends Component {
-  componentDidMount() {
-    const cookies = JSON.parse(browserCookies.get('auth'));
+  constructor(props) {
+    super(props);
 
-    if (cookies) {
-      store.dispatch(actions.navigation.value(cookies.navigation.value));
-      store.dispatch(actions.navigation.params(cookies.navigation.params));
-    }
+    this.state = {
+      store: createStore(
+        combineReducers({
+          navigation: reducers.navigation,
+        }),
+        { ...props.cookiesByUrl },
+        applyMiddleware(
+          middleware.cookiesPage(
+            getTypesValues(types.navigation),
+            '/auth',
+            'navigation',
+          ),
+          middleware.http(),
+        ),
+      ),
+    };
   }
 
   render() {
     return (
-      <Provider store={store}>
+      <Provider store={this.state.store}>
         <Container>
           <NavigationItem component={SignIn} />
           <NavigationItem path="signIn" component={SignIn} />
@@ -49,3 +46,7 @@ export default class Auth extends Component {
     );
   }
 }
+
+Auth.propTypes = {
+  cookiesByUrl: PropTypes.object,
+};
