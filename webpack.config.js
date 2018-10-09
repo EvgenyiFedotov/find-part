@@ -6,7 +6,7 @@ const devtool = 'source-map';
 module.exports = [
   createConfig({
     entry: {
-      index: './src/client/index.js',
+      auth: './src/client/modules/auth/client.jsx',
     },
     output: {
       path: `${__dirname}/dist/client`,
