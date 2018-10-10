@@ -7,11 +7,10 @@ import Loadable from 'react-loadable';
 import Html from '../Html.jsx';
 import App from './App.jsx';
 
-export default function ({
-  url = '/',
+export default ({
   children,
   modulesLoaded = [],
-}) {
+}) => (url = '/') => {
   const context = {};
   const sheetsRegistry = new SheetsRegistry();
   const sheetsManager = new Map();

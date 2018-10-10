@@ -1,8 +1,13 @@
 import { Router } from 'express';
 
 import { User, Session } from './database';
+import authServer from '../../../client/modules/auth/server.jsx';
 
 const auth = new Router();
+
+auth.get(['/', '/auth'], (req, res) => {
+  res.send(authServer(req.originalUrl));
+});
 
 auth.get('/api/auth/signin', (req, res) => {
   const { login, password } = req.query;

@@ -23,7 +23,6 @@ export default function App({
     palette: {
       primary: blue,
       accent: red,
-      type: 'dark',
     },
   });
 

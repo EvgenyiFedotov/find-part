@@ -7,6 +7,7 @@ module.exports = [
   createConfig({
     entry: {
       auth: './src/client/modules/auth/client.jsx',
+      dashboard: './src/client/modules/dashboard/client.jsx',
     },
     output: {
       path: `${__dirname}/dist/client`,
