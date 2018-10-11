@@ -10,14 +10,14 @@ import App from './App.jsx';
 export default ({
   children,
   modulesLoaded = [],
-}) => (url = '/') => {
+}) => (location = '/') => {
   const context = {};
   const sheetsRegistry = new SheetsRegistry();
   const sheetsManager = new Map();
   const content = renderToString(
     <Loadable.Capture report={moduleName => modulesLoaded.push(moduleName)}>
       <StaticRouter
-        location={url}
+        location={location}
         context={context}
       >
         <App

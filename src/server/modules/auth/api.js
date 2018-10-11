@@ -5,7 +5,7 @@ import authServer from '../../../client/modules/auth/server.jsx';
 
 const auth = new Router();
 
-auth.get(['/', '/auth'], (req, res) => {
+auth.get(['/', '/auth*'], (req, res) => {
   res.send(authServer(req.originalUrl));
 });
 
