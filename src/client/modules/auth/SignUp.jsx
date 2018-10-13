@@ -1,15 +1,61 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Button, TextField } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 
-import Container from './Container.jsx';
+import Form from '../../components/statefull/Form.jsx';
+import styles from './styles';
 
 class SignUp extends Component {
+  onClick() {
+    console.log('@onClick', this.form.state.values);
+  }
+
   render() {
+    const { classes } = this.props;
+
     return (
-      <Container>
-        SignUp
-      </Container>
+      <Form
+        className={classes.form}
+        ref={(el) => { this.form = el; }}
+      >
+        <TextField
+          field="login"
+          label="Логин"
+          className={classes.text}
+          value=""
+        />
+
+        <TextField
+          field="password"
+          label="Пароль"
+          type="password"
+          className={classes.text}
+          value=""
+        />
+
+        <TextField
+          field="passwordRepeat"
+          label="Повторите пароль"
+          type="password"
+          className={classes.text}
+          value=""
+        />
+
+        <Button
+          color="primary"
+          className={classes.submitButton}
+          onClick={this.onClick.bind(this)}
+        >
+          Отправить
+        </Button>
+      </Form>
     );
   }
 }
 
-export default SignUp;
+SignUp.propTypes = {
+  classes: PropTypes.object,
+};
+
+export default withStyles(styles)(SignUp);

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Button, TextField } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
-import Container from './Container.jsx';
 import styles from './styles';
 
 class SignIn extends Component {
@@ -30,36 +29,32 @@ class SignIn extends Component {
     const { values, errors } = this.state;
 
     return (
-      <Container>
-        <div className={classes.content}>
-          <div className={classes.form}>
-            <TextField
-              label="Логин"
-              className={classes.text}
-              value={values.login || ''}
-              error={!!errors.login}
-              onChange={this.onChange.bind(this, 'login')}
-            />
+      <div className={classes.form}>
+        <TextField
+          label="Логин"
+          className={classes.text}
+          value={values.login || ''}
+          error={!!errors.login}
+          onChange={this.onChange.bind(this, 'login')}
+        />
 
-            <TextField
-              label="Пароль"
-              type="password"
-              className={classes.text}
-              value={values.password || ''}
-              error={!!errors.password}
-              onChange={this.onChange.bind(this, 'password')}
-            />
+        <TextField
+          label="Пароль"
+          type="password"
+          className={classes.text}
+          value={values.password || ''}
+          error={!!errors.password}
+          onChange={this.onChange.bind(this, 'password')}
+        />
 
-            <Button
-              color="primary"
-              className={classes.submitButton}
-              // onClick={this.onClick.bind(this)}
-            >
-              Отправить
-            </Button>
-          </div>
-        </div>
-      </Container>
+        <Button
+          color="primary"
+          className={classes.submitButton}
+          // onClick={this.onClick.bind(this)}
+        >
+          Отправить
+        </Button>
+      </div>
     );
   }
 }
