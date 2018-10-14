@@ -1,8 +1,11 @@
-import React from 'react';
+import cookies from 'browser-cookies';
 
 import App from '../../App';
 import Auth from './index.jsx';
 
 App.client({
-  children: <Auth />,
+  component: Auth,
+  props: {
+    cookies: cookies.all(),
+  },
 });

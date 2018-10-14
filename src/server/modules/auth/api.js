@@ -6,7 +6,12 @@ import authServer from '../../../client/modules/auth/server.jsx';
 const auth = new Router();
 
 auth.get(['/', '/auth*'], (req, res) => {
-  res.send(authServer(req.originalUrl));
+  res.send(authServer({
+    location: req.originalUrl,
+    propsFromServer: {
+      cookies: req.cookies,
+    },
+  }));
 });
 
 auth.get('/api/auth/signin', (req, res) => {

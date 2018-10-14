@@ -80,6 +80,59 @@ class Form extends Component {
     return result;
   }
 
+  /**
+   * @param {Object} params
+   */
+  submit(params = {}) {
+    const {
+      url,
+      onSubmit,
+      onSubmitSuccess,
+      onSubmitError,
+      method,
+    } = this.props;
+
+    if (url) {
+      let query = null;
+
+      if (method === 'POST') {
+        query = axios.post(url, params);
+      } else if (method === 'GET') {
+        query = axios.get(url, { params });
+      } else {
+        throw new Error('Not correct method http!');
+      }
+
+      if (query) {
+        query.then(({ data, ...result }) => {
+          const { success, response, errors } = data;
+
+          if (success) {
+            this.setState({ values: {} });
+
+            if (onSubmitSuccess instanceof Function) {
+              onSubmitSuccess.call(this, response, data, result);
+            }
+          } else {
+            this.setState({
+              errors: errors || {},
+            });
+
+            if (onSubmitError instanceof Function) {
+              onSubmitError.call(this, errors, data, result);
+            }
+          }
+
+          if (onSubmit instanceof Function) {
+            onSubmit.call(this, data, result);
+          }
+        });
+      }
+    } else {
+      throw new Error('Setting url in props form!');
+    }
+  }
+
   render() {
     const { children, className } = this.props;
 
@@ -95,6 +148,15 @@ Form.propTypes = {
   children: PropTypes.any,
   className: PropTypes.any,
   onChange: PropTypes.func,
+  url: PropTypes.string,
+  onSubmit: PropTypes.func,
+  onSubmitSuccess: PropTypes.func,
+  onSubmitError: PropTypes.func,
+  method: PropTypes.string,
+};
+
+Form.defaultProps = {
+  method: 'POST',
 };
 
 export default Form;

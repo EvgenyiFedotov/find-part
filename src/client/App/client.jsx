@@ -9,12 +9,12 @@ import Loadable from 'react-loadable';
 
 import App from './App.jsx';
 
-export default function ({ children }) {
+export default function ({ component, props = {}, children }) {
   Loadable.preloadReady().then(() => {
     ReactDOM.hydrate(
       <BrowserRouter>
         <App>
-          {children}
+          {React.createElement(component, props, children)}
         </App>
       </BrowserRouter>,
       document.getElementById('root'),

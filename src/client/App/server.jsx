@@ -8,9 +8,11 @@ import Html from '../Html.jsx';
 import App from './App.jsx';
 
 export default ({
+  component,
+  props = {},
   children,
   modulesLoaded = [],
-}) => (location = '/') => {
+}) => ({ location = '/', propsFromServer = {} }) => {
   const context = {};
   const sheetsRegistry = new SheetsRegistry();
   const sheetsManager = new Map();
@@ -24,7 +26,10 @@ export default ({
           sheetsManager={sheetsManager}
           sheetsRegistry={sheetsRegistry}
         >
-          {children}
+          {React.createElement(component, {
+            ...props,
+            ...propsFromServer,
+          }, children)}
         </App>
       </StaticRouter>
     </Loadable.Capture>,

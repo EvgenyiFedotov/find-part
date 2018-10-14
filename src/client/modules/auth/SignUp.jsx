@@ -8,7 +8,7 @@ import styles from './styles';
 
 class SignUp extends Component {
   onClick() {
-    console.log('@onClick', this.form.state.values);
+    this.form.submit(this.form.state.values);
   }
 
   render() {
@@ -18,28 +18,29 @@ class SignUp extends Component {
       <Form
         className={classes.form}
         ref={(el) => { this.form = el; }}
+        url="/api/auth/signup"
       >
         <TextField
           field="login"
           label="Логин"
-          className={classes.text}
           value=""
+          className={classes.text}
         />
 
         <TextField
           field="password"
           label="Пароль"
           type="password"
-          className={classes.text}
           value=""
+          className={classes.text}
         />
 
         <TextField
           field="passwordRepeat"
           label="Повторите пароль"
           type="password"
-          className={classes.text}
           value=""
+          className={classes.text}
         />
 
         <Button
