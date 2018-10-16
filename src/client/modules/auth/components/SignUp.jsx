@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { Button, TextField } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
-import Form from '../../components/statefull/Form.jsx';
-import styles from './styles';
+import Form from '../../../components/statefull/Form.jsx';
+import styles from '../styles';
 
 class SignUp extends Component {
   onClick() {

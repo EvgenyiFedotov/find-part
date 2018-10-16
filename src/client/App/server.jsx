@@ -12,7 +12,7 @@ export default ({
   props = {},
   children,
   modulesLoaded = [],
-}) => ({ location = '/', propsFromServer = {} }) => {
+}) => ({ location = '/', ...propsServer }) => {
   const context = {};
   const sheetsRegistry = new SheetsRegistry();
   const sheetsManager = new Map();
@@ -28,7 +28,7 @@ export default ({
         >
           {React.createElement(component, {
             ...props,
-            ...propsFromServer,
+            ...(propsServer.props || {}),
           }, children)}
         </App>
       </StaticRouter>

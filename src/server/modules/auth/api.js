@@ -8,7 +8,7 @@ const auth = new Router();
 auth.get(['/', '/auth*'], (req, res) => {
   res.send(authServer({
     location: req.originalUrl,
-    propsFromServer: {
+    props: {
       getCookies: () => req.cookies,
     },
   }));
@@ -81,8 +81,12 @@ auth.use('/api/auth*', (req, res, next) => {
   }
 });
 
-auth.use('/api/signOut', (req, res) => {
-  res.send('res.signOut');
+auth.get('/api/auth/signout', (req, res) => {
+  res.clearCookie('session');
+
+  res.send({
+    success: true,
+  });
 });
 
 export default auth;

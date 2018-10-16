@@ -8,14 +8,19 @@ dashboard.use(['/dashboard*', '/api/dashboard*'], (req, res, next) => {
   const { session } = req.cookies;
 
   if (!session) {
-    res.sendStatus(404);
+    res.redirect('/auth');
   } else {
     next();
   }
 });
 
 dashboard.get('/dashboard', (req, res) => {
-  res.send(dashboardServer(req.originalUrl));
+  res.send(dashboardServer({
+    location: req.originalUrl,
+    props: {
+      getCookies: () => req.cookies,
+    },
+  }));
 });
 
 export default dashboard;
