@@ -6,6 +6,6 @@ import Auth from './index.jsx';
 App.client({
   component: Auth,
   props: {
-    cookies: cookies.all(),
+    getCookies: () => cookies.all(),
   },
 });

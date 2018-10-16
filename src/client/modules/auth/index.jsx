@@ -17,32 +17,36 @@ const Dashboard = Loadable({
   modules: ['/dashboard'],
 });
 
-function Auth({ classes, cookies }) {
-  return [
-    <Route key={0} exact path="/dashboard" component={Dashboard} />,
-    <Route key={1} exact render={({ location }) => {
-      if (cookies.session) {
-        return location.pathname !== '/dashboard'
-          ? <Redirect to="/dashboard" />
-          : null;
-      }
+function Auth({ classes, getCookies }) {
+  return (
+    <div>
+      <Route exact path="/dashboard" component={Dashboard} />
+      <Route exact render={({ location }) => {
+        const { session } = getCookies ? getCookies() : {};
 
-      return (
-        <Container key={1}>
-          <div className={classes.content}>
-            <Route exact path="/" component={SignIn} />
-            <Route exact path="/auth/signin" component={SignIn} />
-            <Route exact path="/auth/signup" component={SignUp} />
-          </div>
-        </Container>
-      );
-    }} />,
-  ];
+        if (session) {
+          return location.pathname !== '/dashboard'
+            ? <Redirect to="/dashboard" />
+            : null;
+        }
+
+        return (
+          <Container>
+            <div className={classes.content}>
+              <Route exact path="/" component={SignIn} />
+              <Route exact path="/auth/signin" component={SignIn} />
+              <Route exact path="/auth/signup" component={SignUp} />
+            </div>
+          </Container>
+        );
+      }} />
+    </div>
+  );
 }
 
 Auth.propTypes = {
   classes: PropTypes.object,
-  cookies: PropTypes.object,
+  getCookies: PropTypes.func,
 };
 
 export default withStyles(styles)(Auth);

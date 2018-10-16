@@ -9,7 +9,7 @@ auth.get(['/', '/auth*'], (req, res) => {
   res.send(authServer({
     location: req.originalUrl,
     propsFromServer: {
-      cookies: req.cookies,
+      getCookies: () => req.cookies,
     },
   }));
 });
