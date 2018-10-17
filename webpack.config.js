@@ -1,7 +1,11 @@
 const createConfig = require('./webpack/createConfig');
 
-const mode = 'development';
-const devtool = 'source-map';
+const mode = 'development'; // development | production
+let devtool = 'source-map';
+
+if (mode === 'production') {
+  devtool = undefined;
+}
 
 module.exports = [
   createConfig({
