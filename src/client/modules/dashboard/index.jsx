@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Route, Redirect } from 'react-router-dom';
 import Loadable from 'react-loadable';
 import axios from 'axios';
-import { withRouter } from 'react-router';
 
 import Container from '../../components/simple/Container.jsx';
 
@@ -25,26 +24,25 @@ class Dashboard extends Component {
   }
 
   render() {
-    const { getCookies, history } = this.props;
-
-    console.log(history);
+    const { getCookies } = this.props;
+    const { session } = getCookies ? getCookies() : {};
 
     return (
       <div>
+        <Route path="/auth" render={() => {
+          if (session) {
+            return <Redirect to="/dashboard" />;
+          }
+
+          return <Auth getCookies={getCookies} />;
+        }}/>
+
         <Route
           exact
-          path="/auth"
-          render={() => <Auth getCookies={getCookies} />}
-        />
-
-        <Route
-          render={({ location }) => {
-            const { session } = getCookies ? getCookies() : {};
-
+          path="/dashboard"
+          render={() => {
             if (!session) {
-              return location.pathname !== '/auth'
-                ? <Redirect to="/auth" />
-                : null;
+              return <Redirect to="/auth" />;
             }
 
             return (
@@ -71,4 +69,4 @@ Dashboard.propTypes = {
   history: PropTypes.object,
 };
 
-export default withRouter(Dashboard);
+export default Dashboard;

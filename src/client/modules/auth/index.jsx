@@ -1,12 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Route, Redirect } from 'react-router-dom';
-import { withStyles } from '@material-ui/core/styles';
 import Loadable from 'react-loadable';
 
-import routeMap from './routes-map';
-import Container from '../../components/simple/Container.jsx';
-import styles from './styles';
+import Container from './components/Container.jsx';
 import SignIn from './components/SignIn.jsx';
 import SignUp from './components/SignUp.jsx';
 
@@ -17,64 +14,52 @@ const Dashboard = Loadable({
   },
   modules: ['/dashboard'],
 });
-const routes = {
-  SignIn: { component: SignIn },
-  SignUp: { component: SignUp },
-};
 
-function Auth({ classes, getCookies, tools }) {
+function createContainer({ session, component, ...props }) {
+  return function createContainerReturn() {
+    if (session) {
+      return <Redirect to="/dashboard" />;
+    }
+
+    return (
+      <Container>
+        {!!component && React.createElement(component, props)}
+      </Container>
+    );
+  };
+}
+
+function Auth({ getCookies }) {
+  const { session } = getCookies ? getCookies() : {};
+  const containerSignIn = createContainer({
+    component: SignIn,
+    session,
+  });
+
   return (
     <div>
-      {/* transitions */}
-      <Route
-        exact
-        path="/dashboard"
-        render={() => <Dashboard getCookies={getCookies} />}
-      />
-
-      {/* main route */}
-      <Route exact render={({ location }) => {
-        const { session } = getCookies ? getCookies() : {};
-
-        if (session) {
-          return location.pathname !== '/dashboard'
-            ? <Redirect to="/dashboard" />
-            : null;
+      <Route path="/dashboard" render={() => {
+        if (!session) {
+          return <Redirect to="/auth" />;
         }
 
-        return (
-          <Container
-            title="Findpart"
-            tools={tools}
-          >
-            <div className={classes.content}>
-              {
-                Object.keys(routeMap).map((path, key) => (
-                  <Route key={key} exact path={path} {...routes[routeMap[path]]} />
-                ))
-              }
-            </div>
-          </Container>
-        );
-      }} />
+        return <Dashboard getCookies={getCookies} />;
+      }}/>
+      <Route exact path="/" render={containerSignIn} />
+      <Route exact path="/auth" component={containerSignIn} />
+      <Route exact path="/auth/signin" component={containerSignIn} />
+      <Route exact path="/auth/signup" component={
+        createContainer({
+          component: SignUp,
+          session,
+        })
+      } />
     </div>
   );
 }
 
 Auth.propTypes = {
-  classes: PropTypes.object,
   getCookies: PropTypes.func,
-  tools: PropTypes.array,
 };
 
-Auth.defaultProps = {
-  tools: [{
-    children: 'Вход',
-    to: '/auth/signin',
-  }, {
-    children: 'Регистрация',
-    to: '/auth/signup',
-  }],
-};
-
-export default withStyles(styles)(Auth);
+export default Auth;
