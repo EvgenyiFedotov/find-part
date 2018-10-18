@@ -21,5 +21,9 @@ export default function ({ component, props = {}, children }) {
     );
   });
 
-  document.getElementById('jss-server-side').remove();
+  const jssServerSide = document.getElementById('jss-server-side');
+
+  if (jssServerSide) {
+    jssServerSide.remove();
+  }
 }

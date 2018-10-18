@@ -11,11 +11,12 @@ export default ({
   component,
   props = {},
   children,
-  modulesLoaded = [],
+  modules = [],
 }) => ({ location = '/', ...propsServer }) => {
   const context = {};
   const sheetsRegistry = new SheetsRegistry();
   const sheetsManager = new Map();
+  let modulesLoaded = [];
   const content = renderToString(
     <Loadable.Capture report={moduleName => modulesLoaded.push(moduleName)}>
       <StaticRouter
@@ -36,10 +37,18 @@ export default ({
   );
   const css = sheetsRegistry.toString();
 
+  modulesLoaded = [...modulesLoaded, ...modules].reduce((result, name) => {
+    if (result.indexOf(name) === -1) {
+      result.push(name);
+    }
+
+    return result;
+  }, []);
+
   return Html({
     title: 'FindPart',
     modulesLoaded,
     content,
     css,
   });
-}
+};

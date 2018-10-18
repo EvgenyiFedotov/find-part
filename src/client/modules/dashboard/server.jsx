@@ -3,5 +3,5 @@ import Dashboard from './index.jsx';
 
 export default App.server({
   component: Dashboard,
-  modulesLoaded: ['/dashboard'],
+  modules: ['/dashboard'],
 });

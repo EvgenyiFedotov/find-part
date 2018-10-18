@@ -71,11 +71,11 @@ auth.post('/api/auth/signup', (req, res) => {
   }
 });
 
-auth.use('/api/auth*', (req, res, next) => {
+auth.use('/*', (req, res, next) => {
   const { session } = req.cookies;
 
   if (!session) {
-    res.sendStatus(404);
+    res.redirect('/auth');
   } else {
     next();
   }

@@ -41,5 +41,6 @@ module.exports = function createConfig(config = {}) {
     watchOptions: {
       aggregateTimeout: 1000,
     },
+    plugins: config.plugins,
   };
 };

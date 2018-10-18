@@ -18,13 +18,14 @@ class Container extends Component {
     const {
       children,
       tools,
+      buttonsTools,
       history,
       ...props
     } = this.props;
-    let setTools = null;
+    let setButtonsTools = null;
 
-    if (tools && tools.length) {
-      setTools = tools.map(({ to, ...propsTool }, key) => (
+    if (buttonsTools && buttonsTools.length) {
+      setButtonsTools = buttonsTools.map(({ to, ...propsTool }, key) => (
         <Button
           onClick={this.onClick.bind(this, to)}
           {...propsTool}
@@ -37,7 +38,12 @@ class Container extends Component {
     return (
       <Page
         {...props}
-        tools={setTools}
+        tools={
+          <span>
+            {tools}
+            {setButtonsTools}
+          </span>
+        }
       >
         {children}
       </Page>
@@ -48,7 +54,8 @@ class Container extends Component {
 Container.propTypes = {
   children: PropTypes.any,
   history: PropTypes.object,
-  tools: PropTypes.array,
+  tools: PropTypes.any,
+  buttonsTools: PropTypes.array,
 };
 
 export default withRouter(Container);

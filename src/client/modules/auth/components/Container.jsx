@@ -5,11 +5,17 @@ import { withStyles } from '@material-ui/core/styles';
 import Container from '../../../components/simple/Container.jsx';
 import styles from './styles';
 
-function ContainerSetup({ children, tools, classes = {} }) {
+function ContainerSetup({
+  children,
+  tools,
+  buttonsTools,
+  classes = {},
+}) {
   return (
     <Container
       title="Findpart"
       tools={tools}
+      buttonsTools={buttonsTools}
     >
       <div className={classes.content}>
         {children}
@@ -21,11 +27,12 @@ function ContainerSetup({ children, tools, classes = {} }) {
 ContainerSetup.propTypes = {
   children: PropTypes.any,
   classes: PropTypes.object,
-  tools: PropTypes.array,
+  buttonsTools: PropTypes.array,
+  tools: PropTypes.any,
 };
 
 ContainerSetup.defaultProps = {
-  tools: [{
+  buttonsTools: [{
     children: 'Вход',
     to: '/auth/signin',
   }, {
