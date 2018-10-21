@@ -11,13 +11,27 @@ import styles from './styles';
 const ButtonSessions = Loadable({
   loader: () => import(/* webpackChunkName: "ButtonSessions" */ '../../auth/components/ButtonSessions.jsx'),
   loading() {
-    return (<div>Loading...</div>);
+    return null;
   },
   modules: ['/ButtonSessions'],
 });
 ButtonSessions.preload();
 
 class Container extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      buttonSession: null,
+    };
+  }
+
+  componentDidMount() {
+    this.setState({
+      buttonSession: <ButtonSessions />,
+    });
+  }
+
   onNavigate(value) {
     axios.get('/api/auth/signout').then(({ data }) => {
       if (data.success) {
@@ -27,21 +41,28 @@ class Container extends Component {
   }
 
   render() {
-    const { tools } = this.props;
+    const { classes } = this.props;
+    const { buttonSession } = this.state;
 
     return (
       <ContainerBase
         wrappedComponentRef={(el) => { this.container = el; }}
         title="Findpart: Рабочий стол"
-        tools={tools()}
+        tools={(
+          <span>
+            {buttonSession}
+          </span>
+        )}
         buttonsTools={[{
           children: 'Выход',
           onClick: this.onNavigate.bind(this, '/auth'),
         }]}
       >
-        <Paper>
-          Компании
-        </Paper>
+        <div className={classes.content}>
+          <Paper className={classes.companies}>
+            Компании
+          </Paper>
+        </div>
       </ContainerBase>
     );
   }
@@ -49,18 +70,9 @@ class Container extends Component {
 
 Container.propTypes = {
   classes: PropTypes.object,
-  buttonsTools: PropTypes.func,
-  tools: PropTypes.func,
 };
 
 Container.defaultProps = {
-  tools() {
-    return (
-      <span>
-        <ButtonSessions />
-      </span>
-    );
-  },
 };
 
 export default withStyles(styles)(Container);

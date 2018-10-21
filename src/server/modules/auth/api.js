@@ -81,11 +81,33 @@ auth.use('/*', (req, res, next) => {
   }
 });
 
+auth.get('/api/auth/*', (req, res, next) => {
+  const { session } = req.cookies;
+
+  Session.findById(session, (err, currentSession) => {
+    req.currentSession = currentSession;
+
+    next();
+  });
+});
+
 auth.get('/api/auth/signout', (req, res) => {
   res.clearCookie('session');
 
   res.send({
     success: true,
+  });
+});
+
+auth.get('/api/auth/count-sessions', (req, res) => {
+  const { currentSession } = req;
+  const { userId } = currentSession;
+
+  Session.count({ userId }, (err2, count) => {
+    res.send({
+      success: true,
+      count,
+    });
   });
 });
 

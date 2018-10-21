@@ -1,11 +1,26 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   IconButton,
   Badge,
   Popover,
+  List,
+  ListSubheader,
+  ListItem,
 } from '@material-ui/core';
 import axios from 'axios';
 import LaunchIcon from '@material-ui/icons/Launch';
+import { withStyles } from '@material-ui/core/styles';
+
+const styles = {
+  list: {
+    width: '300px',
+    height: '300px',
+  },
+  listItemHeader: {
+    backgroundColor: 'white',
+  },
+};
 
 class ButtonSessions extends Component {
   constructor(props) {
@@ -36,6 +51,7 @@ class ButtonSessions extends Component {
   }
 
   render() {
+    const { classes } = this.props;
     const { count, open } = this.state;
 
     if (!count) {
@@ -68,10 +84,30 @@ class ButtonSessions extends Component {
             horizontal: 'left',
           }}
         >
+          Раздел находится в разработке
+          <List className={classes.list}>
+            {[0, 1, 2, 3, 4].map(sectionId => (
+              <div key={`section-${sectionId}`} >
+                {/* <ListSubheader className={classes.listItemHeader}>
+                  {`I'm sticky ${sectionId}`}
+                </ListSubheader> */}
+
+                {[0, 1, 2].map(item => (
+                  <ListItem button key={`item-${sectionId}-${item}`}>
+                    {`Item ${item}`}
+                  </ListItem>
+                ))}
+              </div>
+            ))}
+          </List>
         </Popover>
       </span>
     );
   }
 }
 
-export default ButtonSessions;
+ButtonSessions.propTypes = {
+  classes: PropTypes.object,
+};
+
+export default withStyles(styles)(ButtonSessions);
