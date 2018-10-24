@@ -8,6 +8,8 @@ import Loadable from 'react-loadable';
 import ContainerBase from '../../../components/simple/Container.jsx';
 import styles from './styles';
 
+import Companies from '../../companies';
+
 const ButtonSessions = Loadable({
   loader: () => import(/* webpackChunkName: "ButtonSessions" */ '../../auth/components/ButtonSessions.jsx'),
   loading() {
@@ -60,7 +62,7 @@ class Container extends Component {
       >
         <div className={classes.content}>
           <Paper className={classes.companies}>
-            Компании
+            <Companies />
           </Paper>
         </div>
       </ContainerBase>
