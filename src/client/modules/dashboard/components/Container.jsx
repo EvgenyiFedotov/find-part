@@ -4,11 +4,17 @@ import { Paper } from '@material-ui/core';
 import axios from 'axios';
 import { withStyles } from '@material-ui/core/styles';
 import Loadable from 'react-loadable';
+import { createStore, combineReducers } from 'redux';
+import { Provider } from 'react-redux';
 
 import ContainerBase from '../../../components/simple/Container.jsx';
 import styles from './styles';
 
-import Companies from '../../companies';
+import Companies, { data as companiesData } from './Companies.jsx';
+
+const createdStore = createStore(combineReducers({
+  companies: companiesData.reducer,
+}));
 
 const ButtonSessions = Loadable({
   loader: () => import(/* webpackChunkName: "ButtonSessions" */ '../../auth/components/ButtonSessions.jsx'),
@@ -36,7 +42,9 @@ class Container extends Component {
 
   onNavigate(value) {
     axios.get('/api/auth/signout').then(({ data }) => {
-      if (data.success) {
+      const { success } = data;
+
+      if (success) {
         this.container.historyPush(value);
       }
     });
@@ -45,27 +53,31 @@ class Container extends Component {
   render() {
     const { classes } = this.props;
     const { buttonSession } = this.state;
+    const tools = (
+      <span>
+        {buttonSession}
+      </span>
+    );
+    const buttonsTools = [{
+      children: 'Выход',
+      onClick: this.onNavigate.bind(this, '/auth'),
+    }];
 
     return (
-      <ContainerBase
-        wrappedComponentRef={(el) => { this.container = el; }}
-        title="Findpart: Рабочий стол"
-        tools={(
-          <span>
-            {buttonSession}
-          </span>
-        )}
-        buttonsTools={[{
-          children: 'Выход',
-          onClick: this.onNavigate.bind(this, '/auth'),
-        }]}
-      >
-        <div className={classes.content}>
-          <Paper className={classes.companies}>
-            <Companies />
-          </Paper>
-        </div>
-      </ContainerBase>
+      <Provider store={createdStore}>
+        <ContainerBase
+          wrappedComponentRef={(el) => { this.container = el; }}
+          title="Findpart: Рабочий стол"
+          tools={tools}
+          buttonsTools={buttonsTools}
+        >
+          <div className={classes.content}>
+            <Paper className={classes.companies}>
+              <Companies />
+            </Paper>
+          </div>
+        </ContainerBase>
+      </Provider>
     );
   }
 }

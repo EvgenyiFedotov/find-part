@@ -1,7 +1,0 @@
-@import './App';
-@import './pages/index';
-
-@mixin statefull($values) {
-  @include App($values);
-  @include pages($values);
-}

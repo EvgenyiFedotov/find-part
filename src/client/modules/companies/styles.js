@@ -1,6 +1,4 @@
 export default (theme) => {
-  console.log(theme);
-
   const blockFlexRow = {
     display: 'flex',
     alignItems: 'center',
@@ -14,6 +12,9 @@ export default (theme) => {
     },
     button: {
       padding: theme.spacing.unit,
+    },
+    listItem: {
+      paddingLeft: 0,
     },
     dialogText: {
       width: '100%',

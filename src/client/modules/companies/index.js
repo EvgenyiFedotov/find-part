@@ -16,7 +16,6 @@ import DialogEdit from './DialogEdit.jsx';
 
 class Companies extends Component {
   state = {
-    items: [{}, {}, {}, {}],
     openDialog: false,
     editItem: null,
   };
@@ -40,28 +39,17 @@ class Companies extends Component {
   }
 
   saveDialog(params) {
-    const { index, fields } = params;
-    const { items } = this.state;
-    const newItems = [...items];
+    const { onSaveItem } = this.props;
 
-    if (index === -1) {
-      newItems.push(fields);
-    } else {
-      newItems[index] = {
-        ...newItems[index],
-        ...fields,
-      };
+    if (onSaveItem) {
+      onSaveItem(params);
     }
-
-    this.setState({
-      items: newItems,
-    });
 
     this.closeDialog();
   }
 
   deleteItem(index) {
-    const { items } = this.state;
+    const { items } = this.props;
     const newItems = [...items];
 
     newItems.splice(index, 1);
@@ -72,8 +60,8 @@ class Companies extends Component {
   }
 
   render() {
-    const { items, openDialog, editItem } = this.state;
-    const { classes } = this.props;
+    const { openDialog, editItem } = this.state;
+    const { classes, items } = this.props;
 
     if (openDialog) {
       return (
@@ -108,6 +96,7 @@ class Companies extends Component {
               key={index}
               onClick={this.openDialog.bind(this, item, index)}
               button
+              className={classes.listItem}
             >
               <ListItemText>
                 {item.name || 'Нет названия'}
@@ -131,6 +120,12 @@ class Companies extends Component {
 
 Companies.propTypes = {
   classes: PropTypes.object,
+  items: PropTypes.array,
+  onSaveItem: PropTypes.func,
+};
+
+Companies.defaultProps = {
+  items: [{}, {}, {}, {}],
 };
 
 export default withStyles(styles)(Companies);

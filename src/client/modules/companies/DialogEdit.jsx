@@ -14,7 +14,10 @@ class DialogEdit extends Component {
 
     this.state = {
       index,
-      fields,
+      fields: {
+        name: '',
+        ...fields,
+      },
     };
   }
 
