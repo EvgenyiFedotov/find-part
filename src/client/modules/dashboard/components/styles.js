@@ -4,7 +4,7 @@ export default theme => ({
     padding: theme.spacing.unit * 3,
   },
   companies: {
-    width: '30%',
+    width: '40%',
     padding: theme.spacing.unit * 2,
   },
 });

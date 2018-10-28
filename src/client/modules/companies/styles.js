@@ -3,6 +3,7 @@ export default (theme) => {
     display: 'flex',
     alignItems: 'center',
   };
+  const { unit } = theme.spacing;
 
   return {
     companies: {},
@@ -11,18 +12,30 @@ export default (theme) => {
       justifyContent: 'space-between',
     },
     button: {
-      padding: theme.spacing.unit,
+      padding: unit,
     },
     listItem: {
       paddingLeft: 0,
     },
-    dialogText: {
-      width: '100%',
-      marginBottom: theme.spacing.unit * 2,
-    },
     dialogFooter: {
-      ...blockFlexRow,
       justifyContent: 'flex-end',
+    },
+    badge: {
+      top: '-16px',
+      left: '26px',
+      border: `2px solid ${
+        theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.grey[900]
+      }`,
+    },
+    icon: {
+      marginLeft: unit,
+    },
+    badgeIcon: {
+      marginTop: unit * -2,
+      marginLeft: unit,
+    },
+    actions: {
+      paddingRight: unit * 2,
     },
   };
 };

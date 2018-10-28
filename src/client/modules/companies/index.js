@@ -8,8 +8,9 @@ import {
   ListItem,
   ListItemText,
   ListItemSecondaryAction,
+  Badge,
 } from '@material-ui/core';
-import { Add, Delete } from '@material-ui/icons';
+import { Add, Public, Group } from '@material-ui/icons';
 
 import styles from './styles';
 import DialogEdit from './DialogEdit.jsx';
@@ -44,19 +45,14 @@ class Companies extends Component {
     if (onSaveItem) {
       onSaveItem(params);
     }
-
-    this.closeDialog();
   }
 
   deleteItem(index) {
-    const { items } = this.props;
-    const newItems = [...items];
+    const { onDeleteItem } = this.props;
 
-    newItems.splice(index, 1);
-
-    this.setState({
-      items: newItems,
-    });
+    if (onDeleteItem) {
+      onDeleteItem(index);
+    }
   }
 
   render() {
@@ -68,6 +64,7 @@ class Companies extends Component {
         <DialogEdit
           onClose={this.closeDialog.bind(this)}
           onSave={this.saveDialog.bind(this)}
+          onDelete={this.deleteItem.bind(this)}
           {...editItem}
         />
       );
@@ -102,13 +99,31 @@ class Companies extends Component {
                 {item.name || 'Нет названия'}
               </ListItemText>
 
-              <ListItemSecondaryAction>
-                <IconButton
-                  className={classes.button}
-                  onClick={this.deleteItem.bind(this, index)}
-                >
-                  <Delete />
-                </IconButton>
+              <ListItemSecondaryAction className={classes.actions}>
+                <Public
+                  color={item.isPublic ? 'action' : 'disabled'}
+                  className={classes.icon}
+                />
+
+                {!!(item.partners.length) && (
+                  <Badge
+                    color="primary"
+                    badgeContent={item.partners.length}
+                    classes={{ badge: classes.badge }}
+                  >
+                    <Group
+                      color="action"
+                      className={classes.badgeIcon}
+                    />
+                  </Badge>
+                )}
+
+                {!(item.partners.length) && (
+                  <Group
+                    color="disabled"
+                    className={classes.icon}
+                  />
+                )}
               </ListItemSecondaryAction>
             </ListItem>
           ))}
@@ -122,6 +137,7 @@ Companies.propTypes = {
   classes: PropTypes.object,
   items: PropTypes.array,
   onSaveItem: PropTypes.func,
+  onDeleteItem: PropTypes.func,
 };
 
 Companies.defaultProps = {

@@ -1,10 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { Typography, IconButton, TextField } from '@material-ui/core';
+import {
+  Typography,
+  IconButton,
+  TextField,
+  Button,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+} from '@material-ui/core';
 import { Clear, Send } from '@material-ui/icons';
 
 import styles from './styles';
+import { defaultCompanies } from './data';
 
 class DialogEdit extends Component {
   constructor(props) {
@@ -15,7 +24,7 @@ class DialogEdit extends Component {
     this.state = {
       index,
       fields: {
-        name: '',
+        ...defaultCompanies,
         ...fields,
       },
     };
@@ -30,16 +39,27 @@ class DialogEdit extends Component {
     });
   }
 
+  onChangeCheck(key) {
+    const { fields } = this.state;
+
+    this.setState({
+      fields: {
+        ...fields,
+        [key]: !fields[key],
+      },
+    });
+  }
+
   close() {
     const { onClose } = this.props;
 
     this.setState({
       fields: {
-        name: '',
+        ...defaultCompanies,
       },
     });
 
-    if (onClose instanceof Function) {
+    if (onClose) {
       onClose.call(this);
     }
   }
@@ -47,16 +67,26 @@ class DialogEdit extends Component {
   save() {
     const { onSave } = this.props;
 
-    if (onSave instanceof Function) {
+    if (onSave) {
       onSave.call(this, this.state);
     }
 
     this.close();
   }
 
+  delete() {
+    const { onDelete } = this.props;
+
+    if (onDelete) {
+      onDelete.call(this, this.state.index);
+    }
+
+    this.close();
+  }
+
   render() {
-    const { fields } = this.state;
-    const { name } = fields;
+    const { index, fields } = this.state;
+    const { name, isPublic, partners } = fields;
     const { classes } = this.props;
 
     return (
@@ -73,14 +103,39 @@ class DialogEdit extends Component {
           </IconButton>
         </Typography>
 
-        <TextField
-          label="Название"
-          className={classes.dialogText}
-          value={name}
-          onChange={this.onChange.bind(this, 'name')}
-        />
+        <FormGroup>
+          <TextField
+            label="Название"
+            value={name}
+            onChange={this.onChange.bind(this, 'name')}
+          />
+        </FormGroup>
 
-        <div className={classes.dialogFooter}>
+        <FormGroup>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={isPublic}
+                onChange={this.onChangeCheck.bind(this, 'isPublic')}
+                disabled={!!partners.length}
+              />
+            }
+            label="Публичная"
+          />
+        </FormGroup>
+
+        <FormGroup>
+        </FormGroup>
+
+        <FormGroup row={true} className={classes.dialogFooter}>
+          <Button
+            color="secondary"
+            onClick={this.delete.bind(this)}
+            disabled={index === -1 || !!partners.length}
+          >
+            Удалить
+          </Button>
+
           <IconButton
             color="primary"
             className={classes.button}
@@ -88,7 +143,7 @@ class DialogEdit extends Component {
           >
             <Send />
           </IconButton>
-        </div>
+        </FormGroup>
       </div>
     );
   }
@@ -98,6 +153,7 @@ DialogEdit.propTypes = {
   classes: PropTypes.object,
   onClose: PropTypes.func,
   onSave: PropTypes.func,
+  onDelete: PropTypes.func,
   index: PropTypes.number,
   fields: PropTypes.object,
 };
@@ -105,7 +161,7 @@ DialogEdit.propTypes = {
 DialogEdit.defaultProps = {
   index: -1,
   fields: {
-    name: '',
+    ...defaultCompanies,
   },
 };
 

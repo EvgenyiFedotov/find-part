@@ -12,12 +12,19 @@ const CompaniesStore = class CompaniesStore extends Component {
     dispatch(actions.edit(params));
   }
 
+  onDeleteItem(index) {
+    const { dispatch } = this.props;
+
+    dispatch(actions.delete(index));
+  }
+
   render() {
     const { dispatch, ...props } = this.props;
 
     return <Companies
       {...props}
       onSaveItem={this.onSaveItem.bind(this)}
+      onDeleteItem={this.onDeleteItem.bind(this)}
     />;
   }
 };

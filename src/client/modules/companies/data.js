@@ -1,5 +1,6 @@
 export const types = {
   edit: 'COMPANIES_EDIT',
+  delete: 'COMPANIES_DELETE',
 };
 
 export const actions = {
@@ -8,14 +9,32 @@ export const actions = {
     index,
     fields,
   }),
+  delete: index => ({
+    type: types.delete,
+    index,
+  }),
 };
 
-export const defaultStore = [];
+export const defaultStore = [
+  { name: 'Название моей компании', isPublic: false, partners: [] },
+  { name: 'Моя новая компания', isPublic: true, partners: [] },
+  { name: 'Моя компания с парнтерами', isPublic: true, partners: [1, 2, 3] },
+];
+
+export const defaultCompanies = {
+  name: '',
+  isPublic: false,
+  partners: [],
+};
 
 export function reducer(store = defaultStore, action = {}) {
   const { type, index, fields = {} } = action;
-  const { name } = fields;
-  const setItem = { name };
+  const setItem = {
+    ...(Object.keys(defaultCompanies).reduce((result, key) => ({
+      ...result,
+      [key]: fields[key] || result[key],
+    }), defaultCompanies)),
+  };
   const newStore = [...store];
 
   switch (type) {
@@ -30,6 +49,13 @@ export function reducer(store = defaultStore, action = {}) {
       }
 
       return newStore;
+    case types.delete:
+      if (index !== -1) {
+        newStore.splice(index, 1);
+        return newStore;
+      }
+
+      return store;
     default:
       return store;
   }
