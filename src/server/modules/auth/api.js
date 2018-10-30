@@ -1,7 +1,8 @@
 import { Router } from 'express';
 
+import authServer from 'modules/auth/server';
+
 import { User, Session } from './database';
-import authServer from '../../../client/modules/auth/server.jsx';
 
 const auth = new Router();
 
@@ -77,18 +78,12 @@ auth.use('/*', (req, res, next) => {
   if (!session) {
     res.redirect('/auth');
   } else {
-    next();
+    Session.findById(session, (err, currentSession) => {
+      req.currentSession = currentSession;
+
+      next();
+    });
   }
-});
-
-auth.get('/api/auth/*', (req, res, next) => {
-  const { session } = req.cookies;
-
-  Session.findById(session, (err, currentSession) => {
-    req.currentSession = currentSession;
-
-    next();
-  });
 });
 
 auth.get('/api/auth/signout', (req, res) => {

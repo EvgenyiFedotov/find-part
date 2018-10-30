@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "b": "webpack",
-    "bw": "webpack --watch"
+    "build": "webpack",
+    "build-watch": "webpack --watch",
+    "start": "node ./node_modules/nodemon/bin/nodemon.js ./dist/server/index.js"
   },
   "repository": {
     "type": "git",
@@ -27,11 +28,13 @@
     "css-loader": "^1.0.0",
     "eslint": "^5.4.0",
     "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-import-resolver-webpack": "^0.10.1",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-react": "^7.11.1",
     "file-loader": "^2.0.0",
     "node-sass": "^4.9.3",
+    "nodemon": "^1.18.5",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.22.1",
     "url-loader": "^1.1.1",

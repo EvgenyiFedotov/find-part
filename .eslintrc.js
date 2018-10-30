@@ -15,12 +15,19 @@ module.exports = {
           "render"
         ]
       }
-    ]
+    ],
   },
   "parser": "babel-eslint",
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
+    }
+  },
+  "settings" : {
+    "import/resolver": {
+      "webpack": {
+        "config": "./webpack.config.js"
+      }
     }
   },
 };

@@ -16,6 +16,7 @@ app.use(express.static('dist/client'));
 app.get('/favicon.ico', (req, res) => res.sendStatus(404));
 app.use(modules.auth.api);
 app.use(modules.dashboard.api);
+app.use(modules.companies.api);
 
 Loadable.preloadAll().then(() => {
   httpServer.listen(PORT, () => {

@@ -10,10 +10,9 @@ import {
   FormControlLabel,
   Checkbox,
 } from '@material-ui/core';
-import { Clear, Send } from '@material-ui/icons';
+import { Clear } from '@material-ui/icons';
 
-import styles from './styles';
-import { defaultCompanies } from './data';
+import styles from '../styles';
 
 class DialogEdit extends Component {
   constructor(props) {
@@ -24,7 +23,6 @@ class DialogEdit extends Component {
     this.state = {
       index,
       fields: {
-        ...defaultCompanies,
         ...fields,
       },
     };
@@ -54,9 +52,7 @@ class DialogEdit extends Component {
     const { onClose } = this.props;
 
     this.setState({
-      fields: {
-        ...defaultCompanies,
-      },
+      fields: {},
     });
 
     if (onClose) {
@@ -86,7 +82,7 @@ class DialogEdit extends Component {
 
   render() {
     const { index, fields } = this.state;
-    const { name, isPublic, partners } = fields;
+    const { name = '', isPublic = false, partners = [] } = fields;
     const { classes } = this.props;
 
     return (
@@ -108,6 +104,7 @@ class DialogEdit extends Component {
             label="Название"
             value={name}
             onChange={this.onChange.bind(this, 'name')}
+            disabled={!!(isPublic || partners.length)}
           />
         </FormGroup>
 
@@ -136,13 +133,13 @@ class DialogEdit extends Component {
             Удалить
           </Button>
 
-          <IconButton
+          <Button
             color="primary"
             className={classes.button}
             onClick={this.save.bind(this)}
           >
-            <Send />
-          </IconButton>
+            Сохранить
+          </Button>
         </FormGroup>
       </div>
     );
@@ -160,9 +157,7 @@ DialogEdit.propTypes = {
 
 DialogEdit.defaultProps = {
   index: -1,
-  fields: {
-    ...defaultCompanies,
-  },
+  fields: {},
 };
 
 export default withStyles(styles)(DialogEdit);

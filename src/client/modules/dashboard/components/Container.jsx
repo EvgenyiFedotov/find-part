@@ -4,17 +4,22 @@ import { Paper } from '@material-ui/core';
 import axios from 'axios';
 import { withStyles } from '@material-ui/core/styles';
 import Loadable from 'react-loadable';
-import { createStore, combineReducers } from 'redux';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 
-import ContainerBase from '../../../components/simple/Container.jsx';
+import ContainerBase from 'components/simple/Container';
+import { CompaniesStore, data as companiesData } from 'modules/companies';
+
 import styles from './styles';
 
-import Companies, { data as companiesData } from './Companies.jsx';
-
-const createdStore = createStore(combineReducers({
-  companies: companiesData.reducer,
-}));
+const createdStore = createStore(
+  combineReducers({
+    companies: companiesData.reducer,
+  }),
+  applyMiddleware(
+    companiesData.middleware,
+  ),
+);
 
 const ButtonSessions = Loadable({
   loader: () => import(/* webpackChunkName: "ButtonSessions" */ '../../auth/components/ButtonSessions.jsx'),
@@ -73,7 +78,7 @@ class Container extends Component {
         >
           <div className={classes.content}>
             <Paper className={classes.companies}>
-              <Companies />
+              <CompaniesStore />
             </Paper>
           </div>
         </ContainerBase>
