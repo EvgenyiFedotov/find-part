@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Route, Redirect } from 'react-router-dom';
 import Loadable from 'react-loadable';
 
-import Container from './components/Container.jsx';
+import Component from './component';
 
 const Auth = Loadable({
   loader: () => import(/* webpackChunkName: "dashboard-auth" */ '../auth'),
@@ -26,7 +26,7 @@ function Dashboard({ getCookies }) {
         return <Auth getCookies={getCookies} />;
       }}/>
 
-      <Route exact path="/dashboard" component={Container} />
+      <Route exact path="/dashboard" component={Component.main} />
     </div>
   );
 }
