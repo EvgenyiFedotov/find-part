@@ -1,23 +1,59 @@
 import { Router } from 'express';
+import uuid from 'uuid/v4';
 
 import { Company } from './database';
 
 const companies = new Router();
 export const companiesApi = new Router();
 
+const companyFindAndUpdate = (req, res) => (_id, params) => {
+  if (_id) {
+    Company.findByIdAndUpdate(_id, params, (err) => {
+      if (!err) {
+        res.send({
+          success: true,
+          _id,
+        });
+      } else {
+        res.send({
+          success: false,
+        });
+      }
+    });
+  } else {
+    res.send({
+      success: false,
+    });
+  }
+};
+
 companies.use('/api/companies', companiesApi);
 
 companiesApi.get('/fetch', (req, res) => {
   const meta = [
-    { name: 'Название моей компании', isPublic: false, partners: [] },
-    { name: 'Моя новая компания', isPublic: true, partners: [] },
-    { name: 'Моя компания с парнтерами', isPublic: true, partners: [1, 2, 3] },
+    // {
+    //   cid: uuid(),
+    //   name: 'Название моей компании',
+    //   isPublic: false,
+    //   partners: [],
+    // }, {
+    //   cid: uuid(),
+    //   name: 'Моя новая компания',
+    //   isPublic: true,
+    //   partners: [],
+    // }, {
+    //   cid: uuid(),
+    //   name: 'Моя компания с парнтерами',
+    //   isPublic: true,
+    //   partners: [1, 2, 3],
+    // },
   ];
   const { userId } = req.currentSession;
 
   Company.find({
+    isDelete: false,
     userId,
-  }, (err, result) => {
+  }).sort({ _id: -1 }).exec((err, result) => {
     if (!err) {
       res.send({
         success: true,
@@ -59,24 +95,15 @@ companiesApi.post('/add', (req, res) => {
 companiesApi.post('/edit', (req, res) => {
   const { _id } = req.body;
 
-  if (_id) {
-    Company.findByIdAndUpdate(_id, req.body, (err) => {
-      if (!err) {
-        res.send({
-          success: true,
-          _id,
-        });
-      } else {
-        res.send({
-          success: false,
-        });
-      }
-    });
-  } else {
-    res.send({
-      success: false,
-    });
-  }
+  companyFindAndUpdate(req, res)(_id, req.body);
+});
+
+companiesApi.delete('/', (req, res) => {
+  const { _id } = req.query;
+
+  companyFindAndUpdate(req, res)(_id, {
+    isDelete: true,
+  });
 });
 
 export default companies;

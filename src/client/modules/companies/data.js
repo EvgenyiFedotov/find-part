@@ -1,21 +1,38 @@
 import axios from 'axios';
+import uuid from 'uuid/v4';
 
 export const types = {
+  add: 'COMPANIES_ADD',
+  editByCid: 'COMPANIES_EDIT_BY_CID',
   edit: 'COMPANIES_EDIT',
+  write: 'COMPANIES_WRITE',
   delete: 'COMPANIES_DELETE',
   fetch: 'COMPANIES_FETCH',
   set: 'COMPANIES_SET',
 };
 
 export const actions = {
-  edit: ({ index, fields }) => ({
-    type: types.edit,
-    index,
-    fields,
-  }),
-  delete: index => ({
+  write: (item) => {
+    let type = types.add;
+    const setItem = { ...item };
+    const { _id, cid } = item;
+
+    if (_id && !cid) {
+      type = types.edit;
+    } else if (cid) {
+      type = types.editByCid;
+    } else {
+      setItem.cid = uuid();
+    }
+
+    return {
+      item: setItem,
+      type,
+    };
+  },
+  delete: item => ({
     type: types.delete,
-    index,
+    item,
   }),
   fetch: () => ({
     type: types.fetch,
@@ -38,37 +55,35 @@ export const defaultCompanies = {
 export function reducer(store = defaultStore, action = {}) {
   const {
     type,
-    index,
-    fields = {},
+    item,
     items = [],
   } = action;
-  const setItem = {
-    ...(Object.keys(defaultCompanies).reduce((result, key) => ({
-      ...result,
-      [key]: fields[key] || result[key],
-    }), defaultCompanies)),
-  };
-  const newStore = [...store];
 
   switch (type) {
+    case types.add:
+      return [
+        item,
+        ...store,
+      ];
+    case types.editByCid:
+      return store.map((storeItem) => {
+        if (storeItem.cid === item.cid) {
+          const { cid, ...setItem } = item;
+          return setItem;
+        }
+
+        return storeItem;
+      });
     case types.edit:
-      if (index === -1) {
-        newStore.push(setItem);
-      } else {
-        newStore[index] = {
-          ...newStore[index],
-          ...setItem,
-        };
-      }
+      return store.map((storeItem) => {
+        if (storeItem._id === item._id) {
+          return item;
+        }
 
-      return newStore;
+        return storeItem;
+      });
     case types.delete:
-      if (index !== -1) {
-        newStore.splice(index, 1);
-        return newStore;
-      }
-
-      return store;
+      return store.filter(storeItem => storeItem._id !== item._id);
     case types.set:
       return [...items];
     default:
@@ -77,7 +92,7 @@ export function reducer(store = defaultStore, action = {}) {
 }
 
 export const middleware = ({ dispatch }) => next => (action) => {
-  const { type, index, fields } = action;
+  const { type, item } = action;
   const apiPath = '/api/companies';
 
   switch (type) {
@@ -92,19 +107,28 @@ export const middleware = ({ dispatch }) => next => (action) => {
         });
 
       break;
-    case types.edit:
-      if (index === -1) {
-        axios.post(`${apiPath}/add`, fields)
-          .then(({ data }) => {
-            console.log('@add', data);
-          });
-      } else {
-        axios.post(`${apiPath}/edit`, fields)
-          .then(({ data }) => {
-            console.log('@edit', data);
-          });
-      }
+    case types.add:
+      axios.post(`${apiPath}/add`, item).then(({ data }) => {
+        const { _id } = data;
 
+        dispatch(actions.write({
+          ...item,
+          _id,
+        }));
+      });
+
+      next(action);
+      break;
+    case types.edit:
+      axios.post(`${apiPath}/edit`, item);
+      next(action);
+      break;
+    case types.delete:
+      axios.delete(`${apiPath}`, {
+        params: {
+          _id: item._id,
+        },
+      });
       next(action);
       break;
     default:

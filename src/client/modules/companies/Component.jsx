@@ -21,15 +21,10 @@ class Companies extends Component {
     editItem: null,
   };
 
-  openDialog(item, index) {
+  openDialog(item) {
     this.setState({
       openDialog: true,
-      editItem: item
-        ? {
-          index,
-          fields: item,
-        }
-        : null,
+      editItem: item || null,
     });
   }
 
@@ -39,19 +34,19 @@ class Companies extends Component {
     });
   }
 
-  saveDialog(params) {
+  saveDialog(item) {
     const { onSaveItem } = this.props;
 
     if (onSaveItem) {
-      onSaveItem(params);
+      onSaveItem(item);
     }
   }
 
-  deleteItem(index) {
+  deleteItem(item) {
     const { onDeleteItem } = this.props;
 
     if (onDeleteItem) {
-      onDeleteItem(index);
+      onDeleteItem(item);
     }
   }
 
@@ -65,7 +60,7 @@ class Companies extends Component {
           onClose={this.closeDialog.bind(this)}
           onSave={this.saveDialog.bind(this)}
           onDelete={this.deleteItem.bind(this)}
-          {...editItem}
+          fields={editItem}
         />
       );
     }
@@ -88,10 +83,16 @@ class Companies extends Component {
         </Typography>
 
         <List dense={false}>
+          {!(items.length) && (
+            <Typography variant="caption">
+              Список ваших компаний пуст.
+            </Typography>
+          )}
+
           {items.map((item, index) => (
             <ListItem
               key={index}
-              onClick={this.openDialog.bind(this, item, index)}
+              onClick={this.openDialog.bind(this, item)}
               button
               className={classes.listItem}
             >
@@ -105,7 +106,7 @@ class Companies extends Component {
                   className={classes.icon}
                 />
 
-                {!!(item.partners.length) && (
+                {!!(item.partners && item.partners.length) && (
                   <Badge
                     color="primary"
                     badgeContent={item.partners.length}
@@ -118,7 +119,7 @@ class Companies extends Component {
                   </Badge>
                 )}
 
-                {!(item.partners.length) && (
+                {!(item.partners && item.partners.length) && (
                   <Group
                     color="disabled"
                     className={classes.icon}

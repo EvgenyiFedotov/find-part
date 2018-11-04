@@ -12,10 +12,10 @@ const CompaniesStore = class CompaniesStore extends Component {
     dispatch(actions.fetch());
   }
 
-  onSaveItem(params) {
+  onSaveItem(item) {
     const { dispatch } = this.props;
 
-    dispatch(actions.edit(params));
+    dispatch(actions.write(item));
   }
 
   onDeleteItem(index) {

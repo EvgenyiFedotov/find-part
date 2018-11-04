@@ -18,42 +18,27 @@ class DialogEdit extends Component {
   constructor(props) {
     super(props);
 
-    const { index, fields } = props;
+    const { fields } = props;
 
     this.state = {
-      index,
-      fields: {
-        ...fields,
-      },
+      ...fields,
     };
   }
 
   onChange(key, ev) {
     this.setState({
-      fields: {
-        ...this.state.fields,
-        [key]: ev.target.value,
-      },
+      [key]: ev.target.value,
     });
   }
 
   onChangeCheck(key) {
-    const { fields } = this.state;
-
     this.setState({
-      fields: {
-        ...fields,
-        [key]: !fields[key],
-      },
+      [key]: !this.state[key],
     });
   }
 
   close() {
     const { onClose } = this.props;
-
-    this.setState({
-      fields: {},
-    });
 
     if (onClose) {
       onClose.call(this);
@@ -74,15 +59,19 @@ class DialogEdit extends Component {
     const { onDelete } = this.props;
 
     if (onDelete) {
-      onDelete.call(this, this.state.index);
+      onDelete.call(this, this.state);
     }
 
     this.close();
   }
 
   render() {
-    const { index, fields } = this.state;
-    const { name = '', isPublic = false, partners = [] } = fields;
+    const {
+      _id,
+      name = '',
+      isPublic = false,
+      partners = [],
+    } = this.state;
     const { classes } = this.props;
 
     return (
@@ -114,7 +103,7 @@ class DialogEdit extends Component {
               <Checkbox
                 checked={isPublic}
                 onChange={this.onChangeCheck.bind(this, 'isPublic')}
-                disabled={!!partners.length}
+                disabled={!!partners.length || !name}
               />
             }
             label="Публичная"
@@ -128,7 +117,7 @@ class DialogEdit extends Component {
           <Button
             color="secondary"
             onClick={this.delete.bind(this)}
-            disabled={index === -1 || !!partners.length}
+            disabled={isPublic || !!partners.length || !_id}
           >
             Удалить
           </Button>
@@ -151,12 +140,10 @@ DialogEdit.propTypes = {
   onClose: PropTypes.func,
   onSave: PropTypes.func,
   onDelete: PropTypes.func,
-  index: PropTypes.number,
   fields: PropTypes.object,
 };
 
 DialogEdit.defaultProps = {
-  index: -1,
   fields: {},
 };
 
