@@ -5,7 +5,8 @@
   "scripts": {
     "build": "webpack",
     "build-watch": "webpack --watch",
-    "start": "node ./node_modules/nodemon/bin/nodemon.js ./dist/server/index.js"
+    "start": "node ./node_modules/nodemon/bin/nodemon.js ./dist/server/index.js",
+    "module-create": "node ./cli/module/create.js"
   },
   "repository": {
     "type": "git",
@@ -47,11 +48,13 @@
     "@material-ui/icons": "^3.0.1",
     "axios": "^0.18.0",
     "browser-cookies": "^1.2.0",
+    "chalk-pipe": "^2.0.0",
     "classnames": "^2.2.6",
     "cookie": "^0.3.1",
     "cookie-parser": "^1.4.3",
     "dateformat": "^3.0.3",
     "express": "^4.16.3",
+    "inquirer": "^6.2.0",
     "md5": "^2.2.1",
     "mongoose": "^5.3.0",
     "prop-types": "^15.6.2",
