@@ -10,7 +10,12 @@ import {
   ListItemSecondaryAction,
   Badge,
 } from '@material-ui/core';
-import { Add, Public, Group } from '@material-ui/icons';
+import {
+  Add,
+  Public,
+  Group,
+  CompareArrows,
+} from '@material-ui/icons';
 
 import styles from '../styles';
 import DialogEdit from '../components/DialogEdit';
@@ -53,6 +58,28 @@ class Companies extends Component {
   render() {
     const { openDialog, editItem } = this.state;
     const { classes, items } = this.props;
+    const barge = filter => (Icon, count) => {
+      if (filter()) {
+        return (
+          <Badge badgeContent={count}>
+            <Icon />
+          </Badge>
+        );
+      }
+
+      return <Icon />;
+    };
+    const itemActions = item => (
+      <ListItemSecondaryAction>
+        <IconButton disabled={!item.partners}>
+          {barge(() => !!item.partners)(Group, item.partners)}
+        </IconButton>
+
+        <IconButton disabled={!item.requests}>
+          {barge(() => !!item.requests)(CompareArrows, item.requests)}
+        </IconButton>
+      </ListItemSecondaryAction>
+    );
 
     if (openDialog) {
       return (
@@ -96,36 +123,13 @@ class Companies extends Component {
               button
               className={classes.listItem}
             >
+              <Public color={item.isPublic ? 'action' : 'disabled'} />
+
               <ListItemText>
                 {item.name || 'Нет названия'}
               </ListItemText>
 
-              <ListItemSecondaryAction className={classes.actions}>
-                <Public
-                  color={item.isPublic ? 'action' : 'disabled'}
-                  className={classes.icon}
-                />
-
-                {!!(item.partners && item.partners.length) && (
-                  <Badge
-                    color="primary"
-                    badgeContent={item.partners.length}
-                    classes={{ badge: classes.badge }}
-                  >
-                    <Group
-                      color="action"
-                      className={classes.badgeIcon}
-                    />
-                  </Badge>
-                )}
-
-                {!(item.partners && item.partners.length) && (
-                  <Group
-                    color="disabled"
-                    className={classes.icon}
-                  />
-                )}
-              </ListItemSecondaryAction>
+              {itemActions(item)}
             </ListItem>
           ))}
         </List>

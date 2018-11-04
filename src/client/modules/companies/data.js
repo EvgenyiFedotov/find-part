@@ -93,11 +93,12 @@ export function reducer(store = defaultStore, action = {}) {
 
 export const middleware = ({ dispatch }) => next => (action) => {
   const { type, item } = action;
-  const apiPath = '/api/companies';
+  const companiesApiPath = '/api/companies';
+  const companyApiPath = '/api/company';
 
   switch (type) {
     case types.fetch:
-      axios.get(`${apiPath}/fetch`)
+      axios.get(`${companiesApiPath}`)
         .then(({ data }) => {
           const { success, items } = data;
 
@@ -108,7 +109,7 @@ export const middleware = ({ dispatch }) => next => (action) => {
 
       break;
     case types.add:
-      axios.post(`${apiPath}/add`, item).then(({ data }) => {
+      axios.post(`${companyApiPath}`, item).then(({ data }) => {
         const { _id } = data;
 
         dispatch(actions.write({
@@ -120,11 +121,11 @@ export const middleware = ({ dispatch }) => next => (action) => {
       next(action);
       break;
     case types.edit:
-      axios.post(`${apiPath}/edit`, item);
+      axios.put(`${companyApiPath}`, item);
       next(action);
       break;
     case types.delete:
-      axios.delete(`${apiPath}`, {
+      axios.delete(`${companyApiPath}`, {
         params: {
           _id: item._id,
         },

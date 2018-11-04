@@ -13,7 +13,12 @@ export const Companies = new mongoose.Schema({
     type: Boolean,
   },
   partners: {
-    type: [mongoose.Schema.Types.ObjectId],
+    type: Number,
+    default: 0,
+  },
+  requests: {
+    type: Number,
+    default: 0,
   },
   isDelete: {
     type: Boolean,

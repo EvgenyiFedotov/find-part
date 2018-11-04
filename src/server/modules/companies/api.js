@@ -1,35 +1,13 @@
 import { Router } from 'express';
-import uuid from 'uuid/v4';
 
 import { Company } from './database';
 
 const companies = new Router();
 export const companiesApi = new Router();
 
-const companyFindAndUpdate = (req, res) => (_id, params) => {
-  if (_id) {
-    Company.findByIdAndUpdate(_id, params, (err) => {
-      if (!err) {
-        res.send({
-          success: true,
-          _id,
-        });
-      } else {
-        res.send({
-          success: false,
-        });
-      }
-    });
-  } else {
-    res.send({
-      success: false,
-    });
-  }
-};
-
 companies.use('/api/companies', companiesApi);
 
-companiesApi.get('/fetch', (req, res) => {
+companiesApi.get('/', (req, res) => {
   const meta = [
     // {
     //   cid: uuid(),
@@ -70,7 +48,32 @@ companiesApi.get('/fetch', (req, res) => {
   });
 });
 
-companiesApi.post('/add', (req, res) => {
+export const companyApi = new Router();
+
+const companyFindAndUpdate = (req, res) => (_id, params) => {
+  if (_id) {
+    Company.findByIdAndUpdate(_id, params, (err) => {
+      if (!err) {
+        res.send({
+          success: true,
+          _id,
+        });
+      } else {
+        res.send({
+          success: false,
+        });
+      }
+    });
+  } else {
+    res.send({
+      success: false,
+    });
+  }
+};
+
+companies.use('/api/company', companyApi);
+
+companyApi.post('/', (req, res) => {
   const { userId } = req.currentSession;
 
   new Company({
@@ -92,13 +95,13 @@ companiesApi.post('/add', (req, res) => {
   });
 });
 
-companiesApi.post('/edit', (req, res) => {
+companyApi.put('/', (req, res) => {
   const { _id } = req.body;
 
   companyFindAndUpdate(req, res)(_id, req.body);
 });
 
-companiesApi.delete('/', (req, res) => {
+companyApi.delete('/', (req, res) => {
   const { _id } = req.query;
 
   companyFindAndUpdate(req, res)(_id, {
