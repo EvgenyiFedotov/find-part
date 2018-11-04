@@ -8,16 +8,16 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 
 import ContainerBase from 'components/simple/Container';
-import { CompaniesStore, data as companiesData } from 'modules/companies';
+import Companies from 'modules/companies';
 
 import styles from './styles';
 
 const createdStore = createStore(
   combineReducers({
-    companies: companiesData.reducer,
+    companies: Companies.data.reducer,
   }),
   applyMiddleware(
-    companiesData.middleware,
+    Companies.data.middleware,
   ),
 );
 
@@ -78,7 +78,7 @@ class Container extends Component {
         >
           <div className={classes.content}>
             <Paper className={classes.companies}>
-              <CompaniesStore />
+              <Companies.Component.store />
             </Paper>
           </div>
         </ContainerBase>

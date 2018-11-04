@@ -12,8 +12,8 @@ import {
 } from '@material-ui/core';
 import { Add, Public, Group } from '@material-ui/icons';
 
-import styles from './styles';
-import DialogEdit from './components/DialogEdit';
+import styles from '../styles';
+import DialogEdit from '../components/DialogEdit';
 
 class Companies extends Component {
   state = {

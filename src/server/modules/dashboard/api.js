@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import dashboardServer from '../../../client/modules/dashboard/server.jsx';
+import dashboardServer from '../../../client/modules/dashboard/server';
 
 const dashboard = new Router();
 

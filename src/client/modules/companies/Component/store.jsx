@@ -2,14 +2,20 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import Companies from '../../companies';
-import dataExport, { actions } from '../../companies/data';
+import Companies from './main';
+import { actions } from '../data';
 
 const CompaniesStore = class CompaniesStore extends Component {
-  onSaveItem(params) {
+  componentDidMount() {
     const { dispatch } = this.props;
 
-    dispatch(actions.edit(params));
+    dispatch(actions.fetch());
+  }
+
+  onSaveItem(item) {
+    const { dispatch } = this.props;
+
+    dispatch(actions.write(item));
   }
 
   onDeleteItem(index) {
@@ -34,4 +40,3 @@ CompaniesStore.propTypes = {
 };
 
 export default connect(store => ({ items: store.companies }))(CompaniesStore);
-export const data = dataExport;
