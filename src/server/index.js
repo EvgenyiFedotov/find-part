@@ -1,26 +1,28 @@
 import express from 'express';
 import http from 'http';
 import cookieParser from 'cookie-parser';
-import { main } from './http';
-import socket from './socket';
-import { connect } from './database';
+import Loadable from 'react-loadable';
 
-import handlers from './api/sockets/handlers';
+import databaseConnect from './databaseConnect';
+import modules from './modules';
 
 const PORT = 5000;
 const app = express();
 const httpServer = http.Server(app);
 
 app.use(cookieParser());
+app.use(express.json());
 app.use(express.static('dist/client'));
-app.get('/', main);
+app.get('/favicon.ico', (req, res) => res.sendStatus(404));
+app.use(modules.auth.api);
+app.use(modules.dashboard.api);
+app.use(modules.companies.api);
+app.use(modules.partners.api);
 
-socket(httpServer, {
-  ...handlers,
-});
+Loadable.preloadAll().then(() => {
+  httpServer.listen(PORT, () => {
+    console.log(`Example app listening on port ${PORT}!`);
 
-httpServer.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}!`);
-
-  connect();
+    databaseConnect();
+  });
 });

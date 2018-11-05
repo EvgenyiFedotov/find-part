@@ -1,0 +1,3 @@
+/* automatically created */
+
+export default {};

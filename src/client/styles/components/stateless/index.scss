@@ -1,5 +1,0 @@
-@import './AuthTopBar';
-
-@mixin stateless($value) {
-  @include AuthTopBar($value);
-}

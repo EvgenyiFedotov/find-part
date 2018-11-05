@@ -12,7 +12,7 @@ module.exports = function createConfig(config = {}) {
     },
     resolve: {
       extensions: ['*', '.js', '.jsx'],
-      modules: ['node_modules', 'src'],
+      modules: ['node_modules', 'src/client'],
     },
     module: {
       rules: [{
@@ -38,5 +38,9 @@ module.exports = function createConfig(config = {}) {
     stats: {
       warnings: false,
     },
+    watchOptions: {
+      aggregateTimeout: 1000,
+    },
+    plugins: config.plugins,
   };
 };

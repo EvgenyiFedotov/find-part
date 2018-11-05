@@ -1,19 +1,32 @@
 const createConfig = require('./webpack/createConfig');
 
-const mode = 'development';
-const devtool = 'source-map';
+const mode = 'development'; // development | production
+let devtool = 'source-map';
+
+if (mode === 'production') {
+  devtool = undefined;
+}
 
 module.exports = [
   createConfig({
     entry: {
-      index: './src/client/index.js',
+      auth: './src/client/modules/auth/client.jsx',
+      dashboard: './src/client/modules/dashboard/client.jsx',
     },
     output: {
       path: `${__dirname}/dist/client`,
+      chunkFilename: '[name].js',
+      publicPath: '/',
     },
     mode,
     devtool,
+    node: {
+      fs: 'empty',
+      net: 'empty',
+      tls: 'empty',
+    },
   }),
+
   createConfig({
     entry: {
       index: './src/server/index.js',
