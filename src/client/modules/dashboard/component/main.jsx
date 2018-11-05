@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 
 import ContainerBase from 'components/simple/Container';
 import Companies from 'modules/companies';
+import Partners from 'modules/partners';
 
 import ButtonSessions from './buttonSession';
 import styles from './styles';
@@ -66,7 +67,7 @@ class Container extends Component {
             </Paper>
 
             <Paper className={classes.partners}>
-              <Companies.Component.store />
+              <Partners.component.main />
             </Paper>
 
             <Paper className={classes.requsest}>

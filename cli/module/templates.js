@@ -81,7 +81,7 @@ export default {
 };
 `
       ),
-      'main.jsx': () => (`/* automatically created */
+      'main.jsx': ({ name }) => (`/* automatically created */
 
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
@@ -91,7 +91,7 @@ import styles from './styles';
 class ComponentModule extends Component {
   render() {
     return (
-      <div>New module</div>
+      <div>module: ${name}</div>
     );
   }
 }
