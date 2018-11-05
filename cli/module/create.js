@@ -40,9 +40,13 @@ const questions = [{
 
     return 'Input correct name module!';
   },
+}, {
+  type: 'confirm',
+  name: 'router',
+  message: 'Create module routing?',
 }];
 
-const create = (root, config) => {
+const create = (root, config, answers) => {
   if (!(config instanceof Function) && config instanceof Object) {
     fs.mkdirSync(root);
 
@@ -51,31 +55,28 @@ const create = (root, config) => {
       const configName = config[name];
 
       if (configName instanceof Function) {
-        fs.writeFileSync(
-          `${root}/${name}${isFullName ? '' : '.js'}`,
-          configName({
-            name,
-          }).replace(/\n/g, '\r\n'),
-        );
+        const content = configName(answers);
+
+        if (typeof content === 'string') {
+          fs.writeFileSync(
+            `${root}/${name}${isFullName ? '' : '.js'}`,
+            content.replace(/\n/g, '\r\n'),
+          );
+        } else if (!(content instanceof Function) && content instanceof Object) {
+          create(`${root}/${name}`, content, answers);
+        }
       } else if (configName instanceof Object) {
-        create(`${root}/${name}`, configName);
+        create(`${root}/${name}`, configName, answers);
       }
     });
   }
 };
 
 inquirer.prompt(questions).then((answers) => {
-  console.log(JSON.stringify(answers, null, '  '));
-
   const { root, name } = answers;
   const clientPath = `${root}/client/modules/${name}`;
   const serverPath = `${root}/server/modules/${name}`;
 
-  create(clientPath, templates.client);
-
-  // fs.mkdirSync(clientPath);
-  // fs.mkdirSync(serverPath);
-
-  // fs.writeFileSync(`${clientPath}/index.js`, templates.client.index());
-  // fs.writeFileSync(`${serverPath}/index.js`, 'Test');
+  create(clientPath, templates.client, answers);
+  create(serverPath, templates.server, answers);
 });
