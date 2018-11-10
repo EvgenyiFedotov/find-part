@@ -12,6 +12,7 @@ module.exports = [
     entry: {
       auth: './src/client/modules/auth/client.jsx',
       dashboard: './src/client/modules/dashboard/client.jsx',
+      queries: './src/client/modules/queries/sides/client.js',
     },
     output: {
       path: `${__dirname}/dist/client`,
