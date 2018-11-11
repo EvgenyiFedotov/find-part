@@ -1,13 +1,7 @@
-/* automatically created */
-
 import { Router } from 'express';
-
 import companies from '../companies';
 
-const router = new Router();
 const api = new Router();
-
-router.use('/api/partners', api);
 
 api.get('/find', (req, res) => {
   const { currentSession } = req;
@@ -17,14 +11,12 @@ api.get('/find', (req, res) => {
     let { filter } = req.query;
 
     if (filter instanceof Array) {
-      filter = Object.keys(filter.reduce((result, key) => {
-        return {
-          ...result,
-          [key]: true,
-        };
-      }, {}));
+      filter = Object.keys(filter.reduce((result, key) => ({
+        ...result,
+        [key]: true,
+      }), {}));
 
-      companies.common.companiesFind(req, res)({
+      companies.methods.companiesFind(req, res)({
         $and: filter.reduce((result, value) => {
           result.push({
             name: new RegExp(value),
@@ -48,4 +40,4 @@ api.get('/find', (req, res) => {
   }
 });
 
-export default router;
+export default api;

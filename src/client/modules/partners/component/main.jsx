@@ -1,5 +1,3 @@
-/* automatically created */
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -66,7 +64,7 @@ class ComponentModule extends Component {
           )}
         </List>
 
-        <Components.dialogFind
+        <Components.dialogFind.component
           open={openDialog}
           onClose={this.dialogClose}
           onSelect={this.dialogSelect}

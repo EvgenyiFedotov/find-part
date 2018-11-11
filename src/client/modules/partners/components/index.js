@@ -1,6 +1,4 @@
-/* automatically created */
-
-import dialogFind from './dialogFind';
+import dialogFind from './dialog-find';
 
 export default {
   dialogFind,
