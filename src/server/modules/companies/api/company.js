@@ -1,29 +1,10 @@
 import { Router } from 'express';
-import { Company } from './database';
-import methods from './methods';
+import { Company } from '../database';
+import methods from '../methods';
 
 const api = new Router();
 
-api.get('/', (req, res) => {
-  const { currentSession } = req;
-
-  if (currentSession) {
-    const { userId } = currentSession;
-
-    methods.companiesFind(req, res)({
-      isDelete: false,
-      userId,
-    });
-  } else {
-    res.sendStatus(404);
-  }
-});
-
-const companyApi = new Router();
-
-api.use('/company', companyApi);
-
-companyApi.post('/', (req, res) => {
+api.post('/', (req, res) => {
   const { userId } = req.currentSession;
 
   new Company({
@@ -45,13 +26,13 @@ companyApi.post('/', (req, res) => {
   });
 });
 
-companyApi.put('/', (req, res) => {
+api.put('/', (req, res) => {
   const { _id } = req.body;
 
   methods.companyFindAndUpdate(req, res)(_id, req.body);
 });
 
-companyApi.delete('/', (req, res) => {
+api.delete('/', (req, res) => {
   const { _id } = req.query;
 
   methods.companyFindAndUpdate(req, res)(_id, {

@@ -26,8 +26,8 @@ class ComponentModule extends Component {
     this.setState({ openDialog: false });
   }
 
-  dialogSelect = () => {
-    console.log('@dialogSelect');
+  dialogSelect = (item) => {
+    console.log('@dialogSelect', item);
   }
 
   render() {

@@ -1,24 +1,13 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
 const questions = require('./questions');
+const common = require('../common');
 
 const cloneDir = (fromPath, toPath, nameModule) => {
-  fs.mkdirSync(toPath);
-
-  fs.readdirSync(fromPath).forEach((fileName) => {
-    const fromPathFile = `${fromPath}/${fileName}`;
-    const toPathFile = `${toPath}/${fileName}`;
-
-    if (fs.statSync(fromPathFile).isDirectory()) {
-      cloneDir(fromPathFile, toPathFile, nameModule);
-    } else {
-      const file = fs.readFileSync(fromPathFile);
-      let fileStr = file.toString();
-
-      fileStr = fileStr.replace(/NAME_MODULE/g, nameModule);
-
-      fs.writeFileSync(toPathFile, fileStr);
-    }
+  common.cloneDir(fromPath, toPath, {
+    fileCallback: ({ fileStr }) => (
+      fileStr.replace(/NAME_MODULE/g, nameModule)
+    ),
   });
 };
 
