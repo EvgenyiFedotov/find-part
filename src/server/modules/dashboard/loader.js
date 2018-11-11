@@ -1,7 +1,7 @@
 import App from 'App';
-import router from '../router';
+import router from 'modules/dashboard/router';
 
 export default App.server({
-  modules: ['/queries'],
+  modules: ['/dashboard'],
   component: router,
 });

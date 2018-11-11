@@ -4,12 +4,15 @@ import loader from './loader';
 
 const router = new Router();
 
-router.get('/NAME_MODULE', (req, res) => {
+router.get('/dashboard', (req, res) => {
   res.send(loader({
     location: req.originalUrl,
+    props: {
+      getCookies: () => req.cookies,
+    },
   }));
 });
 
-router.use('/api/NAME_MODULE', api);
+router.use('/api/dashboard', api);
 
 export default router;

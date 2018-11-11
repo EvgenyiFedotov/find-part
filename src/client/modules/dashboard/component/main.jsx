@@ -1,35 +1,20 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { Paper } from '@material-ui/core';
-import axios from 'axios';
 import { withStyles } from '@material-ui/core/styles';
 import { Provider } from 'react-redux';
+import { Paper } from '@material-ui/core';
+import axios from 'axios';
 
 import ContainerBase from 'components/simple/Container';
 import Companies from 'modules/companies';
 import Partners from 'modules/partners';
+import Queries from 'modules/queries';
+import ButtonSessions from 'modules/auth/components/public/ButtonSessions/loader';
 
-import ButtonSessions from './buttonSession';
 import styles from './styles';
 import store from './store';
 
-ButtonSessions.preload();
-
-class Container extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      buttonSession: null,
-    };
-  }
-
-  componentDidMount() {
-    this.setState({
-      buttonSession: <ButtonSessions />,
-    });
-  }
-
+class Component extends React.Component {
   onNavigate(value) {
     axios.get('/api/auth/signout').then(({ data }) => {
       const { success } = data;
@@ -42,24 +27,17 @@ class Container extends Component {
 
   render() {
     const { classes } = this.props;
-    const { buttonSession } = this.state;
-    const tools = (
-      <span>
-        {buttonSession}
-      </span>
-    );
-    const buttonsTools = [{
-      children: 'Выход',
-      onClick: this.onNavigate.bind(this, '/auth'),
-    }];
 
     return (
       <Provider store={store}>
         <ContainerBase
           wrappedComponentRef={(el) => { this.container = el; }}
           title="Findpart: Рабочий стол"
-          tools={tools}
-          buttonsTools={buttonsTools}
+          tools={<span><ButtonSessions /></span>}
+          buttonsTools={[{
+            children: 'Выход',
+            onClick: this.onNavigate.bind(this, '/auth'),
+          }]}
         >
           <div className={classes.content}>
             <Paper className={classes.companies}>
@@ -71,7 +49,7 @@ class Container extends Component {
             </Paper>
 
             <Paper className={classes.requsest}>
-              <Companies.Component.store />
+              <Queries.component.main />
             </Paper>
           </div>
         </ContainerBase>
@@ -80,11 +58,10 @@ class Container extends Component {
   }
 }
 
-Container.propTypes = {
+Component.propTypes = {
   classes: PropTypes.object,
 };
 
-Container.defaultProps = {
-};
+Component.defaultProps = {};
 
-export default withStyles(styles)(Container);
+export default withStyles(styles)(Component);

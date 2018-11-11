@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button } from '@material-ui/core';
 import { withRouter } from 'react-router';
 
-import Page from '../statefull/Page.jsx';
+import Page from '../statefull/Page';
 
 class Container extends Component {
   onClick(value) {

@@ -4,8 +4,8 @@ import { StaticRouter } from 'react-router-dom';
 import { SheetsRegistry } from 'react-jss/lib/jss';
 import Loadable from 'react-loadable';
 
-import Html from '../Html.jsx';
-import App from './App.jsx';
+import Html from '../Html';
+import App from './App';
 
 export default ({
   component,

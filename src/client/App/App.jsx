@@ -4,13 +4,17 @@ import {
   MuiThemeProvider,
   createMuiTheme,
   createGenerateClassName,
+  withStyles,
 } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
 import red from '@material-ui/core/colors/red';
 import PropTypes from 'prop-types';
 import { Switch } from 'react-router-dom';
+import styles from './styles';
 
-export default function App({
+const GlobalStylesApp = withStyles(styles)(props => props.children);
+
+function App({
   sheetsRegistry = null,
   sheetsManager = null,
   children,
@@ -30,7 +34,9 @@ export default function App({
     <JssProvider registry={sheetsRegistry} generateClassName={generateClassName}>
       <MuiThemeProvider theme={theme} sheetsManager={sheetsManager}>
         <Switch>
-          {children}
+          <GlobalStylesApp>
+            {children}
+          </GlobalStylesApp>
         </Switch>
       </MuiThemeProvider>
     </JssProvider>
@@ -42,3 +48,5 @@ App.propTypes = {
   sheetsRegistry: PropTypes.object,
   sheetsManager: PropTypes.object,
 };
+
+export default App;

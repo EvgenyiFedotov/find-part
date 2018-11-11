@@ -8,7 +8,7 @@ import SignIn from './components/SignIn.jsx';
 import SignUp from './components/SignUp.jsx';
 
 const Dashboard = Loadable({
-  loader: () => import(/* webpackChunkName: "auth-dashboard" */ '../dashboard'),
+  loader: () => import(/* webpackChunkName: "auth-dashboard" */ '../dashboard/router'),
   loading() {
     return (<div>Loading...</div>);
   },

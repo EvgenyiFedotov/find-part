@@ -1,5 +1,5 @@
-import client from './client.jsx';
-import server from './server.jsx';
+import client from './client';
+import server from './server';
 
 export default {
   client,

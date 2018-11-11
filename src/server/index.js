@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(express.static('dist/client'));
 app.get('/favicon.ico', (req, res) => res.sendStatus(404));
 app.use(modules.auth.api);
-app.use(modules.dashboard.api);
+app.use(modules.dashboard.router);
 app.use(modules.companies.api);
 app.use(modules.partners.api);
 app.use(modules.queries.router);

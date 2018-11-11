@@ -7,7 +7,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import Loadable from 'react-loadable';
 
-import App from './App.jsx';
+import App from './App';
 
 export default function ({ component, props = {}, children }) {
   Loadable.preloadReady().then(() => {

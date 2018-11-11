@@ -1,7 +1,7 @@
-import Component from './component';
+import component from './component';
 import components from './components';
 
 export default {
-  Component,
+  component,
   components,
 };
