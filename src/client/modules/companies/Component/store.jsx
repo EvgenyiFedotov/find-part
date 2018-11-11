@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import Companies from './main';
-import { actions } from '../data';
+import { actions } from '../store-config';
 
-const CompaniesStore = class CompaniesStore extends Component {
+class CompaniesStore extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
 
@@ -33,7 +33,7 @@ const CompaniesStore = class CompaniesStore extends Component {
       onDeleteItem={this.onDeleteItem.bind(this)}
     />;
   }
-};
+}
 
 CompaniesStore.propTypes = {
   dispatch: PropTypes.func,

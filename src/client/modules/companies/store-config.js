@@ -94,7 +94,7 @@ export function reducer(store = defaultStore, action = {}) {
 export const middleware = ({ dispatch }) => next => (action) => {
   const { type, item } = action;
   const companiesApiPath = '/api/companies';
-  const companyApiPath = '/api/company';
+  const companyApiPath = '/api/companies/company';
 
   switch (type) {
     case types.fetch:

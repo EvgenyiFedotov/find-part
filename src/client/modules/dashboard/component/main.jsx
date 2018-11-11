@@ -12,7 +12,7 @@ import Queries from 'modules/queries';
 import ButtonSessions from 'modules/auth/components/public/ButtonSessions/loader';
 
 import styles from './styles';
-import store from './store';
+import store from '../store';
 
 class Component extends React.Component {
   onNavigate(value) {
@@ -41,7 +41,7 @@ class Component extends React.Component {
         >
           <div className={classes.content}>
             <Paper className={classes.companies}>
-              <Companies.Component.store />
+              <Companies.component.store />
             </Paper>
 
             <Paper className={classes.partners}>

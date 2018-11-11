@@ -1,20 +1,16 @@
 import { Router } from 'express';
-
 import { Company } from './database';
-import { companiesFind, companyFindAndUpdate } from './common';
+import methods from './methods';
 
-const companies = new Router();
-export const companiesApi = new Router();
+const api = new Router();
 
-companies.use('/api/companies', companiesApi);
-
-companiesApi.get('/', (req, res) => {
+api.get('/', (req, res) => {
   const { currentSession } = req;
 
   if (currentSession) {
     const { userId } = currentSession;
 
-    companiesFind(req, res)({
+    methods.companiesFind(req, res)({
       isDelete: false,
       userId,
     });
@@ -23,9 +19,9 @@ companiesApi.get('/', (req, res) => {
   }
 });
 
-export const companyApi = new Router();
+const companyApi = new Router();
 
-companies.use('/api/company', companyApi);
+api.use('/company', companyApi);
 
 companyApi.post('/', (req, res) => {
   const { userId } = req.currentSession;
@@ -52,15 +48,15 @@ companyApi.post('/', (req, res) => {
 companyApi.put('/', (req, res) => {
   const { _id } = req.body;
 
-  companyFindAndUpdate(req, res)(_id, req.body);
+  methods.companyFindAndUpdate(req, res)(_id, req.body);
 });
 
 companyApi.delete('/', (req, res) => {
   const { _id } = req.query;
 
-  companyFindAndUpdate(req, res)(_id, {
+  methods.companyFindAndUpdate(req, res)(_id, {
     isDelete: true,
   });
 });
 
-export default companies;
+export default api;

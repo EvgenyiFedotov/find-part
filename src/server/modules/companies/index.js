@@ -1,9 +1,11 @@
+import router from './router';
 import api from './api';
+import methods from './methods';
 import database from './database';
-import common from './common';
 
 export default {
+  router,
   api,
+  methods,
   database,
-  common,
 };

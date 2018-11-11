@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import {
@@ -17,10 +17,10 @@ import {
   CompareArrows,
 } from '@material-ui/icons';
 
-import styles from '../styles';
-import DialogEdit from '../components/DialogEdit';
+import styles from './styles';
+import Components from '../components';
 
-class Companies extends Component {
+class Component extends React.Component {
   state = {
     openDialog: false,
     editItem: null,
@@ -83,7 +83,7 @@ class Companies extends Component {
 
     if (openDialog) {
       return (
-        <DialogEdit
+        <Components.dialogEdit.component
           onClose={this.closeDialog.bind(this)}
           onSave={this.saveDialog.bind(this)}
           onDelete={this.deleteItem.bind(this)}
@@ -93,7 +93,7 @@ class Companies extends Component {
     }
 
     return (
-      <div className={classes.companies}>
+      <div>
         <Typography
           variant="title"
           className={classes.header}
@@ -138,15 +138,15 @@ class Companies extends Component {
   }
 }
 
-Companies.propTypes = {
+Component.propTypes = {
   classes: PropTypes.object,
   items: PropTypes.array,
   onSaveItem: PropTypes.func,
   onDeleteItem: PropTypes.func,
 };
 
-Companies.defaultProps = {
-  items: [{}, {}, {}, {}],
+Component.defaultProps = {
+  items: [],
 };
 
-export default withStyles(styles)(Companies);
+export default withStyles(styles)(Component);

@@ -1,11 +1,11 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
-import Companies from 'modules/companies';
+import companies from 'modules/companies';
 
 export default createStore(
   combineReducers({
-    companies: Companies.data.reducer,
+    companies: companies.storeConfig.reducer,
   }),
   applyMiddleware(
-    Companies.data.middleware,
+    companies.storeConfig.middleware,
   ),
 );

@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core';
 import { Clear } from '@material-ui/icons';
 
-import styles from '../styles';
+import styles from './styles';
 
 class DialogEdit extends Component {
   constructor(props) {
@@ -113,7 +113,7 @@ class DialogEdit extends Component {
         <FormGroup>
         </FormGroup>
 
-        <FormGroup row={true} className={classes.dialogFooter}>
+        <FormGroup row={true} className={classes.footer}>
           <Button
             color="secondary"
             onClick={this.delete.bind(this)}

@@ -1,8 +1,9 @@
-import data from './data';
-
-import Component from './Component';
+import component from './component';
+import components from './components';
+import storeConfig from './store-config';
 
 export default {
-  Component,
-  data,
+  component,
+  components,
+  storeConfig,
 };
