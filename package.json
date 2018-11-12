@@ -7,7 +7,8 @@
     "build-watch": "webpack --watch",
     "start": "node ./node_modules/nodemon/bin/nodemon.js ./dist/server/index.js",
     "module-create": "node ./cli/module-create",
-    "template-create": "node ./cli/template-create"
+    "template-create": "node ./cli/template-create",
+    "component-create": "node ./cli/component-create"
   },
   "repository": {
     "type": "git",
