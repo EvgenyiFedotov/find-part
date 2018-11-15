@@ -7,19 +7,91 @@ import {
   Dialog,
   DialogActions,
   Button,
+  Stepper,
+  StepLabel,
+  StepContent,
+  Step,
+  Typography,
 } from '@material-ui/core';
+import companies from 'modules/companies';
 
 import styles from './styles';
-
 import Find from '../find';
 
+const CompaniesList = companies.components.public.list.component;
+const steps = [
+  'Выберите свою компанию',
+  'Настройте фильтр для поиска партнера',
+  'Ваше предложение',
+];
+
 class DialogFind extends Component {
-  onSelect = (item) => {
-    console.log('@onSelect', item);
+  state = {
+    activeStep: 0,
+    company: null,
+    partner: null,
+  };
+
+  onSelectCompany = (item) => {
+    this.nextStep();
+    console.log('@onSelectCompany', item);
+  }
+
+  onSelectPartner = (item) => {
+    console.log('@onSelectPartner', item);
+  }
+
+  nextStep() {
+    this.setState({ activeStep: this.state.activeStep + 1 });
+  }
+
+  prevStep() {
+    this.setState({ activeStep: this.state.activeStep - 1 });
+  }
+
+  getContent() {
+    const { activeStep } = this.state;
+
+    switch (activeStep) {
+      case 0:
+        return <CompaniesList onClick={this.onSelectCompany} />;
+      case 1:
+        return <Find.component onSelect={this.onSelectPartner} />;
+      default:
+        return null;
+    }
+  }
+
+  getButtons() {
+    const { activeStep } = this.state;
+
+    return (
+      <div>
+        <div>
+          <Button
+            disabled={activeStep === 0}
+            size="small"
+            // onClick={this.handleBack}
+          >
+            Back
+          </Button>
+
+          <Button
+            variant="contained"
+            color="primary"
+            size="small"
+            // onClick={this.handleNext}}
+          >
+            {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+          </Button>
+        </div>
+      </div>
+    );
   }
 
   render() {
     const { open, onClose } = this.props;
+    const { activeStep } = this.state;
 
     return (
       <Dialog
@@ -35,7 +107,20 @@ class DialogFind extends Component {
         </DialogTitle>
 
         <DialogContent>
-          <Find.component onSelect={this.onSelect} />
+          <Stepper activeStep={activeStep} orientation="vertical">
+            {steps.map(label => (
+              <Step key={label}>
+                <StepLabel>
+                  {label}
+                </StepLabel>
+
+                <StepContent>
+                  {this.getContent()}
+                  {this.getButtons()}
+                </StepContent>
+              </Step>
+            ))}
+          </Stepper>
         </DialogContent>
 
         <DialogActions>
