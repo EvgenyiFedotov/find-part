@@ -27,4 +27,9 @@ module.exports = [{
 
     return `Component with name \`${value}\` exist!`;
   },
+}, {
+  type: 'confirm',
+  name: 'isPublic',
+  message: 'Is public component?',
+  default: false,
 }];
