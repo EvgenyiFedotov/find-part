@@ -23,13 +23,8 @@ class ComponentModule extends Component {
   }
 
   render() {
-    const {
-      classes,
-      items,
-    } = this.props;
-    const {
-      openDialog,
-    } = this.state;
+    const { classes, items, onCreate } = this.props;
+    const { openDialog } = this.state;
 
     return (
       <div>
@@ -59,7 +54,7 @@ class ComponentModule extends Component {
         <Components.dialogFind.component
           open={openDialog}
           onClose={this.dialogToggle(false)}
-          onSend={this.onCreate}
+          onSend={onCreate}
         />
       </div>
     );

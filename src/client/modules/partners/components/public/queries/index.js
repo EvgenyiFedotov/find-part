@@ -1,7 +1,7 @@
-import main from './main';
+import component from './component';
 import styles from './styles';
 
 export default {
-  main,
+  component,
   styles,
 };

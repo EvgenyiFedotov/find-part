@@ -8,7 +8,6 @@ import axios from 'axios';
 import ContainerBase from 'components/simple/Container';
 import Companies from 'modules/companies';
 import Partners from 'modules/partners';
-import Queries from 'modules/queries';
 import ButtonSessions from 'modules/auth/components/public/ButtonSessions/loader';
 
 import styles from './styles';
@@ -45,11 +44,11 @@ class Component extends React.Component {
             </Paper>
 
             <Paper className={classes.partners}>
-              <Partners.component.main />
+              <Partners.component.store />
             </Paper>
 
             <Paper className={classes.requsest}>
-              <Queries.component.main />
+              <Partners.components.public.queries.component />
             </Paper>
           </div>
         </ContainerBase>
