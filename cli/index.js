@@ -8,8 +8,8 @@ program
 program
   .command('create [name]')
   .description('run create by template functional area')
-  .action((env, options) => {
-    console.log(env, options);
+  .action((name) => {
+    require(`${__dirname}/create/${name}`);
   })
   .on('--help', () => {
     console.log('Name:');
