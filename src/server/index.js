@@ -18,7 +18,6 @@ app.use(modules.auth.api);
 app.use(modules.dashboard.router);
 app.use(modules.companies.router);
 app.use(modules.partners.router);
-app.use(modules.queries.router);
 
 Loadable.preloadAll().then(() => {
   httpServer.listen(PORT, () => {
