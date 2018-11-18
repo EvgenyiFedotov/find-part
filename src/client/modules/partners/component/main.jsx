@@ -18,16 +18,8 @@ class ComponentModule extends Component {
     openDialog: false,
   };
 
-  dialogOpen = () => {
-    this.setState({ openDialog: true });
-  }
-
-  dialogClose = () => {
-    this.setState({ openDialog: false });
-  }
-
-  dialogSelect = (item) => {
-    console.log('@dialogSelect', item);
+  dialogToggle = (value = false) => () => {
+    this.setState({ openDialog: value });
   }
 
   render() {
@@ -50,7 +42,7 @@ class ComponentModule extends Component {
           <IconButton
             color="primary"
             className={classes.buttonAdd}
-            onClick={this.dialogOpen}
+            onClick={this.dialogToggle(true)}
           >
             <Add />
           </IconButton>
@@ -66,8 +58,8 @@ class ComponentModule extends Component {
 
         <Components.dialogFind.component
           open={openDialog}
-          onClose={this.dialogClose}
-          onSelect={this.dialogSelect}
+          onClose={this.dialogToggle(false)}
+          onSend={this.onCreate}
         />
       </div>
     );
@@ -77,6 +69,7 @@ class ComponentModule extends Component {
 ComponentModule.propTypes = {
   classes: PropTypes.object,
   items: PropTypes.array,
+  onCreate: PropTypes.func,
 };
 
 ComponentModule.defaultProps = {

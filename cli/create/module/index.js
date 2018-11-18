@@ -1,7 +1,7 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
 const questions = require('./questions');
-const common = require('../common');
+const common = require('../../common');
 
 const cloneDir = (fromPath, toPath, nameModule) => {
   common.cloneDir(fromPath, toPath, {

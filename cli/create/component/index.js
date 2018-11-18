@@ -1,7 +1,7 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
 const questions = require('./questions');
-const common = require('../common');
+const common = require('../../common');
 
 inquirer.prompt(questions).then((answers) => {
   const { nameModule, nameComponent, isPublic } = answers;
@@ -15,6 +15,6 @@ inquirer.prompt(questions).then((answers) => {
   common.cloneDir(
     `${__dirname}/templates`,
     `${path}${nameComponent}`,
-    { fileCallback: ({ fileStr }) => fileStr.replace(/NAME_COMPONENT/g, nameComponent), },
+    { fileCallback: ({ fileStr }) => fileStr.replace(/NAME_COMPONENT/g, nameComponent) },
   );
 });

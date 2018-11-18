@@ -11,12 +11,12 @@ import {
   StepLabel,
   StepContent,
   Step,
-  Typography,
 } from '@material-ui/core';
 import companies from 'modules/companies';
 
 import styles from './styles';
 import Find from '../find';
+import Offer from '../offer';
 
 const CompaniesList = companies.components.public.list.component;
 const steps = [
@@ -30,23 +30,39 @@ class DialogFind extends Component {
     activeStep: 0,
     company: null,
     partner: null,
+    offer: null,
   };
 
   onSelectCompany = (item) => {
+    this.setState({ company: item });
     this.nextStep();
-    console.log('@onSelectCompany', item);
   }
 
   onSelectPartner = (item) => {
-    console.log('@onSelectPartner', item);
+    this.setState({ partner: item });
+    this.nextStep();
   }
 
-  nextStep() {
+  onChangeOffer = (offer) => {
+    this.setState({ offer });
+  }
+
+  nextStep = () => {
     this.setState({ activeStep: this.state.activeStep + 1 });
   }
 
-  prevStep() {
-    this.setState({ activeStep: this.state.activeStep - 1 });
+  prevStep = () => {
+    const activeStep = this.state.activeStep - 1;
+
+    if (activeStep === 0) {
+      this.setState({ company: null, partner: null });
+    } else if (activeStep === 1) {
+      this.setState({ partner: null });
+    } else if (activeStep === 2) {
+      this.setState({ offer: null });
+    }
+
+    this.setState({ activeStep });
   }
 
   getContent() {
@@ -57,6 +73,8 @@ class DialogFind extends Component {
         return <CompaniesList onClick={this.onSelectCompany} />;
       case 1:
         return <Find.component onSelect={this.onSelectPartner} />;
+      case 2:
+        return <Offer.component onChange={this.onChangeOffer} />;
       default:
         return null;
     }
@@ -67,30 +85,40 @@ class DialogFind extends Component {
 
     return (
       <div>
-        <div>
-          <Button
-            disabled={activeStep === 0}
-            size="small"
-            // onClick={this.handleBack}
-          >
-            Back
-          </Button>
-
-          <Button
-            variant="contained"
-            color="primary"
-            size="small"
-            // onClick={this.handleNext}}
-          >
-            {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-          </Button>
-        </div>
+        <Button
+          disabled={activeStep === 0}
+          size="small"
+          color="primary"
+          onClick={this.prevStep}
+        >
+          Назад
+        </Button>
       </div>
     );
   }
 
+  onSend = () => {
+    const { onClose, onSend } = this.props;
+    const { company, partner, offer } = this.state;
+
+    if (company && partner && offer && onSend) {
+      onSend.call(this, { company, partner, offer });
+    }
+
+    if (onClose) {
+      onClose.call(this);
+    }
+
+    this.setState({
+      activeStep: 0,
+      company: null,
+      partner: null,
+      offer: null,
+    });
+  }
+
   render() {
-    const { open, onClose } = this.props;
+    const { classes, open, onClose } = this.props;
     const { activeStep } = this.state;
 
     return (
@@ -107,7 +135,11 @@ class DialogFind extends Component {
         </DialogTitle>
 
         <DialogContent>
-          <Stepper activeStep={activeStep} orientation="vertical">
+          <Stepper
+            activeStep={activeStep}
+            orientation="vertical"
+            className={classes.stepper}
+          >
             {steps.map(label => (
               <Step key={label}>
                 <StepLabel>
@@ -115,7 +147,10 @@ class DialogFind extends Component {
                 </StepLabel>
 
                 <StepContent>
-                  {this.getContent()}
+                  <div className={classes.stepContent}>
+                    {this.getContent()}
+                  </div>
+
                   {this.getButtons()}
                 </StepContent>
               </Step>
@@ -124,8 +159,12 @@ class DialogFind extends Component {
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={onClose} color="primary">
+          <Button onClick={onClose}>
             Отмена
+          </Button>
+
+          <Button onClick={this.onSend} color="primary">
+            Отправить
           </Button>
         </DialogActions>
       </Dialog>
@@ -137,6 +176,7 @@ DialogFind.propTypes = {
   classes: PropTypes.object,
   open: PropTypes.bool,
   onClose: PropTypes.func,
+  onSend: PropTypes.func,
 };
 
 export default withStyles(styles)(DialogFind);

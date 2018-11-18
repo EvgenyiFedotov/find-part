@@ -5,10 +5,10 @@
   "scripts": {
     "build": "webpack",
     "build-watch": "webpack --watch",
-    "start": "node ./node_modules/nodemon/bin/nodemon.js ./dist/server/index.js",
-    "module-create": "node ./cli/module-create",
-    "template-create": "node ./cli/template-create",
-    "component-create": "node ./cli/component-create"
+    "start": "node ./node_modules/nodemon/bin/nodemon.js ./dist/server/index.js"
+  },
+  "bin": {
+    "cli": "node ./cli"
   },
   "repository": {
     "type": "git",
@@ -52,6 +52,7 @@
     "browser-cookies": "^1.2.0",
     "chalk-pipe": "^2.0.0",
     "classnames": "^2.2.6",
+    "commander": "^2.19.0",
     "cookie": "^0.3.1",
     "cookie-parser": "^1.4.3",
     "dateformat": "^3.0.3",

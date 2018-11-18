@@ -3,7 +3,9 @@ const fs = require('fs');
 const cloneDir = (fromPath, toPath, params = {}) => {
   const { fileCallback } = params;
 
-  fs.mkdirSync(toPath);
+  if (!fs.existsSync(toPath)) {
+    fs.mkdirSync(toPath);
+  }
 
   fs.readdirSync(fromPath).forEach((fileName) => {
     const fromPathFile = `${fromPath}/${fileName}`;
