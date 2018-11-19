@@ -10,13 +10,13 @@ class Component extends React.Component {
   constructor(props) {
     super();
 
-    const { discounts, count, onChange } = props;
+    const { discounts, countTickets, onChange } = props;
     const defaultDiscount = discounts[0].value;
 
     this.state = {
-      my: defaultDiscount,
-      parther: defaultDiscount,
-      count: count[0].value,
+      toDiscount: defaultDiscount,
+      fromDiscount: defaultDiscount,
+      countTickets: countTickets[0].value,
     };
 
     if (onChange) {
@@ -60,17 +60,17 @@ class Component extends React.Component {
 
     return (
       <div className={classes.content}>
-        {this.getDicountComponent('Моя скидка', 'my')}
-        {this.getDicountComponent('Скидка партнера', 'parther')}
+        {this.getDicountComponent('Моя скидка', 'fromDiscount')}
+        {this.getDicountComponent('Скидка партнера', 'toDiscount')}
 
         <TextField
           select
           label="Количество скидок"
-          value={this.state.count}
-          onChange={this.onChange('count')}
+          value={this.state.countTickets}
+          onChange={this.onChange('countTickets')}
           className={classNames(classes.discount)}
         >
-          {this.props.count.map(option => (
+          {this.props.countTickets.map(option => (
             <MenuItem key={option.value} value={option.value}>
               {option.label}
             </MenuItem>
@@ -84,7 +84,7 @@ class Component extends React.Component {
 Component.propTypes = {
   classes: PropTypes.object,
   discounts: PropTypes.array,
-  count: PropTypes.array,
+  countTickets: PropTypes.array,
   onChange: PropTypes.func,
 };
 
@@ -103,7 +103,7 @@ Component.defaultProps = {
       label: '15',
     },
   ],
-  count: [...Array(1000).keys()]
+  countTickets: [...Array(1000).keys()]
     .filter(value => !(value % 100))
     .map(value => ({
       value: value + 100,

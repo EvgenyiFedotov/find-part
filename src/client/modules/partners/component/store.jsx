@@ -3,10 +3,20 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import Main from './main';
+import storeConfig from '../store-config';
 
 class Store extends Component {
-  onCreate = (params) => {
-    console.log('@onCreate', params);
+  onCreate = ({ fromCompany, toCompany, offer }) => {
+    const { dispatch } = this.props;
+    dispatch(storeConfig.queries.actions.create({
+      fromCompanyId: fromCompany._id,
+      toCompanyId: toCompany._id,
+      fromCompanyName: fromCompany.name,
+      toCompanyName: toCompany.name,
+      toDiscount: offer.toDiscount,
+      fromDiscount: offer.fromDiscount,
+      countTickets: offer.countTickets,
+    }));
   }
 
   render() {

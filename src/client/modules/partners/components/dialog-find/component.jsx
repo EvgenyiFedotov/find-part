@@ -28,18 +28,18 @@ const steps = [
 class DialogFind extends Component {
   state = {
     activeStep: 0,
-    company: null,
-    partner: null,
+    fromCompany: null,
+    toCompany: null,
     offer: null,
   };
 
-  onSelectCompany = (item) => {
-    this.setState({ company: item });
+  onSelectFromCompany = (item) => {
+    this.setState({ fromCompany: item });
     this.nextStep();
   }
 
-  onSelectPartner = (item) => {
-    this.setState({ partner: item });
+  onSelectToCompany = (item) => {
+    this.setState({ toCompany: item });
     this.nextStep();
   }
 
@@ -55,9 +55,9 @@ class DialogFind extends Component {
     const activeStep = this.state.activeStep - 1;
 
     if (activeStep === 0) {
-      this.setState({ company: null, partner: null });
+      this.setState({ fromCompany: null, toCompany: null });
     } else if (activeStep === 1) {
-      this.setState({ partner: null });
+      this.setState({ toCompany: null });
     } else if (activeStep === 2) {
       this.setState({ offer: null });
     }
@@ -70,9 +70,9 @@ class DialogFind extends Component {
 
     switch (activeStep) {
       case 0:
-        return <CompaniesList onClick={this.onSelectCompany} />;
+        return <CompaniesList onClick={this.onSelectFromCompany} />;
       case 1:
-        return <Find.component onSelect={this.onSelectPartner} />;
+        return <Find.component onSelect={this.onSelectToCompany} />;
       case 2:
         return <Offer.component onChange={this.onChangeOffer} />;
       default:
@@ -99,10 +99,10 @@ class DialogFind extends Component {
 
   onSend = () => {
     const { onClose, onSend } = this.props;
-    const { company, partner, offer } = this.state;
+    const { fromCompany, toCompany, offer } = this.state;
 
-    if (company && partner && offer && onSend) {
-      onSend.call(this, { company, partner, offer });
+    if (fromCompany && toCompany && offer && onSend) {
+      onSend.call(this, { fromCompany, toCompany, offer });
     }
 
     if (onClose) {
@@ -111,8 +111,8 @@ class DialogFind extends Component {
 
     this.setState({
       activeStep: 0,
-      company: null,
-      partner: null,
+      fromCompany: null,
+      toCompany: null,
       offer: null,
     });
   }

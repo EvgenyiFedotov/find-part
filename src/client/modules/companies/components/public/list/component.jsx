@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
-import { ListItem, ListItemText } from '@material-ui/core';
+import { ListItem, ListItemText, List } from '@material-ui/core';
 
 import styles from './styles';
 
@@ -11,7 +11,7 @@ class Component extends React.Component {
     const { items, onClick } = this.props;
 
     return (
-      <div>
+      <List dense={false}>
         {items.filter(item => item.isPublic).map((item, index) => (
           <ListItem
             key={index}
@@ -23,7 +23,7 @@ class Component extends React.Component {
             </ListItemText>
           </ListItem>
         ))}
-      </div>
+      </List>
     );
   }
 }
@@ -39,7 +39,5 @@ Component.defaultValues = {
 };
 
 const ComponentStyle = withStyles(styles)(Component);
-
-// export default ComponentStyle;
 
 export default connect(store => ({ items: store.companies }))(ComponentStyle);
